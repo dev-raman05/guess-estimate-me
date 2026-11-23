@@ -182,10 +182,10 @@
   }
 
   function applyTheme() {
+    if (state.theme !== 'light' && state.theme !== 'dark') state.theme = 'dark';
     document.body.classList.toggle('light-theme', state.theme === 'light');
-    document.body.classList.toggle('nordic-theme', state.theme === 'nordic');
-    document.body.classList.toggle('font-relaxed', state.fontScale === 'relaxed');
-    document.body.classList.toggle('font-large', state.fontScale === 'large');
+    document.body.classList.toggle('font-compact', state.fontScale === 'compact');
+    document.body.classList.toggle('font-comfortable', state.fontScale === 'comfortable');
 
     document.querySelectorAll('[data-set-theme]').forEach(el => {
       el.classList.toggle('active', el.dataset.setTheme === state.theme);
@@ -211,14 +211,21 @@
 
     const titles = {
       dashboard: 'Crash Course Roadmap',
-      academy: 'Learn the Approach — Frameworks & Scripts',
-      memorize: 'Memorize & Drill — Cheat Sheet & Flashcards',
-      library: `Problem Library (${PROBLEMS.length} Solved Cases)`,
+      academy: 'Approach Guide',
+      memorize: 'Memorize & Drill',
+      library: `Problem Library (${PROBLEMS.length})`,
       practice: 'Guided Practice Coach',
-      mock: 'Timed Mock Interview & Issue-Tree Workbench'
+      mock: 'Mock Interview Workbench'
     };
     document.getElementById('topbar-title').textContent = titles[view] || 'GuessMaster Pro';
     document.getElementById('sidebar').classList.remove('open');
+    const gs = document.getElementById('global-search');
+    if (gs && gs.value !== (state.filters.search || '')) {
+      gs.value = state.filters.search || '';
+    }
+    if (typeof window.scrollTo === 'function') {
+      window.scrollTo(0, 0);
+    }
     render();
   }
 
@@ -311,6 +318,12 @@
   function renderAcademy() {
     const tab = state.academyTab || 'algorithm';
     const tabsHtml = `
+      <div class="page-header">
+        <div>
+          <h1>Learn the Guesstimate Approach</h1>
+          <p>Master the 6-step consulting method, decision wizard, archetypes, and mental math shortcuts.</p>
+        </div>
+      </div>
       <div class="tab-bar">
         <button class="tab-btn ${tab === 'algorithm' ? 'active' : ''}" data-acad-tab="algorithm">1. The 6-Step Algorithm &amp; Scripts</button>
         <button class="tab-btn ${tab === 'wizard' ? 'active' : ''}" data-acad-tab="wizard">2. Approach Decision Wizard (12 Drills)</button>
@@ -713,20 +726,34 @@
     const activeProb = filtered.find(p => p.id === state.selectedProblemId) || filtered[0] || null;
 
     return `
-      <div class="filter-bar">
-        <input type="text" class="input" id="lib-search" placeholder="Search title, tags, company..." value="${esc(state.filters.search)}" />
-        <select class="select" id="lib-source">${sources.map(s => `<option ${state.filters.source === s ? 'selected' : ''}>${esc(s)}</option>`).join('')}</select>
-        <select class="select" id="lib-company">${companies.map(c => `<option ${state.filters.company === c ? 'selected' : ''}>${esc(c)}</option>`).join('')}</select>
-        <select class="select" id="lib-archetype">${archetypes.map(a => `<option ${state.filters.archetype === a ? 'selected' : ''}>${esc(a)}</option>`).join('')}</select>
-        <div style="display:flex;gap:6px;">
-          <select class="select" id="lib-diff">
-            <option value="All" ${state.filters.difficulty === 'All' ? 'selected' : ''}>All Levels</option>
-            ${[1, 2, 3, 4, 5].map(d => `<option value="${d}" ${String(state.filters.difficulty) === String(d) ? 'selected' : ''}>Level ${d}</option>`).join('')}
-          </select>
-          <select class="select" id="lib-status">
-            ${['All', 'Unread', 'Mastered', 'Bookmarked'].map(st => `<option ${state.filters.status === st ? 'selected' : ''}>${st}</option>`).join('')}
-          </select>
+      <div class="page-header">
+        <div>
+          <h1>Problem Library</h1>
+          <p>Filter ${PROBLEMS.length} solved consulting &amp; PM guesstimates by source, firm, archetype, or difficulty.</p>
         </div>
+      </div>
+      <div class="filter-bar">
+        <input type="text" class="input" id="lib-search" placeholder="Filter by title, tags, firm..." value="${esc(state.filters.search)}" aria-label="Search problems" />
+        <select class="select" id="lib-source" aria-label="Filter by source">
+          <option value="All" ${state.filters.source === 'All' ? 'selected' : ''}>Source: All</option>
+          ${sources.filter(s => s !== 'All').map(s => `<option value="${esc(s)}" ${state.filters.source === s ? 'selected' : ''}>${esc(s)}</option>`).join('')}
+        </select>
+        <select class="select" id="lib-company" aria-label="Filter by company">
+          <option value="All" ${state.filters.company === 'All' ? 'selected' : ''}>Firm: All</option>
+          ${companies.filter(c => c !== 'All').map(c => `<option value="${esc(c)}" ${state.filters.company === c ? 'selected' : ''}>${esc(c)}</option>`).join('')}
+        </select>
+        <select class="select" id="lib-archetype" aria-label="Filter by archetype">
+          <option value="All" ${state.filters.archetype === 'All' ? 'selected' : ''}>Type: All</option>
+          ${archetypes.filter(a => a !== 'All').map(a => `<option value="${esc(a)}" ${state.filters.archetype === a ? 'selected' : ''}>${esc(a)}</option>`).join('')}
+        </select>
+        <select class="select" id="lib-diff" aria-label="Filter by difficulty">
+          <option value="All" ${state.filters.difficulty === 'All' ? 'selected' : ''}>Level: All</option>
+          ${[1, 2, 3, 4, 5].map(d => `<option value="${d}" ${String(state.filters.difficulty) === String(d) ? 'selected' : ''}>Level ${d}</option>`).join('')}
+        </select>
+        <select class="select" id="lib-status" aria-label="Filter by study status">
+          <option value="All" ${state.filters.status === 'All' ? 'selected' : ''}>Status: All</option>
+          ${['Unread', 'Mastered', 'Bookmarked'].map(st => `<option value="${st}" ${state.filters.status === st ? 'selected' : ''}>${st}</option>`).join('')}
+        </select>
       </div>
 
       <div style="margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;">
@@ -765,7 +792,13 @@
     const approaches = ['Top-Down (Demand-Side)', 'Bottom-Up (Supply-Side)', 'Stock & Replacement', 'Geometry & Proxy', 'Hybrid (Demand + Supply)'];
 
     const selectorHtml = `
-      <div class="card-flat" style="margin-bottom:16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;">
+      <div class="page-header">
+        <div>
+          <h1>Guided Practice Coach</h1>
+          <p>Walk through clarifying scope, approach, MECE structure, math, and sanity checks step-by-step.</p>
+        </div>
+      </div>
+      <div class="card-flat" style="margin-bottom:12px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;">
         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex:1;">
           <strong>Active Practice Problem:</strong>
           <select class="select" id="guided-prob-select" style="max-width:440px;">
@@ -990,7 +1023,13 @@
     const finalComputed = computedNodes.length ? computedNodes[computedNodes.length - 1].computed : 0;
 
     return `
-      <div class="card" style="margin-bottom:18px;">
+      <div class="page-header">
+        <div>
+          <h1>Timed Mock Interview &amp; Workbench</h1>
+          <p>Simulate live interview pacing, clarify scope with the interviewer, and calculate your tree.</p>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:14px;">
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;">
           <div>
             <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px;">
@@ -1109,6 +1148,12 @@
   function renderMemorize() {
     const tab = state.memorizeTab || 'cheatsheet';
     const tabsHtml = `
+      <div class="page-header">
+        <div>
+          <h1>Memorize Benchmarks &amp; Rapid Math</h1>
+          <p>Study core demographics, flip through 40 flashcards, and sharpen speed with the 60s drill.</p>
+        </div>
+      </div>
       <div class="tab-bar">
         <button class="tab-btn ${tab === 'cheatsheet' ? 'active' : ''}" data-mem-tab="cheatsheet">📋 Master Cheat Sheet</button>
         <button class="tab-btn ${tab === 'flashcards' ? 'active' : ''}" data-mem-tab="flashcards">🗂️ Flashcard Deck (${(CHEATSHEET.flashcards || []).length})</button>
@@ -1339,6 +1384,8 @@
           saveState();
           render();
           if (id === 'lib-search') {
+            const gs = document.getElementById('global-search');
+            if (gs) gs.value = e.target.value;
             const re = document.getElementById('lib-search');
             if (re) { re.focus(); re.setSelectionRange(re.value.length, re.value.length); }
           }
@@ -1356,6 +1403,8 @@
     if (clearBtn) {
       clearBtn.addEventListener('click', () => {
         state.filters = { ...defaultState.filters };
+        const gs = document.getElementById('global-search');
+        if (gs) gs.value = '';
         saveState();
         render();
       });
@@ -1900,6 +1949,17 @@
 
   const globalSearchEl = document.getElementById('global-search');
   if (globalSearchEl) {
+    globalSearchEl.value = state.filters.search || '';
+    globalSearchEl.addEventListener('input', (e) => {
+      state.filters.search = e.target.value;
+      saveState();
+      if (state.view !== 'library') {
+        setView('library');
+        globalSearchEl.focus();
+      } else {
+        render();
+      }
+    });
     globalSearchEl.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         state.filters.search = e.target.value;
