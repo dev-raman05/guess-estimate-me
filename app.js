@@ -143,6 +143,7 @@
 
   let wizardAnswers = { q1: null, q2: null, q3: null };
   let cheatSearch = '';
+  let libResizeObserver = null;
 
   // Helpers
   function esc(str) {
@@ -235,6 +236,10 @@
   function setView(view, opts = {}) {
     if (drillState.active && (view !== 'memorize' || (opts.memorizeTab && opts.memorizeTab !== 'drill'))) {
       abortRapidDrill();
+    }
+    if (view !== 'library' && libResizeObserver) {
+      libResizeObserver.disconnect();
+      libResizeObserver = null;
     }
     state.view = view;
     if (opts.academyTab) state.academyTab = opts.academyTab;
@@ -1523,6 +1528,47 @@
       }
     }
 
+    function syncLibraryListHeight() {
+      const listPanel = document.getElementById('lib-list-panel');
+      const detailWrap = document.getElementById('lib-detail-wrap');
+      if (!listPanel || !detailWrap) return;
+
+      if (window.innerWidth <= 980) {
+        listPanel.style.maxHeight = '';
+        listPanel.style.removeProperty('--lib-sticky-top');
+        return;
+      }
+
+      const topbar = document.querySelector('.topbar');
+      const stickyTop = (topbar ? Math.ceil(topbar.getBoundingClientRect().height) : 50) + 12;
+      listPanel.style.setProperty('--lib-sticky-top', `${stickyTop}px`);
+
+      const viewportCap = Math.max(240, window.innerHeight - stickyTop - 16);
+      const rightH = Math.ceil(detailWrap.getBoundingClientRect().height);
+      const hasItems = !!listPanel.querySelector('.problem-list-item');
+      if (rightH > 0) {
+        const targetMax = hasItems
+          ? (rightH < 220 ? Math.min(viewportCap, Math.max(120, rightH)) : Math.max(220, Math.min(viewportCap, rightH)))
+          : Math.min(viewportCap, Math.max(80, rightH));
+        listPanel.style.maxHeight = `${targetMax}px`;
+      } else {
+        listPanel.style.maxHeight = `${viewportCap}px`;
+      }
+    }
+
+    function observeLibraryDetailHeight() {
+      if (libResizeObserver) {
+        libResizeObserver.disconnect();
+        libResizeObserver = null;
+      }
+      syncLibraryListHeight();
+      const detailWrap = document.getElementById('lib-detail-wrap');
+      if (typeof ResizeObserver === 'function' && detailWrap) {
+        libResizeObserver = new ResizeObserver(() => syncLibraryListHeight());
+        libResizeObserver.observe(detailWrap);
+      }
+    }
+
     function renderProblemDetailInPlace() {
       const wrap = document.getElementById('lib-detail-wrap');
       if (!wrap) return;
@@ -1530,6 +1576,7 @@
       const activeProb = filtered.find(p => p.id === state.selectedProblemId) || filtered[0] || null;
       wrap.innerHTML = renderProblemDetail(activeProb);
       attachLibraryDetailListeners(wrap);
+      syncLibraryListHeight();
     }
 
     function bindLibraryListClicks() {
@@ -1541,6 +1588,15 @@
           document.querySelectorAll('#lib-list-panel .problem-list-item.selected').forEach(x => x.classList.remove('selected'));
           el.classList.add('selected');
           renderProblemDetailInPlace();
+          if (window.innerWidth > 980) {
+            const detailWrap = document.getElementById('lib-detail-wrap');
+            const topbar = document.querySelector('.topbar');
+            const stickyTop = (topbar ? Math.ceil(topbar.getBoundingClientRect().height) : 50) + 12;
+            if (detailWrap && detailWrap.getBoundingClientRect().top < stickyTop) {
+              const targetY = Math.max(0, window.scrollY + detailWrap.getBoundingClientRect().top - stickyTop);
+              window.scrollTo({ top: targetY, behavior: 'smooth' });
+            }
+          }
         });
       });
     }
@@ -1566,10 +1622,16 @@
         detailWrap.innerHTML = renderProblemDetail(activeProb);
         attachLibraryDetailListeners(detailWrap);
       }
+      syncLibraryListHeight();
     };
+
+    window.__gmSyncLibraryListHeight = syncLibraryListHeight;
 
     attachLibraryDetailListeners(document);
     bindLibraryListClicks();
+    if (state.view === 'library') {
+      observeLibraryDetailHeight();
+    }
 
     // Academy tabs & wizard
     document.querySelectorAll('[data-acad-tab]').forEach(btn => {
@@ -2331,6 +2393,14 @@
           e.preventDefault();
           advanceDrillQuestion();
         }
+      }
+    });
+  }
+
+  if (typeof window.addEventListener === 'function') {
+    window.addEventListener('resize', () => {
+      if (state.view === 'library' && typeof window.__gmSyncLibraryListHeight === 'function') {
+        window.__gmSyncLibraryListHeight();
       }
     });
   }
