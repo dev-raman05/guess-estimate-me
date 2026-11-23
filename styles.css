@@ -1176,6 +1176,61 @@ code {
 .quiz-opt.correct { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-bright); font-weight: 600; }
 .quiz-opt.wrong { background: var(--danger-soft); border-color: var(--danger); color: var(--danger); }
 
+.drill-options-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.drill-options-grid .quiz-opt {
+  margin-bottom: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.drill-key-hint {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 5px;
+  flex-shrink: 0;
+}
+
+.drill-feedback-slot {
+  min-height: 36px;
+  margin-bottom: 10px;
+  padding: 7px 11px;
+  border-radius: 7px;
+  font-size: 12.2px;
+  line-height: 1.35;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-dim);
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.drill-feedback-slot.good {
+  background: var(--accent-soft);
+  border-color: rgba(34, 154, 108, 0.35);
+  color: var(--accent-bright);
+  font-weight: 600;
+}
+
+.drill-feedback-slot.bad {
+  background: var(--danger-soft);
+  border-color: rgba(217, 83, 111, 0.35);
+  color: var(--danger);
+  font-weight: 600;
+}
+
 /* Timer Badge */
 .timer-pill {
   font-family: var(--mono);
@@ -1272,6 +1327,7 @@ code {
   .content-container { padding: 12px; }
   .cs-item { flex-direction: column; gap: 4px; }
   .cs-val { max-width: 100%; text-align: left; }
+  .drill-options-grid { grid-template-columns: minmax(0, 1fr); }
 }
 
 @media print {

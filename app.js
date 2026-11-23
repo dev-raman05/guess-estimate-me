@@ -68,6 +68,12 @@
     } catch {}
   }
 
+  let saveTimerId = null;
+  function saveStateDebounced(delay = 250) {
+    clearTimeout(saveTimerId);
+    saveTimerId = setTimeout(() => { saveState(); }, delay);
+  }
+
   // Runtime transient states (timers, flashcard index, mock workbench)
   let flashState = {
     category: 'All',
@@ -78,15 +84,43 @@
 
   let drillState = {
     active: false,
+    completed: false,
     timeLeft: 60,
     timerId: null,
+    advanceTimeoutId: null,
     score: 0,
     answered: 0,
+    correctCount: 0,
     streak: 0,
+    bestStreak: 0,
     currentIdx: 0,
     questions: [],
-    lastFeedback: null
+    lastFeedback: null,
+    lockedChoice: null,
+    beatBest: false
   };
+
+  function abortRapidDrill() {
+    clearInterval(drillState.timerId);
+    clearTimeout(drillState.advanceTimeoutId);
+    drillState = {
+      active: false,
+      completed: false,
+      timeLeft: 60,
+      timerId: null,
+      advanceTimeoutId: null,
+      score: 0,
+      answered: 0,
+      correctCount: 0,
+      streak: 0,
+      bestStreak: 0,
+      currentIdx: 0,
+      questions: [],
+      lastFeedback: null,
+      lockedChoice: null,
+      beatBest: false
+    };
+  }
 
   let mockState = {
     problemId: PROBLEMS[0] ? PROBLEMS[0].id : null,
@@ -199,6 +233,9 @@
   }
 
   function setView(view, opts = {}) {
+    if (drillState.active && (view !== 'memorize' || (opts.memorizeTab && opts.memorizeTab !== 'drill'))) {
+      abortRapidDrill();
+    }
     state.view = view;
     if (opts.academyTab) state.academyTab = opts.academyTab;
     if (opts.memorizeTab) state.memorizeTab = opts.memorizeTab;
@@ -223,7 +260,7 @@
     if (gs && gs.value !== (state.filters.search || '')) {
       gs.value = state.filters.search || '';
     }
-    if (typeof window.scrollTo === 'function') {
+    if (!opts.preserveFocus && typeof window.scrollTo === 'function') {
       window.scrollTo(0, 0);
     }
     render();
@@ -714,6 +751,23 @@
     `;
   }
 
+  function renderLibraryListHtml(filtered, activeProb) {
+    return filtered.map(p => `
+      <div class="problem-list-item ${activeProb && activeProb.id === p.id ? 'selected' : ''}" data-select-prob="${esc(p.id)}">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
+          <span class="pill" style="font-size:10.5px;">${esc(p.company)}</span>
+          <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap;">
+            ${state.bookmarkedIds[p.id] ? '<span>★</span>' : ''}
+            ${state.masteredIds[p.id] ? '<span class="pill pill-green" style="font-size:10px;">✓</span>' : ''}
+            ${diffDots(p.difficulty)}
+          </div>
+        </div>
+        <h4>${esc(p.title)}</h4>
+        <div style="font-size:11.5px;color:var(--text-dim);">${esc(p.archetype)} · ${esc(p.source)}</div>
+      </div>
+    `).join('') || '<div class="card-flat">No matching problems. Click Reset Filters.</div>';
+  }
+
   function renderLibrary() {
     const sources = ['All', ...new Set(PROBLEMS.map(p => p.source))];
     const companies = ['All', ...new Set(PROBLEMS.map(p => p.company))].sort((a, b) => a === 'All' ? -1 : b === 'All' ? 1 : a.localeCompare(b));
@@ -757,28 +811,15 @@
       </div>
 
       <div style="margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-        <span style="font-size:13px;color:var(--text-muted);">Showing <strong>${filtered.length}</strong> of ${PROBLEMS.length} solved guesstimates</span>
+        <span id="lib-count-text" style="font-size:13px;color:var(--text-muted);">Showing <strong>${filtered.length}</strong> of ${PROBLEMS.length} solved guesstimates</span>
         <button class="btn btn-sm" id="clear-filters-btn">Reset Filters</button>
       </div>
 
       <div class="library-split">
-        <div class="problem-list-panel">
-          ${filtered.map(p => `
-            <div class="problem-list-item ${activeProb && activeProb.id === p.id ? 'selected' : ''}" data-select-prob="${esc(p.id)}">
-              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
-                <span class="pill" style="font-size:10.5px;">${esc(p.company)}</span>
-                <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap;">
-                  ${state.bookmarkedIds[p.id] ? '<span>★</span>' : ''}
-                  ${state.masteredIds[p.id] ? '<span class="pill pill-green" style="font-size:10px;">✓</span>' : ''}
-                  ${diffDots(p.difficulty)}
-                </div>
-              </div>
-              <h4>${esc(p.title)}</h4>
-              <div style="font-size:11.5px;color:var(--text-dim);">${esc(p.archetype)} · ${esc(p.source)}</div>
-            </div>
-          `).join('') || '<div class="card-flat">No matching problems. Click Reset Filters.</div>'}
+        <div class="problem-list-panel" id="lib-list-panel">
+          ${renderLibraryListHtml(filtered, activeProb)}
         </div>
-        <div>
+        <div id="lib-detail-wrap">
           ${renderProblemDetail(activeProb)}
         </div>
       </div>
@@ -933,7 +974,9 @@
                 <input type="number" step="any" class="input" id="guided-est-val" placeholder="Enter number in ${esc(range.unit)}" value="${esc(g.userEstimate)}" />
                 <button class="btn btn-primary btn-sm" id="guided-check-est">Check</button>
               </div>
-              ${g.gradeResult ? `<div class="${g.gradeResult.ok ? 'good-box' : 'bad-box'}" style="margin-top:8px;font-size:12.5px;">${esc(g.gradeResult.msg)}</div>` : ''}
+              <div id="guided-grade-out">
+                ${g.gradeResult ? `<div class="${g.gradeResult.ok ? 'good-box' : 'bad-box'}" style="margin-top:8px;font-size:12.5px;">${esc(g.gradeResult.msg)}</div>` : ''}
+              </div>
             </div>
           </div>
 
@@ -991,33 +1034,71 @@
   function computeWorkbenchNodes() {
     let runningVal = 0;
     return mockState.nodes.map((n, idx) => {
+      const parsedVal = parseFloat(n.val);
+      const numVal = isNaN(parsedVal) ? 0 : parsedVal;
       if (idx === 0 || n.op === 'base') {
-        runningVal = Number(n.val) || 0;
+        runningVal = numVal;
       } else if (n.op === 'pct') {
-        runningVal = runningVal * ((Number(n.val) || 0) / 100);
+        runningVal = runningVal * (numVal / 100);
       } else if (n.op === 'mul') {
-        runningVal = runningVal * (Number(n.val) || 0);
+        runningVal = runningVal * numVal;
       } else if (n.op === 'div') {
-        runningVal = (Number(n.val) || 1) !== 0 ? runningVal / Number(n.val) : runningVal;
+        runningVal = numVal !== 0 ? runningVal / numVal : runningVal;
       } else if (n.op === 'add') {
-        runningVal = runningVal + (Number(n.val) || 0);
+        runningVal = runningVal + numVal;
       } else if (n.op === 'sub') {
-        runningVal = runningVal - (Number(n.val) || 0);
+        runningVal = runningVal - numVal;
       }
       return { ...n, computed: runningVal };
     });
+  }
+
+  function getMockPhaseLabel() {
+    const elapsed = mockState.durationSec - mockState.timeLeft;
+    const pctElapsed = mockState.durationSec ? (elapsed / mockState.durationSec) : 0;
+    if (pctElapsed > 0.8) return 'Phase 4: Sanity Check & Pyramid Pitch!';
+    if (pctElapsed > 0.35) return 'Phase 3: Assume & Compute Out Loud';
+    if (pctElapsed > 0.15) return 'Phase 2: Build MECE Issue Tree';
+    return 'Phase 1: Clarify Scope (0–1.5m)';
+  }
+
+  function formatMockPitchHtml(computedNodes, finalComputed) {
+    return `“Based on a structured breakdown, my final estimate is roughly <strong>${formatIndian(finalComputed)}</strong>. Starting from ${esc(computedNodes[0]?.label || 'the base')} (${formatIndian(parseFloat(computedNodes[0]?.val) || 0)}), the key drivers are ${computedNodes.slice(1, 4).map(x => `${esc(x.label)} (${x.op === 'pct' ? (x.val || 0) + '%' : (x.val || 0)})`).join(', ')}. ${mockState.sanityNote ? 'As a sanity check: ' + esc(mockState.sanityNote) : 'To sanity-check this figure, I’d verify the per-capita/per-unit implied rate against real benchmarks.'}”`;
+  }
+
+  function updateMockTimerUI() {
+    const timerEl = document.getElementById('mock-timer-display');
+    if (timerEl) {
+      const mins = Math.floor(mockState.timeLeft / 60);
+      const secs = String(mockState.timeLeft % 60).padStart(2, '0');
+      timerEl.textContent = `${mins}:${secs}`;
+      timerEl.style.color = mockState.timeLeft <= 60 ? 'var(--danger)' : '';
+      timerEl.style.borderColor = mockState.timeLeft <= 60 ? 'var(--danger)' : '';
+    }
+    const phaseEl = document.getElementById('mock-phase-badge');
+    if (phaseEl) phaseEl.textContent = getMockPhaseLabel();
+    const startBtn = document.getElementById('mock-start-pause');
+    if (startBtn) startBtn.textContent = mockState.running ? '⏸ Pause' : '▶ Start Timer';
+  }
+
+  function updateMockWorkbenchCalc() {
+    const computedNodes = computeWorkbenchNodes();
+    const finalComputed = computedNodes.length ? computedNodes[computedNodes.length - 1].computed : 0;
+    computedNodes.forEach((n, idx) => {
+      const subEl = document.querySelector(`[data-wb-sub="${idx}"]`);
+      if (subEl) subEl.textContent = `= ${formatIndian(n.computed)}`;
+    });
+    const finalEl = document.getElementById('wb-final-val');
+    if (finalEl) finalEl.textContent = formatIndian(finalComputed);
+    const pitchEl = document.getElementById('wb-pitch-box');
+    if (pitchEl) pitchEl.innerHTML = formatMockPitchHtml(computedNodes, finalComputed);
   }
 
   function renderMock() {
     const prob = getProblem(mockState.problemId);
     const mins = Math.floor(mockState.timeLeft / 60);
     const secs = String(mockState.timeLeft % 60).padStart(2, '0');
-    const elapsed = mockState.durationSec - mockState.timeLeft;
-    const pctElapsed = elapsed / mockState.durationSec;
-    let phaseLabel = 'Phase 1: Clarify Scope (0–1.5m)';
-    if (pctElapsed > 0.8) phaseLabel = 'Phase 4: Sanity Check & Pyramid Pitch!';
-    else if (pctElapsed > 0.35) phaseLabel = 'Phase 3: Assume & Compute Out Loud';
-    else if (pctElapsed > 0.15) phaseLabel = 'Phase 2: Build MECE Issue Tree';
+    const phaseLabel = getMockPhaseLabel();
 
     const computedNodes = computeWorkbenchNodes();
     const finalComputed = computedNodes.length ? computedNodes[computedNodes.length - 1].computed : 0;
@@ -1035,12 +1116,12 @@
             <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:6px;">
               <span class="pill pill-purple">Mock Interview Simulator</span>
               <span class="pill pill-blue">${esc(prob.company)} · ${diffDots(prob.difficulty)}</span>
-              <span class="pill pill-warn">${esc(phaseLabel)}</span>
+              <span class="pill pill-warn" id="mock-phase-badge">${esc(phaseLabel)}</span>
             </div>
             <h2 style="margin:0;font-size:19px;">“${esc(prob.prompt)}”</h2>
           </div>
           <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-            <span class="timer-pill" style="${mockState.timeLeft <= 60 ? 'color:var(--danger);border-color:var(--danger);' : ''}">${mins}:${secs}</span>
+            <span class="timer-pill" id="mock-timer-display" style="${mockState.timeLeft <= 60 ? 'color:var(--danger);border-color:var(--danger);' : ''}">${mins}:${secs}</span>
             <button class="btn btn-primary btn-sm" id="mock-start-pause">${mockState.running ? '⏸ Pause' : '▶ Start Timer'}</button>
             <button class="btn btn-sm" id="mock-reset-timer">↺ Reset (${state.mockDurationMins || 10}m)</button>
             <button class="btn btn-sm btn-secondary" id="mock-random-btn">🎲 New Prompt</button>
@@ -1070,8 +1151,8 @@
                   <option value="add" ${n.op === 'add' ? 'selected' : ''}>+ Val</option>
                   <option value="sub" ${n.op === 'sub' ? 'selected' : ''}>- Val</option>
                 </select>
-                <input type="number" step="any" class="wb-val" data-wb-idx="${idx}" value="${n.val}" />
-                <span class="tree-node-val" title="Running subtotal">= ${formatIndian(n.computed)}</span>
+                <input type="number" step="any" class="wb-val" data-wb-idx="${idx}" value="${esc(n.val)}" />
+                <span class="tree-node-val" data-wb-sub="${idx}" title="Running subtotal">= ${formatIndian(n.computed)}</span>
                 ${idx > 0 ? `<button class="btn btn-sm btn-danger wb-del" data-wb-idx="${idx}" style="padding:4px 8px;">✕</button>` : ''}
               </div>
             `).join('')}
@@ -1087,7 +1168,7 @@
 
           <div class="section-block" style="margin-top:14px;">
             <strong style="font-size:13px;">🎤 Auto-Generated 30-Sec Pyramid Synthesis Pitch</strong>
-            <div class="script-box" style="margin-top:8px;font-size:12.5px;" id="wb-pitch-box">“Based on a structured breakdown, my final estimate is roughly <strong>${formatIndian(finalComputed)}</strong>. Starting from ${esc(computedNodes[0]?.label || 'the base')} (${formatIndian(computedNodes[0]?.val || 0)}), the key drivers are ${computedNodes.slice(1, 4).map(x => `${esc(x.label)} (${x.op === 'pct' ? x.val + '%' : x.val})`).join(', ')}. ${mockState.sanityNote ? 'As a sanity check: ' + esc(mockState.sanityNote) : 'To sanity-check this figure, I’d verify the per-capita/per-unit implied rate against real benchmarks.'}”</div>
+            <div class="script-box" style="margin-top:8px;font-size:12.5px;" id="wb-pitch-box">${formatMockPitchHtml(computedNodes, finalComputed)}</div>
             <input type="text" class="input" id="mock-sanity-input" style="margin-top:8px;" placeholder="Add your sanity check sentence to include in the pitch..." value="${esc(mockState.sanityNote)}" />
           </div>
         </div>
@@ -1144,6 +1225,40 @@
     `;
   }
 
+  function renderCheatSheetCards(qText) {
+    const q = (qText || '').trim().toLowerCase();
+    const cardsHtml = (CHEATSHEET.sections || []).map(sec => {
+      const items = sec.items.filter(it => !q || `${it.label} ${it.value} ${it.note}`.toLowerCase().includes(q));
+      if (!items.length) return '';
+      return `
+        <div class="card">
+          <h3 style="margin:0 0 2px;font-size:16px;">${esc(sec.title)}</h3>
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">${esc(sec.subtitle)}</div>
+          ${items.map(it => `
+            <div class="cs-item">
+              <div>
+                <div class="cs-label">${esc(it.label)}</div>
+                <div class="cs-note">${esc(it.note)}</div>
+              </div>
+              <div class="cs-val">${esc(it.value)}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }).join('');
+    return cardsHtml || `<div class="card-flat" style="grid-column:1/-1;">No benchmarks match “${esc(qText)}”.</div>`;
+  }
+
+  function renderDrillOptionsHtml(qObj) {
+    if (!qObj) return '';
+    return qObj.options.map((opt, idx) => `
+      <button class="quiz-opt" data-drill-opt="${idx}">
+        <span>${esc(opt)}</span>
+        <span class="drill-key-hint">${idx + 1}</span>
+      </button>
+    `).join('');
+  }
+
   // ==================== VIEW 6: MEMORIZE & DRILL ====================
   function renderMemorize() {
     const tab = state.memorizeTab || 'cheatsheet';
@@ -1163,32 +1278,13 @@
 
     let body = '';
     if (tab === 'cheatsheet') {
-      const q = cheatSearch.trim().toLowerCase();
       body = `
         <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;" class="no-print">
           <input type="text" class="input" id="cs-search" style="width:100%;max-width:360px;flex:1 1 200px;min-width:0;" placeholder="Filter benchmarks (e.g. Mumbai, UPI, household, gallon)..." value="${esc(cheatSearch)}" />
           <button class="btn btn-secondary btn-sm" onclick="window.print()">🖨️ Print Cheat Sheet</button>
         </div>
-        <div class="grid-2">
-          ${(CHEATSHEET.sections || []).map(sec => {
-            const items = sec.items.filter(it => !q || `${it.label} ${it.value} ${it.note}`.toLowerCase().includes(q));
-            if (!items.length) return '';
-            return `
-              <div class="card">
-                <h3 style="margin:0 0 2px;font-size:16px;">${esc(sec.title)}</h3>
-                <div style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">${esc(sec.subtitle)}</div>
-                ${items.map(it => `
-                  <div class="cs-item">
-                    <div>
-                      <div class="cs-label">${esc(it.label)}</div>
-                      <div class="cs-note">${esc(it.note)}</div>
-                    </div>
-                    <div class="cs-val">${esc(it.value)}</div>
-                  </div>
-                `).join('')}
-              </div>
-            `;
-          }).join('')}
+        <div class="grid-2" id="cs-grid-container">
+          ${renderCheatSheetCards(cheatSearch)}
         </div>
       `;
     } else if (tab === 'flashcards') {
@@ -1246,44 +1342,46 @@
       `;
     } else {
       const qObj = drillState.questions[drillState.currentIdx];
+      const accPct = drillState.answered ? Math.round((drillState.correctCount / drillState.answered) * 100) : 0;
       body = `
         <div class="flashcard-stage">
-          <div class="card">
-            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
+          <div class="card" id="drill-card-box">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
               <div>
                 <h3 style="margin:0;">⚡ 60-Second Rapid-Fire Consulting Drill</h3>
                 <div style="font-size:12.5px;color:var(--text-muted);">Test your India anchors, unit conversions, and rapid mental math.</div>
               </div>
-              <span class="pill pill-purple">Best Score: ${state.bestDrillScore} pts</span>
+              <span class="pill pill-purple" id="drill-best-pill">Best Score: ${state.bestDrillScore} pts</span>
             </div>
 
             ${!drillState.active ? `
-              <div style="text-align:center;padding:24px 10px;">
-                ${drillState.answered > 0 ? `
-                  <div class="good-box" style="margin-bottom:16px;">
-                    <h2 style="margin:0 0 6px;">Time’s Up! Final Score: ${drillState.score} pts</h2>
-                    <div>Answered ${drillState.answered} questions · Best Streak: ${drillState.streak}</div>
+              <div style="text-align:center;padding:18px 10px;">
+                ${drillState.completed ? `
+                  <div class="good-box" style="margin-bottom:14px;">
+                    <h2 style="margin:0 0 6px;">⏱️ Time’s Up! Final Score: ${drillState.score} pts ${drillState.beatBest ? '🏆 New Best!' : ''}</h2>
+                    <div>Answered ${drillState.answered} (${drillState.correctCount} correct · ${accPct}% accuracy) · Best Streak: ${drillState.bestStreak}</div>
                   </div>
                 ` : ''}
-                <button class="btn btn-primary" id="start-drill-btn" style="font-size:15px;padding:12px 24px;">▶ Start 60-Second Drill</button>
+                <button class="btn btn-primary" id="start-drill-btn" style="font-size:14.5px;padding:10px 22px;">▶ ${drillState.completed ? 'Play Again (60s)' : 'Start 60-Second Drill'}</button>
+                <p style="margin:10px auto 0;max-width:440px;font-size:11.5px;color:var(--text-muted);">Complete the full 60s to save your Best Score. Quitting or leaving early resets the drill without saving. Tip: Use keys 1–4 for speed!</p>
               </div>
             ` : `
-              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:14px;">
-                <span class="timer-pill" style="${drillState.timeLeft <= 10 ? 'color:var(--danger);border-color:var(--danger);' : ''}">⏱️ ${drillState.timeLeft}s</span>
-                <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                  <span class="pill pill-green">Score: ${drillState.score}</span>
-                  <span class="pill pill-warn">Streak: ${drillState.streak}🔥</span>
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
+                <span class="timer-pill" id="drill-timer-pill" style="${drillState.timeLeft <= 10 ? 'color:var(--danger);border-color:var(--danger);' : ''}">⏱️ ${drillState.timeLeft}s</span>
+                <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+                  <span class="pill pill-green" id="drill-score-pill">Score: ${drillState.score}</span>
+                  <span class="pill pill-warn" id="drill-streak-pill">Streak: ${drillState.streak}🔥</span>
+                  <span class="pill" id="drill-count-pill">Q: ${drillState.answered}</span>
+                  <button class="btn btn-sm btn-danger" id="quit-drill-btn">✕ Quit &amp; Reset</button>
                 </div>
               </div>
               ${qObj ? `
                 <div class="section-block">
-                  <div style="font-size:16px;font-weight:700;margin-bottom:12px;">${esc(qObj.q)}</div>
-                  ${qObj.options.map((opt, idx) => `<button class="quiz-opt" data-drill-opt="${idx}">${esc(opt)}</button>`).join('')}
-                </div>
-              ` : ''}
-              ${drillState.lastFeedback ? `
-                <div class="${drillState.lastFeedback.ok ? 'good-box' : 'bad-box'}" style="margin-top:10px;font-size:13px;">
-                  ${esc(drillState.lastFeedback.text)}
+                  <div id="drill-question-text" style="font-size:15px;font-weight:700;margin-bottom:8px;">${esc(qObj.q)}</div>
+                  <div class="drill-feedback-slot" id="drill-feedback-slot">Pick an option or press keys 1–4</div>
+                  <div class="drill-options-grid" id="drill-options-grid">
+                    ${renderDrillOptionsHtml(qObj)}
+                  </div>
                 </div>
               ` : ''}
             `}
@@ -1339,21 +1437,139 @@
       btn.addEventListener('click', () => setView('library', { problemId: btn.dataset.openProblem }));
     });
 
-    // Open problem in guided practice
-    document.querySelectorAll('[data-practice-id]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        startGuidedProblem(btn.dataset.practiceId);
-        setView('practice');
+    function attachLibraryDetailListeners(root = document) {
+      root.querySelectorAll('[data-practice-id]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          startGuidedProblem(btn.dataset.practiceId);
+          setView('practice');
+        });
       });
-    });
 
-    // Open problem in mock simulator
-    document.querySelectorAll('[data-mock-id]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        initMockProblem(btn.dataset.mockId);
-        setView('mock');
+      root.querySelectorAll('[data-mock-id]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          initMockProblem(btn.dataset.mockId);
+          setView('mock');
+        });
       });
-    });
+
+      const progBtn = root.querySelector('#toggle-progressive-btn');
+      if (progBtn) {
+        progBtn.addEventListener('click', () => {
+          state.progressiveMode = !state.progressiveMode;
+          state.studyRevealStep = state.progressiveMode ? 1 : 99;
+          saveState();
+          renderProblemDetailInPlace();
+        });
+      }
+
+      const revNextBtn = root.querySelector('#reveal-next-step-btn');
+      if (revNextBtn) {
+        revNextBtn.addEventListener('click', () => {
+          state.studyRevealStep = Math.min(6, state.studyRevealStep + 1);
+          saveState();
+          renderProblemDetailInPlace();
+        });
+      }
+
+      root.querySelectorAll('[data-toggle-master]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.toggleMaster;
+          state.masteredIds[id] = !state.masteredIds[id];
+          saveState();
+          if (state.view === 'library') {
+            updateSidebarStats();
+            updateLibraryResults(true);
+          } else {
+            render();
+          }
+        });
+      });
+
+      root.querySelectorAll('[data-toggle-bookmark]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.toggleBookmark;
+          state.bookmarkedIds[id] = !state.bookmarkedIds[id];
+          saveState();
+          if (state.view === 'library') {
+            updateSidebarStats();
+            updateLibraryResults(true);
+          } else {
+            render();
+          }
+        });
+      });
+
+      const detailPanel = root.querySelector('#detail-panel');
+      if (detailPanel) {
+        const prob = getProblem(detailPanel.dataset.probId);
+        const sliders = root.querySelectorAll('.model-slider');
+        if (sliders.length && prob && prob.interactiveModel) {
+          const updateSliders = () => {
+            const vars = {};
+            sliders.forEach(sl => {
+              const val = parseFloat(sl.value);
+              vars[sl.dataset.varKey] = val;
+              const label = document.getElementById(`sval-${sl.dataset.varKey}`);
+              if (label) label.textContent = `${val} ${sl.dataset.unit}`;
+            });
+            const res = prob.interactiveModel.compute(vars);
+            const fEl = document.getElementById('live-model-formatted');
+            const bEl = document.getElementById('live-model-breakdown');
+            if (fEl) fEl.textContent = res.formatted;
+            if (bEl) bEl.innerHTML = res.breakdown.map(b => `<div><div style="font-size:11px;color:var(--text-muted);">${esc(b.label)}</div><strong>${esc(b.val)}</strong></div>`).join('');
+          };
+          sliders.forEach(sl => sl.addEventListener('input', updateSliders));
+        }
+      }
+    }
+
+    function renderProblemDetailInPlace() {
+      const wrap = document.getElementById('lib-detail-wrap');
+      if (!wrap) return;
+      const filtered = getFilteredProblems();
+      const activeProb = filtered.find(p => p.id === state.selectedProblemId) || filtered[0] || null;
+      wrap.innerHTML = renderProblemDetail(activeProb);
+      attachLibraryDetailListeners(wrap);
+    }
+
+    function bindLibraryListClicks() {
+      document.querySelectorAll('[data-select-prob]').forEach(el => {
+        el.addEventListener('click', () => {
+          state.selectedProblemId = el.dataset.selectProb;
+          state.studyRevealStep = state.progressiveMode ? 1 : 99;
+          saveState();
+          document.querySelectorAll('#lib-list-panel .problem-list-item.selected').forEach(x => x.classList.remove('selected'));
+          el.classList.add('selected');
+          renderProblemDetailInPlace();
+        });
+      });
+    }
+
+    window.__gmUpdateLibraryResults = function updateLibraryResults(forceDetail = false) {
+      const listPanel = document.getElementById('lib-list-panel');
+      const countEl = document.getElementById('lib-count-text');
+      const detailWrap = document.getElementById('lib-detail-wrap');
+      if (!listPanel || !detailWrap) return;
+
+      const prevSelectedId = state.selectedProblemId;
+      const filtered = getFilteredProblems();
+      if (!filtered.some(p => p.id === state.selectedProblemId)) {
+        state.selectedProblemId = filtered[0] ? filtered[0].id : null;
+      }
+      const activeProb = filtered.find(p => p.id === state.selectedProblemId) || filtered[0] || null;
+
+      if (countEl) countEl.innerHTML = `Showing <strong>${filtered.length}</strong> of ${PROBLEMS.length} solved guesstimates`;
+      listPanel.innerHTML = renderLibraryListHtml(filtered, activeProb);
+      bindLibraryListClicks();
+
+      if (forceDetail || prevSelectedId !== (activeProb && activeProb.id)) {
+        detailWrap.innerHTML = renderProblemDetail(activeProb);
+        attachLibraryDetailListeners(detailWrap);
+      }
+    };
+
+    attachLibraryDetailListeners(document);
+    bindLibraryListClicks();
 
     // Academy tabs & wizard
     document.querySelectorAll('[data-acad-tab]').forEach(btn => {
@@ -1379,19 +1595,20 @@
       });
     });
 
-    // Library filters & selection
+    // Library filters & selection (in-place DOM updates preserve focus & caret)
     const bindFilter = (id, key) => {
       const el = document.getElementById(id);
       if (el) {
         el.addEventListener(el.tagName === 'INPUT' ? 'input' : 'change', (e) => {
           state.filters[key] = e.target.value;
-          saveState();
-          render();
           if (id === 'lib-search') {
+            saveStateDebounced();
             const gs = document.getElementById('global-search');
             if (gs) gs.value = e.target.value;
-            const re = document.getElementById('lib-search');
-            if (re) { re.focus(); re.setSelectionRange(re.value.length, re.value.length); }
+            if (typeof window.__gmUpdateLibraryResults === 'function') window.__gmUpdateLibraryResults(false);
+          } else {
+            saveState();
+            if (typeof window.__gmUpdateLibraryResults === 'function') window.__gmUpdateLibraryResults(true);
           }
         });
       }
@@ -1409,80 +1626,16 @@
         state.filters = { ...defaultState.filters };
         const gs = document.getElementById('global-search');
         if (gs) gs.value = '';
+        const ls = document.getElementById('lib-search');
+        if (ls) ls.value = '';
+        const src = document.getElementById('lib-source'); if (src) src.value = 'All';
+        const cmp = document.getElementById('lib-company'); if (cmp) cmp.value = 'All';
+        const arc = document.getElementById('lib-archetype'); if (arc) arc.value = 'All';
+        const dif = document.getElementById('lib-diff'); if (dif) dif.value = 'All';
+        const stt = document.getElementById('lib-status'); if (stt) stt.value = 'All';
         saveState();
-        render();
+        if (typeof window.__gmUpdateLibraryResults === 'function') window.__gmUpdateLibraryResults(true);
       });
-    }
-
-    document.querySelectorAll('[data-select-prob]').forEach(el => {
-      el.addEventListener('click', () => {
-        state.selectedProblemId = el.dataset.selectProb;
-        state.studyRevealStep = state.progressiveMode ? 1 : 99;
-        saveState();
-        render();
-      });
-    });
-
-    const progBtn = document.getElementById('toggle-progressive-btn');
-    if (progBtn) {
-      progBtn.addEventListener('click', () => {
-        state.progressiveMode = !state.progressiveMode;
-        state.studyRevealStep = state.progressiveMode ? 1 : 99;
-        saveState();
-        render();
-      });
-    }
-
-    const revNextBtn = document.getElementById('reveal-next-step-btn');
-    if (revNextBtn) {
-      revNextBtn.addEventListener('click', () => {
-        state.studyRevealStep = Math.min(6, state.studyRevealStep + 1);
-        saveState();
-        render();
-      });
-    }
-
-    // Master & Bookmark toggles
-    document.querySelectorAll('[data-toggle-master]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const id = btn.dataset.toggleMaster;
-        state.masteredIds[id] = !state.masteredIds[id];
-        saveState();
-        render();
-      });
-    });
-
-    document.querySelectorAll('[data-toggle-bookmark]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const id = btn.dataset.toggleBookmark;
-        state.bookmarkedIds[id] = !state.bookmarkedIds[id];
-        saveState();
-        render();
-      });
-    });
-
-    // Live interactive What-If sliders
-    const detailPanel = document.getElementById('detail-panel');
-    if (detailPanel) {
-      const prob = getProblem(detailPanel.dataset.probId);
-      const sliders = document.querySelectorAll('.model-slider');
-      if (sliders.length && prob && prob.interactiveModel) {
-        const updateSliders = () => {
-          const vars = {};
-          sliders.forEach(sl => {
-            const val = parseFloat(sl.value);
-            vars[sl.dataset.varKey] = val;
-            const label = document.getElementById(`sval-${sl.dataset.varKey}`);
-            if (label) label.textContent = `${val} ${sl.dataset.unit}`;
-          });
-          const res = prob.interactiveModel.compute(vars);
-          const fEl = document.getElementById('live-model-formatted');
-          const bEl = document.getElementById('live-model-breakdown');
-          if (fEl) fEl.textContent = res.formatted;
-          if (bEl) bEl.innerHTML = res.breakdown.map(b => `<div><div style="font-size:11px;color:var(--text-muted);">${esc(b.label)}</div><strong>${esc(b.val)}</strong></div>`).join('');
-        };
-        sliders.forEach(sl => sl.addEventListener('input', updateSliders));
-      }
     }
 
     // Guided Practice listeners
@@ -1541,6 +1694,12 @@
 
     const calcRun = document.getElementById('guided-calc-run');
     const calcInput = document.getElementById('guided-calc-expr');
+    if (calcInput) {
+      calcInput.addEventListener('input', (e) => {
+        state.guided.calcInput = e.target.value;
+        saveStateDebounced();
+      });
+    }
     if (calcRun && calcInput) {
       const evalCalc = () => {
         const expr = calcInput.value.trim();
@@ -1556,15 +1715,28 @@
           state.guided.calcResult = 'Only numbers and + - * / ( ) allowed';
         }
         saveState();
-        render();
+        const outEl = document.getElementById('guided-calc-out');
+        if (outEl) outEl.textContent = state.guided.calcResult ? `Result: ${state.guided.calcResult}` : '';
       };
       calcRun.addEventListener('click', evalCalc);
+      calcInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          evalCalc();
+        }
+      });
     }
 
     const checkEstBtn = document.getElementById('guided-check-est');
     const estValEl = document.getElementById('guided-est-val');
+    if (estValEl) {
+      estValEl.addEventListener('input', (e) => {
+        state.guided.userEstimate = e.target.value;
+        saveStateDebounced();
+      });
+    }
     if (checkEstBtn && estValEl) {
-      checkEstBtn.addEventListener('click', () => {
+      const checkEstimate = () => {
         const val = parseFloat(estValEl.value);
         state.guided.userEstimate = estValEl.value;
         const prob = getProblem(state.guided.problemId);
@@ -1579,7 +1751,18 @@
           state.guided.gradeResult = { ok: false, msg: `⚠️ Off by an order of magnitude vs target (${r.display}). Double-check unit conversions (Crore vs Million, or lifespan division)!` };
         }
         saveState();
-        render();
+        const gradeOut = document.getElementById('guided-grade-out');
+        if (gradeOut) {
+          const gr = state.guided.gradeResult;
+          gradeOut.innerHTML = gr ? `<div class="${gr.ok ? 'good-box' : 'bad-box'}" style="margin-top:8px;font-size:12.5px;">${esc(gr.msg)}</div>` : '';
+        }
+      };
+      checkEstBtn.addEventListener('click', checkEstimate);
+      estValEl.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          checkEstimate();
+        }
       });
     }
 
@@ -1587,7 +1770,7 @@
     if (sanityTxt) {
       sanityTxt.addEventListener('input', (e) => {
         state.guided.sanityInput = e.target.value;
-        saveState();
+        saveStateDebounced();
       });
     }
 
@@ -1607,19 +1790,28 @@
         if (mockState.running) {
           clearInterval(mockState.timerId);
           mockState.running = false;
+          updateMockTimerUI();
         } else {
+          clearInterval(mockState.timerId);
           mockState.running = true;
+          updateMockTimerUI();
           mockState.timerId = setInterval(() => {
+            if (!mockState.running) return;
             if (mockState.timeLeft > 0) {
               mockState.timeLeft--;
-              if (state.view === 'mock') render();
+              updateMockTimerUI();
+              if (mockState.timeLeft <= 0) {
+                clearInterval(mockState.timerId);
+                mockState.running = false;
+                updateMockTimerUI();
+              }
             } else {
               clearInterval(mockState.timerId);
               mockState.running = false;
+              updateMockTimerUI();
             }
           }, 1000);
         }
-        render();
       });
     }
 
@@ -1629,7 +1821,7 @@
         clearInterval(mockState.timerId);
         mockState.running = false;
         mockState.timeLeft = mockState.durationSec;
-        render();
+        updateMockTimerUI();
       });
     }
 
@@ -1672,16 +1864,11 @@
     if (mockSanityEl) {
       mockSanityEl.addEventListener('input', (e) => {
         mockState.sanityNote = e.target.value;
-        const pBox = document.getElementById('wb-pitch-box');
-        if (pBox) {
-          const computed = computeWorkbenchNodes();
-          const finalV = computed.length ? computed[computed.length - 1].computed : 0;
-          pBox.innerHTML = `“Based on a structured breakdown, my final estimate is roughly <strong>${formatIndian(finalV)}</strong>. Starting from ${esc(computed[0]?.label || 'the base')} (${formatIndian(computed[0]?.val || 0)}), the key drivers are ${computed.slice(1, 4).map(x => `${esc(x.label)} (${x.op === 'pct' ? x.val + '%' : x.val})`).join(', ')}. ${mockState.sanityNote ? 'As a sanity check: ' + esc(mockState.sanityNote) : 'To sanity-check this figure, I’d verify the per-capita/per-unit implied rate against real benchmarks.'}”`;
-        }
+        updateMockWorkbenchCalc();
       });
     }
 
-    // Workbench node editing
+    // Workbench node editing (all in-place updates so typing never drops focus)
     const wbAdd = document.getElementById('wb-add-node');
     if (wbAdd) {
       wbAdd.addEventListener('click', () => {
@@ -1697,26 +1884,40 @@
     });
     document.querySelectorAll('.wb-label').forEach(inp => {
       inp.addEventListener('input', (e) => {
-        mockState.nodes[Number(e.target.dataset.wbIdx)].label = e.target.value;
+        const idx = Number(e.target.dataset.wbIdx);
+        if (mockState.nodes[idx]) {
+          mockState.nodes[idx].label = e.target.value;
+          updateMockWorkbenchCalc();
+        }
       });
     });
     document.querySelectorAll('.wb-op').forEach(sel => {
       sel.addEventListener('change', (e) => {
-        mockState.nodes[Number(e.target.dataset.wbIdx)].op = e.target.value;
-        render();
+        const idx = Number(e.target.dataset.wbIdx);
+        if (mockState.nodes[idx]) {
+          mockState.nodes[idx].op = e.target.value;
+          updateMockWorkbenchCalc();
+        }
       });
     });
     document.querySelectorAll('.wb-val').forEach(inp => {
-      inp.addEventListener('change', (e) => {
-        mockState.nodes[Number(e.target.dataset.wbIdx)].val = parseFloat(e.target.value) || 0;
-        render();
+      inp.addEventListener('input', (e) => {
+        const idx = Number(e.target.dataset.wbIdx);
+        if (mockState.nodes[idx]) {
+          mockState.nodes[idx].val = e.target.value;
+          updateMockWorkbenchCalc();
+        }
       });
     });
 
     // Memorize tabs & Cheat sheet & Flashcards & Drill
     document.querySelectorAll('[data-mem-tab]').forEach(btn => {
       btn.addEventListener('click', () => {
-        state.memorizeTab = btn.dataset.memTab;
+        const nextTab = btn.dataset.memTab;
+        if (drillState.active && nextTab !== 'drill') {
+          abortRapidDrill();
+        }
+        state.memorizeTab = nextTab;
         saveState();
         render();
       });
@@ -1726,9 +1927,8 @@
     if (csSearch) {
       csSearch.addEventListener('input', (e) => {
         cheatSearch = e.target.value;
-        render();
-        const re = document.getElementById('cs-search');
-        if (re) { re.focus(); re.setSelectionRange(re.value.length, re.value.length); }
+        const grid = document.getElementById('cs-grid-container');
+        if (grid) grid.innerHTML = renderCheatSheetCards(cheatSearch);
       });
     }
 
@@ -1766,28 +1966,160 @@
     const startDrillBtn = document.getElementById('start-drill-btn');
     if (startDrillBtn) startDrillBtn.addEventListener('click', startRapidDrill);
 
-    document.querySelectorAll('[data-drill-opt]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const chosen = Number(btn.dataset.drillOpt);
-        const q = drillState.questions[drillState.currentIdx];
-        if (!q) return;
-        drillState.answered++;
-        if (chosen === q.answer) {
-          drillState.streak++;
-          drillState.score += 10 + Math.min(10, drillState.streak * 2);
-          drillState.lastFeedback = { ok: true, text: `✅ Correct! ${q.exp}` };
-        } else {
-          drillState.streak = 0;
-          drillState.lastFeedback = { ok: false, text: `❌ Expected "${q.options[q.answer]}". ${q.exp}` };
-        }
-        if (drillState.score > state.bestDrillScore) {
-          state.bestDrillScore = drillState.score;
-          saveState();
-        }
-        drillState.currentIdx = (drillState.currentIdx + 1) % drillState.questions.length;
+    const quitDrillBtn = document.getElementById('quit-drill-btn');
+    if (quitDrillBtn) {
+      quitDrillBtn.addEventListener('click', () => {
+        abortRapidDrill();
         render();
       });
+    }
+
+    bindDrillOptionListeners();
+  }
+
+  function shuffleArray(arr) {
+    const copy = [...arr];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
+  function buildShuffledDrillPool(lastPrompt = '') {
+    const raw = CHEATSHEET.mathDrillQuestions || [];
+    const pool = shuffleArray(raw).map(item => {
+      const mappedOpts = item.options.map((text, idx) => ({ text, isCorrect: idx === item.answer }));
+      const mixedOpts = shuffleArray(mappedOpts);
+      return {
+        q: item.q,
+        options: mixedOpts.map(o => o.text),
+        answer: mixedOpts.findIndex(o => o.isCorrect),
+        exp: item.exp
+      };
     });
+    if (pool.length > 1 && lastPrompt && pool[0].q === lastPrompt) {
+      const last = pool.length - 1;
+      [pool[0], pool[last]] = [pool[last], pool[0]];
+    }
+    return pool;
+  }
+
+  function updateDrillTimerUI() {
+    const pill = document.getElementById('drill-timer-pill');
+    if (!pill) return;
+    pill.textContent = `⏱️ ${drillState.timeLeft}s`;
+    pill.style.color = drillState.timeLeft <= 10 ? 'var(--danger)' : '';
+    pill.style.borderColor = drillState.timeLeft <= 10 ? 'var(--danger)' : '';
+  }
+
+  function renderDrillQuestionInPlace() {
+    const qObj = drillState.questions[drillState.currentIdx];
+    const qEl = document.getElementById('drill-question-text');
+    const fbEl = document.getElementById('drill-feedback-slot');
+    const gridEl = document.getElementById('drill-options-grid');
+    if (!qObj || !qEl || !fbEl || !gridEl) return;
+
+    qEl.textContent = qObj.q;
+    fbEl.className = 'drill-feedback-slot';
+    fbEl.textContent = 'Pick an option or press keys 1–4';
+    gridEl.innerHTML = renderDrillOptionsHtml(qObj);
+    bindDrillOptionListeners();
+  }
+
+  function advanceDrillQuestion() {
+    clearTimeout(drillState.advanceTimeoutId);
+    drillState.advanceTimeoutId = null;
+    if (!drillState.active) return;
+    drillState.lockedChoice = null;
+    const prevQ = drillState.questions[drillState.currentIdx];
+    if (drillState.currentIdx + 1 >= drillState.questions.length) {
+      drillState.questions = buildShuffledDrillPool(prevQ ? prevQ.q : '');
+      drillState.currentIdx = 0;
+    } else {
+      drillState.currentIdx++;
+    }
+    renderDrillQuestionInPlace();
+  }
+
+  function handleDrillAnswer(chosenIdx) {
+    if (!drillState.active || drillState.lockedChoice !== null) return;
+    const q = drillState.questions[drillState.currentIdx];
+    if (!q || chosenIdx < 0 || chosenIdx >= q.options.length) return;
+
+    drillState.lockedChoice = chosenIdx;
+    drillState.answered++;
+    const isCorrect = chosenIdx === q.answer;
+    let pts = 0;
+    if (isCorrect) {
+      drillState.correctCount++;
+      drillState.streak++;
+      if (drillState.streak > drillState.bestStreak) drillState.bestStreak = drillState.streak;
+      pts = 10 + Math.min(10, drillState.streak * 2);
+      drillState.score += pts;
+    } else {
+      drillState.streak = 0;
+    }
+
+    const scoreEl = document.getElementById('drill-score-pill');
+    const streakEl = document.getElementById('drill-streak-pill');
+    const countEl = document.getElementById('drill-count-pill');
+    if (scoreEl) scoreEl.textContent = `Score: ${drillState.score}`;
+    if (streakEl) streakEl.textContent = `Streak: ${drillState.streak}🔥`;
+    if (countEl) countEl.textContent = `Q: ${drillState.answered}`;
+
+    const optBtns = document.querySelectorAll('#drill-options-grid [data-drill-opt]');
+    optBtns.forEach(btn => {
+      const idx = Number(btn.dataset.drillOpt);
+      btn.disabled = true;
+      const hint = btn.querySelector('.drill-key-hint');
+      if (idx === q.answer) {
+        btn.classList.add('correct');
+        if (hint) hint.textContent = '✓';
+      } else if (idx === chosenIdx) {
+        btn.classList.add('wrong');
+        if (hint) hint.textContent = '✕';
+      }
+    });
+
+    const fbEl = document.getElementById('drill-feedback-slot');
+    if (fbEl) {
+      if (isCorrect) {
+        fbEl.className = 'drill-feedback-slot good';
+        fbEl.textContent = `✅ Correct! (+${pts} pts) — ${q.exp}`;
+      } else {
+        fbEl.className = 'drill-feedback-slot bad';
+        fbEl.textContent = `❌ Answer: ${q.options[q.answer]} — ${q.exp}`;
+      }
+    }
+
+    clearTimeout(drillState.advanceTimeoutId);
+    drillState.advanceTimeoutId = setTimeout(advanceDrillQuestion, isCorrect ? 400 : 900);
+  }
+
+  function bindDrillOptionListeners() {
+    document.querySelectorAll('#drill-options-grid [data-drill-opt]').forEach(btn => {
+      btn.addEventListener('click', () => handleDrillAnswer(Number(btn.dataset.drillOpt)));
+    });
+  }
+
+  function finishRapidDrill() {
+    clearInterval(drillState.timerId);
+    clearTimeout(drillState.advanceTimeoutId);
+    drillState.timerId = null;
+    drillState.advanceTimeoutId = null;
+    drillState.active = false;
+    drillState.completed = true;
+    drillState.timeLeft = 0;
+    drillState.lockedChoice = null;
+    if (drillState.score > state.bestDrillScore) {
+      state.bestDrillScore = drillState.score;
+      drillState.beatBest = true;
+      saveState();
+    }
+    if (state.view === 'memorize' && state.memorizeTab === 'drill') {
+      render();
+    }
   }
 
   function startGuidedProblem(probId) {
@@ -1819,26 +2151,30 @@
   }
 
   function startRapidDrill() {
-    clearInterval(drillState.timerId);
-    const pool = [...(CHEATSHEET.mathDrillQuestions || [])].sort(() => Math.random() - 0.5);
+    abortRapidDrill();
+    const pool = buildShuffledDrillPool();
     drillState = {
       active: true,
+      completed: false,
       timeLeft: 60,
       score: 0,
       answered: 0,
+      correctCount: 0,
       streak: 0,
+      bestStreak: 0,
       currentIdx: 0,
       questions: pool,
       lastFeedback: null,
+      lockedChoice: null,
+      beatBest: false,
+      advanceTimeoutId: null,
       timerId: setInterval(() => {
+        if (!drillState.active) return;
         if (drillState.timeLeft > 1) {
           drillState.timeLeft--;
-          if (state.view === 'memorize' && state.memorizeTab === 'drill') render();
+          updateDrillTimerUI();
         } else {
-          clearInterval(drillState.timerId);
-          drillState.timeLeft = 0;
-          drillState.active = false;
-          render();
+          finishRapidDrill();
         }
       }, 1000)
     };
@@ -1956,18 +2292,23 @@
     globalSearchEl.value = state.filters.search || '';
     globalSearchEl.addEventListener('input', (e) => {
       state.filters.search = e.target.value;
-      saveState();
+      saveStateDebounced();
       if (state.view !== 'library') {
-        setView('library');
-        globalSearchEl.focus();
+        setView('library', { preserveFocus: true });
+        if (document.activeElement !== globalSearchEl) globalSearchEl.focus();
       } else {
-        render();
+        const ls = document.getElementById('lib-search');
+        if (ls) ls.value = e.target.value;
+        if (typeof window.__gmUpdateLibraryResults === 'function') {
+          window.__gmUpdateLibraryResults(false);
+        }
       }
     });
     globalSearchEl.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         state.filters.search = e.target.value;
-        setView('library');
+        if (state.view !== 'library') setView('library', { preserveFocus: true });
+        else if (typeof window.__gmUpdateLibraryResults === 'function') window.__gmUpdateLibraryResults(false);
       }
     });
   }
@@ -1975,9 +2316,21 @@
   if (typeof document.addEventListener === 'function') {
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') toggleSettings(false);
-      if (e.key === '/' && !['INPUT', 'TEXTAREA', 'SELECT'].includes((document.activeElement && document.activeElement.tagName) || '')) {
+      const activeTag = (document.activeElement && document.activeElement.tagName) || '';
+      const inField = ['INPUT', 'TEXTAREA', 'SELECT'].includes(activeTag);
+      if (e.key === '/' && !inField) {
         e.preventDefault();
         if (globalSearchEl) globalSearchEl.focus();
+        return;
+      }
+      if (!inField && state.view === 'memorize' && state.memorizeTab === 'drill' && drillState.active) {
+        if (['1', '2', '3', '4'].includes(e.key) && drillState.lockedChoice === null) {
+          e.preventDefault();
+          handleDrillAnswer(Number(e.key) - 1);
+        } else if ((e.key === ' ' || e.key === 'Enter') && drillState.lockedChoice !== null) {
+          e.preventDefault();
+          advanceDrillQuestion();
+        }
       }
     });
   }
