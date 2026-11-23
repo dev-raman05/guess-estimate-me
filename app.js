@@ -588,6 +588,284 @@
     });
   }
 
+  function splitOutsideGrouping(str, getDelimLen) {
+    const parts = [];
+    let depth = 0;
+    let start = 0;
+    for (let i = 0; i < str.length; i++) {
+      const ch = str[i];
+      if (ch === '(' || ch === '[') {
+        depth++;
+      } else if (ch === ')' || ch === ']') {
+        depth = Math.max(0, depth - 1);
+      } else if (depth === 0) {
+        const delimLen = getDelimLen(str, i);
+        if (delimLen > 0) {
+          parts.push({ text: str.slice(start, i), delim: str.slice(i, i + delimLen) });
+          i += delimLen - 1;
+          start = i + 1;
+        }
+      }
+    }
+    parts.push({ text: str.slice(start), delim: '' });
+    return parts;
+  }
+
+  function parseStrategyPoints(text) {
+    const raw = String(text || '').trim();
+    if (!raw) return [];
+
+    // Step A: split before explicit structural or numbered markers at top level
+    const markerRe = /^(?:Step\s+\d+|Pillar\s+\d+|Segment\s+\d+|Phase\s+\d+|Method\s+[A-Z]|Approach\s+[A-Z]|Route\s+[A-Z]|\(\d+\)|\([A-C]\))(?=\s|[:.(])/i;
+    const stageA = [];
+    let depth = 0;
+    let start = 0;
+    for (let i = 0; i < raw.length; i++) {
+      const prevDepth = depth;
+      const ch = raw[i];
+      if (prevDepth === 0 && i > start + 2) {
+        const prev = raw[i - 1];
+        if (/\s/.test(prev) && markerRe.test(raw.slice(i))) {
+          const piece = raw.slice(start, i).replace(/(?:[;\s]+OR\s*|\s*;\s*|\s+and\s+)$/i, '').trim();
+          if (piece) stageA.push(piece);
+          start = i;
+        }
+      }
+      if (ch === '(' || ch === '[') {
+        depth++;
+      } else if (ch === ')' || ch === ']') {
+        depth = Math.max(0, depth - 1);
+      }
+    }
+    const tailA = raw.slice(start).trim();
+    if (tailA) stageA.push(tailA);
+
+    // Step B: split chunks on sentence boundaries outside grouping, guarding decimals and abbreviations
+    const abbrRe = /(?:^|[\s(])(?:e\.g|i\.e|vs|etc|approx|avg|no|dr|mr|ms|rs|min|max|hr|hrs|yr|yrs|mo|mos|wk|wks|sec|vols?|vol)$/i;
+    const stageB = [];
+    for (const chunk of stageA) {
+      const parts = splitOutsideGrouping(chunk, (s, idx) => {
+        const c = s[idx];
+        if (c !== '.' && c !== '!' && c !== '?') return 0;
+        const next = s[idx + 1] || '';
+        const next2 = s[idx + 2] || '';
+        if (!/\s/.test(next)) return 0;
+        if (c === '.' && /\d/.test(s[idx - 1] || '') && /\d/.test(next)) return 0;
+        if (c === '.' && abbrRe.test(s.slice(0, idx))) return 0;
+        if (c === '?' && next === '!' || (c === '!' && next === '!')) return 0;
+        if (!next2) return 0;
+        return 1;
+      });
+      parts.forEach(p => {
+        const clean = (p.text + (p.delim === '!' || p.delim === '?' ? p.delim : p.delim === '.' ? '.' : '')).trim();
+        if (clean) stageB.push(clean);
+      });
+    }
+
+    // Step C: expand funnel chains with >= 2 top-level `→` arrows
+    const stageC = [];
+    for (const chunk of stageB) {
+      const arrowParts = splitOutsideGrouping(chunk, (s, idx) => (s[idx] === '→' ? 1 : 0));
+      if (arrowParts.length >= 3) {
+        arrowParts.forEach((ap, idx) => {
+          let seg = ap.text.trim();
+          if (!seg) return;
+          if (idx === 0) {
+            const colonIdx = seg.indexOf(':');
+            if (colonIdx > 4 && colonIdx < 64 && !/[0-9%=]/.test(seg.slice(0, colonIdx))) {
+              const hdr = seg.slice(0, colonIdx).trim();
+              const rest = seg.slice(colonIdx + 1).trim();
+              if (hdr) stageC.push(hdr + ':');
+              if (rest) stageC.push(rest);
+              return;
+            }
+          }
+          stageC.push(seg);
+        });
+      } else {
+        stageC.push(chunk);
+      }
+    }
+
+    // Step D: break long multi-clause (>145 chars) imperative action lists cleanly
+    const actionRe = /^,\s*(?:(?:and|then)\s+){0,2}(filter|exclude|split|segment|adjust|divide|multiply|apply|assign|compute|calculate|subtract|layer|select|sum|add|convert|scale|estimate|take|keep|categorize|use)\b/i;
+    const stageD = [];
+    for (const chunk of stageC) {
+      if (chunk.length <= 145) {
+        stageD.push(chunk);
+        continue;
+      }
+      const splits = splitOutsideGrouping(chunk, (s, idx) => {
+        if (s[idx] !== ',') return 0;
+        const m = s.slice(idx).match(actionRe);
+        if (!m) return 0;
+        const before = s.slice(0, idx).trim();
+        if (/^(?:Because|Since|If|When|While|Once|Although|Though)\b/i.test(before) && !before.includes(',')) {
+          return 0;
+        }
+        const prefixLen = m[0].length - m[1].length;
+        return prefixLen;
+      });
+      splits.forEach(sp => {
+        const t = sp.text.trim();
+        if (t) stageD.push(t);
+      });
+    }
+
+    // Step E: polish each bullet
+    const out = [];
+    for (let pt of stageD) {
+      pt = pt
+        .replace(/^[\s;,\-–—→]+/, '')
+        .replace(/^(?:OR|AND|THEN)\s+/i, '')
+        .replace(/^\((?:\d+|[A-C])\)\s*/i, '')
+        .replace(/(?:[;\s]+OR|[;\s]+)$/i, '')
+        .trim();
+      if (!pt) continue;
+      pt = pt.replace(/^([a-z])/, (_, c) => c.toUpperCase());
+      out.push(pt);
+    }
+    return out;
+  }
+
+  function formatInlineCodeAndLabel(pt) {
+    let html = esc(pt).replace(/`([^`]+)`/g, '<code>$1</code>');
+    const boldLabelMatch = html.match(/^((?:Step\s+\d+|Method\s+[A-Z]|Approach\s+[A-Z]|Pillar\s+\d+|Segment\s+\d+|Phase\s+\d+|Route\s+[A-Z]|CRITICAL INSIGHT|Rule of Thumb|Real Sanity Check|Note|Hint)(?:\s*\([^)]+\))?:)\s*(.*)$/i);
+    if (boldLabelMatch) {
+      return `<strong>${boldLabelMatch[1]}</strong>${boldLabelMatch[2] ? ' ' + boldLabelMatch[2] : ''}`;
+    }
+    const colonIdx = html.indexOf(':');
+    if (colonIdx > 2 && colonIdx <= 40) {
+      const prefix = html.slice(0, colonIdx);
+      if (!prefix.includes('=') && !prefix.includes('(') && !prefix.includes('<code>') && !prefix.includes('₹') && !/\d%/.test(prefix)) {
+        return `<strong>${prefix}:</strong>${html.slice(colonIdx + 1)}`;
+      }
+    }
+    return html;
+  }
+
+  function renderStrategyPointsHtml(text, extraClass = '') {
+    const pts = parseStrategyPoints(text);
+    if (!pts.length) return '';
+    return `<ul class="strategy-points${extraClass ? ' ' + extraClass : ''}">${pts.map(pt => `<li>${formatInlineCodeAndLabel(pt)}</li>`).join('')}</ul>`;
+  }
+
+  function unwrapOuterSummation(rhs) {
+    const m = rhs.match(/^∑\s*([\(\[])([\s\S]+)([\)\]])$/);
+    if (!m) return null;
+    const closeMatch = m[1] === '(' ? ')' : ']';
+    if (m[3] !== closeMatch) return null;
+    let depth = 1;
+    const inner = m[2];
+    for (let i = 0; i < inner.length; i++) {
+      const ch = inner[i];
+      if (ch === '(' || ch === '[') depth++;
+      else if (ch === ')' || ch === ']') {
+        depth--;
+        if (depth === 0) return null; // closed before final delimiter -> not a single wrapper
+      }
+    }
+    return inner.trim();
+  }
+
+  function splitFormulaTerms(expr) {
+    const cleanExpr = String(expr || '').trim();
+    if (!cleanExpr) return [];
+
+    // 1. Check top-level additive/alternative separators (` + `, ` - `, ` OR `)
+    const addParts = splitOutsideGrouping(cleanExpr, (s, idx) => {
+      const sub = s.slice(idx);
+      if (/^\s+\+\s+/.test(sub)) return sub.match(/^\s+\+\s+/)[0].length;
+      if (/^\s+-\s+/.test(sub)) return sub.match(/^\s+-\s+/)[0].length;
+      if (/^\s+OR\s+/i.test(sub)) return sub.match(/^\s+OR\s+/i)[0].length;
+      return 0;
+    });
+    if (addParts.length > 1) {
+      return addParts.map((p, idx) => {
+        let op = idx === 0 ? '•' : '+';
+        if (idx > 0) {
+          const prevDelim = addParts[idx - 1].delim.trim().toUpperCase();
+          op = prevDelim === '-' ? '−' : prevDelim === 'OR' ? 'OR' : '+';
+        }
+        return { op, term: p.text.trim() };
+      }).filter(x => x.term);
+    }
+
+    // 2. Otherwise split on top-level multiplicative operators (` × `, ` ÷ `)
+    const mulParts = splitOutsideGrouping(cleanExpr, (s, idx) => {
+      const sub = s.slice(idx);
+      if (/^\s+[×÷]\s+/.test(sub)) return sub.match(/^\s+[×÷]\s+/)[0].length;
+      return 0;
+    });
+    if (mulParts.length > 1) {
+      return mulParts.map((p, idx) => {
+        const op = idx === 0 ? '•' : (mulParts[idx - 1].delim.includes('÷') ? '÷' : '×');
+        return { op, term: p.text.trim() };
+      }).filter(x => x.term);
+    }
+
+    return [{ op: '•', term: cleanExpr }];
+  }
+
+  function parseFormulaEquation(formula) {
+    const raw = String(formula || '').trim();
+    if (!raw) return [];
+    const groupsRaw = splitOutsideGrouping(raw, (s, idx) => (/^\s+\|\s+/.test(s.slice(idx)) ? s.slice(idx).match(/^\s+\|\s+/)[0].length : 0))
+      .map(p => p.text.trim())
+      .filter(Boolean);
+
+    return groupsRaw.map(eq => {
+      const eqParts = splitOutsideGrouping(eq, (s, idx) => (s[idx] === '=' ? 1 : 0));
+      let head = '';
+      let expr = eq;
+
+      if (eqParts.length > 1) {
+        const rawLhs = eqParts[0].text;
+        const lhs = rawLhs.trim();
+        const rhs = eq.slice(rawLhs.length + eqParts[0].delim.length).trim();
+        const unwrapped = unwrapOuterSummation(rhs);
+        if (unwrapped) {
+          head = `${lhs} = ∑ across segments of:`;
+          expr = unwrapped;
+        } else {
+          head = `${lhs} =`;
+          expr = rhs;
+        }
+      } else {
+        const colonIdx = eq.indexOf(':');
+        if (colonIdx > 2 && colonIdx <= 32) {
+          head = eq.slice(0, colonIdx + 1).trim();
+          expr = eq.slice(colonIdx + 1).trim();
+        }
+      }
+
+      const items = splitFormulaTerms(expr);
+      return { head, items };
+    });
+  }
+
+  function renderFormulaPointsHtml(formula, extraStyle = '') {
+    const groups = parseFormulaEquation(formula);
+    if (!groups.length) return '';
+    return `
+      <div class="formula-banner formula-points-box" style="${extraStyle}">
+        ${groups.map(g => `
+          <div class="formula-group">
+            ${g.head ? `<div class="formula-head">${esc(g.head)}</div>` : ''}
+            <ul class="formula-list">
+              ${g.items.map(it => `
+                <li class="formula-line">
+                  <span class="formula-op">${esc(it.op)}</span>
+                  <span class="formula-term">${esc(it.term)}</span>
+                </li>
+              `).join('')}
+            </ul>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
   function renderTreeNode(node) {
     if (!node) return '';
     const boxCls = node.highlight ? 'highlight' : node.muted ? 'muted' : '';
@@ -673,8 +951,8 @@
         ${stepLimit >= 2 ? `
         <div class="section-block">
           <h3>Step 2: Strategy &amp; Core Equation</h3>
-          <p style="margin:0 0 10px;font-size:13.5px;">${esc(prob.strategyOverview)}</p>
-          <div class="formula-banner">${esc(prob.formula)}</div>
+          ${renderStrategyPointsHtml(prob.strategyOverview)}
+          ${renderFormulaPointsHtml(prob.formula)}
         </div>` : ''}
 
         <!-- Step 3 -->
@@ -913,8 +1191,8 @@
           </div>
           ${g.selectedApproach ? `
             <div class="${g.selectedApproach === targetApp ? 'good-box' : 'bad-box'}" style="margin-top:10px;">
-              <strong>${g.selectedApproach === targetApp ? '✅ Spot on!' : '💡 Recommended Approach: ' + esc(targetApp)}</strong><br/>
-              ${esc(prob.strategyOverview)}
+              <strong>${g.selectedApproach === targetApp ? '✅ Spot on!' : '💡 Recommended Approach: ' + esc(targetApp)}</strong>
+              <div style="margin-top:6px;">${renderStrategyPointsHtml(prob.strategyOverview)}</div>
             </div>
           ` : ''}
           <div style="margin-top:14px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
@@ -942,7 +1220,7 @@
           ${g.selectedFunnelIdx !== null && opts[g.selectedFunnelIdx] ? `
             <div class="${opts[g.selectedFunnelIdx].correct ? 'good-box' : 'bad-box'}" style="margin-top:10px;">
               ${esc(opts[g.selectedFunnelIdx].feedback)}
-              <div class="formula-banner" style="margin-top:8px;">Formula: ${esc(prob.formula)}</div>
+              ${renderFormulaPointsHtml(prob.formula, 'margin-top:8px;')}
             </div>
           ` : ''}
           <div style="margin-top:14px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
@@ -957,7 +1235,7 @@
         <div class="card">
           <div class="pill pill-blue" style="margin-bottom:8px;">Step 4 of 5 · Estimate &amp; Compute</div>
           <h3 style="margin:0 0 6px;">Plug in your own assumptions and calculate!</h3>
-          <div class="formula-banner" style="margin-bottom:12px;">${esc(prob.formula)}</div>
+          ${renderFormulaPointsHtml(prob.formula, 'margin-bottom:12px;')}
 
           <div class="grid-2" style="margin-bottom:14px;">
             <div class="section-block">
