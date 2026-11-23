@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GuessMaster Pro — Zero-to-Offer Guesstimate Coach</title>
+  <meta name="description" content="Interactive guesstimate learning studio with 87 solved consulting & PM cases, visual issue trees, live sensitivity sliders, guided practice, flashcards, and timed mock interviews." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-icon">GM</div>
+        <div>
+          <div class="brand-title">GuessMaster Pro</div>
+          <div class="brand-sub">Zero-to-Offer Guesstimates</div>
+        </div>
+      </div>
+
+      <div class="nav-group-label">Fast-Track Learning</div>
+      <nav class="nav-list">
+        <button class="nav-btn active" data-view="dashboard">
+          <span class="nav-btn-left">🧭 Crash Course Roadmap</span>
+          <span class="nav-badge" id="badge-roadmap">0%</span>
+        </button>
+        <button class="nav-btn" data-view="academy">
+          <span class="nav-btn-left">🎓 Learn the Approach</span>
+          <span class="nav-badge">6 Steps</span>
+        </button>
+        <button class="nav-btn" data-view="memorize">
+          <span class="nav-btn-left">🧠 Memorize &amp; Drill</span>
+          <span class="nav-badge" id="badge-cards">40</span>
+        </button>
+      </nav>
+
+      <div class="nav-group-label">Practice &amp; Mastery</div>
+      <nav class="nav-list">
+        <button class="nav-btn" data-view="library">
+          <span class="nav-btn-left">📚 Problem Library</span>
+          <span class="nav-badge" id="badge-library">87</span>
+        </button>
+        <button class="nav-btn" data-view="practice">
+          <span class="nav-btn-left">🎯 Guided Practice Coach</span>
+          <span class="nav-badge">Stepwise</span>
+        </button>
+        <button class="nav-btn" data-view="mock">
+          <span class="nav-btn-left">⏱️ Mock Interview &amp; Tree</span>
+          <span class="nav-badge">Timed</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-progress-box">
+        <div class="progress-row">
+          <span>Interview Readiness</span>
+          <span id="readiness-pct">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="readiness-fill" style="width: 0%;"></div>
+        </div>
+        <div class="stat-sub" id="readiness-summary">0/87 mastered · 0 cards learned</div>
+      </div>
+
+      <div>
+        <div class="nav-group-label" style="padding:0 0 6px;">Eye-Care Theme</div>
+        <div class="theme-switcher" id="theme-switcher">
+          <button class="theme-chip active" data-set-theme="dark" title="Midnight Aurora">🌙 Night</button>
+          <button class="theme-chip" data-set-theme="light" title="Warm Paper (Zero Glare)">☀️ Paper</button>
+          <button class="theme-chip" data-set-theme="nordic" title="Nordic Slate">❄️ Nordic</button>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <button class="btn btn-sm" id="open-settings-btn" style="flex:1;">⚙️ Settings &amp; Backup</button>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <div class="main-area">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu-btn" id="mobile-menu-btn">☰</button>
+          <h2 class="view-title" id="topbar-title">Crash Course Roadmap</h2>
+        </div>
+        <div class="topbar-actions">
+          <div class="search-wrap">
+            <input
+              type="text"
+              class="quick-search"
+              id="global-search"
+              placeholder="Search 87 cases, firms..."
+            />
+            <span class="kbd-hint">/</span>
+          </div>
+          <button class="btn btn-primary btn-sm" id="random-practice-btn">🎲 Random Drill</button>
+        </div>
+      </header>
+
+      <main class="content-container" id="main-content">
+        <!-- Rendered dynamically by app.js -->
+      </main>
+    </div>
+  </div>
+
+  <!-- Settings & Backup Modal -->
+  <div class="modal-backdrop" id="settings-modal">
+    <div class="modal-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <h3 style="margin:0;font-size:18px;">⚙️ Preferences &amp; Progress Backup</h3>
+        <button class="btn btn-sm" id="close-settings-btn">✕</button>
+      </div>
+
+      <div class="section-block" style="margin-bottom:12px;">
+        <strong style="font-size:13px;">🎨 Color Theme (Eye Comfort)</strong>
+        <div class="theme-switcher" style="margin-top:8px;">
+          <button class="theme-chip" data-set-theme="dark">🌙 Midnight Aurora</button>
+          <button class="theme-chip" data-set-theme="light">☀️ Warm Paper</button>
+          <button class="theme-chip" data-set-theme="nordic">❄️ Nordic Slate</button>
+        </div>
+      </div>
+
+      <div class="section-block" style="margin-bottom:12px;">
+        <strong style="font-size:13px;">🔤 Reading Font Size</strong>
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <button class="btn btn-sm" data-set-font="normal" style="flex:1;">Normal (100%)</button>
+          <button class="btn btn-sm" data-set-font="relaxed" style="flex:1;">Relaxed (107%)</button>
+          <button class="btn btn-sm" data-set-font="large" style="flex:1;">Large (114%)</button>
+        </div>
+      </div>
+
+      <div class="section-block" style="margin-bottom:12px;">
+        <strong style="font-size:13px;">⏱️ Default Mock Interview Duration</strong>
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <button class="btn btn-sm" data-set-mockmins="10" style="flex:1;">10 Mins (Standard)</button>
+          <button class="btn btn-sm" data-set-mockmins="15" style="flex:1;">15 Mins (Deep)</button>
+          <button class="btn btn-sm" data-set-mockmins="20" style="flex:1;">20 Mins (Beginner)</button>
+        </div>
+      </div>
+
+      <div class="section-block" style="margin-bottom:14px;">
+        <strong style="font-size:13px;">💾 Backup or Sync Progress (Between Local &amp; Web/Vercel)</strong>
+        <p style="font-size:12px;color:var(--text-muted);margin:4px 0 10px;">Export your mastered cases, flashcards, and roadmap checkmarks as JSON so you can move seamlessly from local file to GitHub Pages / Vercel.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn btn-sm btn-secondary" id="export-progress-btn">⬇ Export Progress JSON</button>
+          <label class="btn btn-sm" style="cursor:pointer;">
+            ⬆ Import Progress JSON
+            <input type="file" id="import-progress-input" accept="application/json" style="display:none;" />
+          </label>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <button class="btn btn-sm btn-danger" id="reset-progress-btn">↺ Reset All Progress</button>
+        <button class="btn btn-sm btn-primary" id="done-settings-btn">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data & Logic Scripts (works seamlessly over file://, GitHub Pages, and Vercel) -->
+  <script src="data/curriculum.js"></script>
+  <script src="data/cheatsheet.js"></script>
+  <script src="data/problems_vol1.js"></script>
+  <script src="data/problems_vol2.js"></script>
+  <script src="data/problems_iitg_web.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
