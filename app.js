@@ -302,7 +302,7 @@
         <div class="stat-card">
           <div class="stat-label">Next Recommended Problem</div>
           <div style="font-weight:700;font-size:14px;margin:6px 0;">${esc(nextRec.title)}</div>
-          <div style="display:flex;gap:6px;align-items:center;">
+          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
             ${diffDots(nextRec.difficulty)}
             <button class="btn btn-sm" data-open-problem="${esc(nextRec.id)}" style="margin-left:auto;">Open</button>
           </div>
@@ -342,9 +342,9 @@
           ${(CURRICULUM.sixSteps || []).map(s => `
             <div class="card">
               <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
-                <div style="display:flex;align-items:center;gap:10px;">
+                <div style="display:flex;align-items:center;gap:10px;min-width:0;flex:1 1 240px;">
                   <span class="stage-num">${s.stepNum}</span>
-                  <div>
+                  <div style="min-width:0;">
                     <h3 style="margin:0;font-size:16.5px;">${esc(s.name)}</h3>
                     <div style="font-size:12.5px;color:var(--text-muted);">${esc(s.tagline)}</div>
                   </div>
@@ -386,16 +386,16 @@
             <div class="section-block">
               <strong style="font-size:13px;">Q1. What kind of thing are you estimating?</strong>
               <div style="display:flex;flex-direction:column;gap:6px;margin-top:8px;">
-                <button class="btn btn-sm ${wizardAnswers.q1 === 'consumer' ? 'btn-primary' : ''}" data-wiz-q="q1" data-wiz-v="consumer">Consumable / App / Food / Service / Revenue</button>
-                <button class="btn btn-sm ${wizardAnswers.q1 === 'durable' ? 'btn-primary' : ''}" data-wiz-q="q1" data-wiz-v="durable">Durable Asset (Car, Fridge, AC, Phone, Tyre)</button>
-                <button class="btn btn-sm ${wizardAnswers.q1 === 'geometry' ? 'btn-primary' : ''}" data-wiz-q="q1" data-wiz-v="geometry">Physical Space / Volume / Length / Probability</button>
+                <button class="btn btn-sm btn-block-left ${wizardAnswers.q1 === 'consumer' ? 'btn-primary' : ''}" data-wiz-q="q1" data-wiz-v="consumer">Consumable / App / Food / Service / Revenue</button>
+                <button class="btn btn-sm btn-block-left ${wizardAnswers.q1 === 'durable' ? 'btn-primary' : ''}" data-wiz-q="q1" data-wiz-v="durable">Durable Asset (Car, Fridge, AC, Phone, Tyre)</button>
+                <button class="btn btn-sm btn-block-left ${wizardAnswers.q1 === 'geometry' ? 'btn-primary' : ''}" data-wiz-q="q1" data-wiz-v="geometry">Physical Space / Volume / Length / Probability</button>
               </div>
             </div>
             <div class="section-block">
               <strong style="font-size:13px;">Q2. Is there a clear physical bottleneck (seats, lanes, runways, booths, single shop)?</strong>
               <div style="display:flex;flex-direction:column;gap:6px;margin-top:8px;">
-                <button class="btn btn-sm ${wizardAnswers.q2 === 'yes' ? 'btn-primary' : ''}" data-wiz-q="q2" data-wiz-v="yes">YES — Single Outlet, Airport, Toll, Cinema, Staff</button>
-                <button class="btn btn-sm ${wizardAnswers.q2 === 'no' ? 'btn-primary' : ''}" data-wiz-q="q2" data-wiz-v="no">NO — City/National Population Demand</button>
+                <button class="btn btn-sm btn-block-left ${wizardAnswers.q2 === 'yes' ? 'btn-primary' : ''}" data-wiz-q="q2" data-wiz-v="yes">YES — Single Outlet, Airport, Toll, Cinema, Staff</button>
+                <button class="btn btn-sm btn-block-left ${wizardAnswers.q2 === 'no' ? 'btn-primary' : ''}" data-wiz-q="q2" data-wiz-v="no">NO — City/National Population Demand</button>
               </div>
             </div>
           </div>
@@ -407,13 +407,13 @@
               <div class="formula-banner">${esc(rec.coreFormula)}</div>
               <p style="margin:8px 0 0;font-size:12.5px;"><strong>⚠️ Watch out for:</strong> ${esc(rec.watchOutFor)}</p>
             </div>
-          ` : '<div class="pill">Select options above to see your recommended approach & formula.</div>'}
+          ` : '<div class="tip-box">Select options above to see your recommended approach &amp; formula.</div>'}
         </div>
 
         <div class="grid-2" style="margin-bottom:22px;">
           ${(wiz.approaches || []).map(a => `
             <div class="card-flat">
-              <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px;">
                 <strong>${esc(a.name)}</strong>
                 <span class="pill pill-blue">${esc(a.badge)}</span>
               </div>
@@ -461,7 +461,7 @@
         <div class="grid-2">
           ${(CURRICULUM.masterTemplates || []).map(t => `
             <div class="card">
-              <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
                 <span class="pill pill-purple">Archetype #${t.num} · ${esc(t.category)}</span>
               </div>
               <h3 style="margin:0 0 8px;font-size:16.5px;">${esc(t.name)}</h3>
@@ -502,11 +502,11 @@
         <h3 style="margin:0 0 12px;">🏢 What Different Firms Actually Grade For</h3>
         <div class="grid-2" style="margin-bottom:22px;">
           ${(m.interviewerSecrets || []).map(sec => `
-            <div class="card-flat">
+            <div class="card-flat" style="display:flex;flex-direction:column;gap:6px;">
               <strong style="font-size:14.5px;color:var(--accent-2);">${esc(sec.firm)}</strong>
-              <div style="font-size:12.5px;margin:4px 0;"><strong>Style:</strong> ${esc(sec.style)}</div>
-              <p style="font-size:13px;color:var(--text-muted);margin:0 0 6px;">${esc(sec.whatTheyLookFor)}</p>
-              <div style="font-size:12.5px;" class="pill pill-green">💡 ${esc(sec.proTip)}</div>
+              <div style="font-size:12.5px;"><strong>Style:</strong> ${esc(sec.style)}</div>
+              <p style="font-size:13px;color:var(--text-muted);margin:0;">${esc(sec.whatTheyLookFor)}</p>
+              <div class="tip-box tip-box-green" style="margin-top:auto;">💡 ${esc(sec.proTip)}</div>
             </div>
           `).join('')}
         </div>
@@ -579,7 +579,7 @@
     return `
       <div class="problem-detail-panel" id="detail-panel" data-prob-id="${esc(prob.id)}">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;">
-          <div>
+          <div style="min-width:0;flex:1 1 260px;">
             <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;">
               <span class="pill pill-blue">${esc(prob.company)}</span>
               <span class="pill">${esc(prob.source)}</span>
@@ -603,11 +603,11 @@
         </div>
 
         <div class="hero-banner" style="margin:0;padding:16px 18px;">
-          <div>
+          <div style="min-width:0;flex:1 1 260px;">
             <div style="font-size:11px;text-transform:uppercase;font-weight:700;color:var(--accent-bright);">Interviewer Prompt</div>
             <div style="font-size:16px;font-weight:700;margin-top:3px;">“${esc(prob.prompt)}”</div>
           </div>
-          <div style="display:flex;align-items:center;gap:8px;">
+          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
             <button class="btn btn-sm ${state.progressiveMode ? 'btn-warn' : ''}" id="toggle-progressive-btn">
               ${state.progressiveMode ? '🔒 Study Mode: Step-by-Step' : '👁️ Full Solution Visible'}
             </button>
@@ -756,7 +756,7 @@
         </select>
       </div>
 
-      <div style="margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;">
+      <div style="margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
         <span style="font-size:13px;color:var(--text-muted);">Showing <strong>${filtered.length}</strong> of ${PROBLEMS.length} solved guesstimates</span>
         <button class="btn btn-sm" id="clear-filters-btn">Reset Filters</button>
       </div>
@@ -765,9 +765,9 @@
         <div class="problem-list-panel">
           ${filtered.map(p => `
             <div class="problem-list-item ${activeProb && activeProb.id === p.id ? 'selected' : ''}" data-select-prob="${esc(p.id)}">
-              <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
                 <span class="pill" style="font-size:10.5px;">${esc(p.company)}</span>
-                <div style="display:flex;gap:5px;align-items:center;">
+                <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap;">
                   ${state.bookmarkedIds[p.id] ? '<span>★</span>' : ''}
                   ${state.masteredIds[p.id] ? '<span class="pill pill-green" style="font-size:10px;">✓</span>' : ''}
                   ${diffDots(p.difficulty)}
@@ -799,13 +799,13 @@
         </div>
       </div>
       <div class="card-flat" style="margin-bottom:12px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;">
-        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex:1;">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex:1 1 260px;min-width:0;">
           <strong>Active Practice Problem:</strong>
-          <select class="select" id="guided-prob-select" style="max-width:440px;">
+          <select class="select" id="guided-prob-select" style="width:100%;max-width:440px;min-width:0;">
             ${PROBLEMS.map(p => `<option value="${esc(p.id)}" ${p.id === prob.id ? 'selected' : ''}>[L${p.difficulty}] ${esc(p.title)} (${esc(p.company)})</option>`).join('')}
           </select>
         </div>
-        <div style="display:flex;gap:8px;">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <button class="btn btn-sm" id="guided-random-easy">🎲 Easy (L1–2)</button>
           <button class="btn btn-sm" id="guided-random-med">🎲 Med (L3)</button>
           <button class="btn btn-sm" id="guided-random-hard">🎲 Hard (L4–5)</button>
@@ -832,8 +832,8 @@
             const open = !!g.clarifyRevealed[idx];
             return `
               <div class="section-block" style="margin-bottom:10px;">
-                <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
-                  <strong>❓ "${esc(cq.q)}"</strong>
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+                  <strong style="flex:1 1 220px;min-width:0;">❓ "${esc(cq.q)}"</strong>
                   <button class="btn btn-sm ${open ? '' : 'btn-primary'}" data-clarify-idx="${idx}">${open ? 'Asked ✓' : 'Ask Interviewer'}</button>
                 </div>
                 ${open ? `
@@ -871,7 +871,7 @@
               ${esc(prob.strategyOverview)}
             </div>
           ` : ''}
-          <div style="margin-top:14px;display:flex;justify-content:space-between;">
+          <div style="margin-top:14px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
             <button class="btn" data-guided-step="1">← Back</button>
             <button class="btn btn-primary" data-guided-step="3">Next: Build MECE Tree →</button>
           </div>
@@ -899,7 +899,7 @@
               <div class="formula-banner" style="margin-top:8px;">Formula: ${esc(prob.formula)}</div>
             </div>
           ` : ''}
-          <div style="margin-top:14px;display:flex;justify-content:space-between;">
+          <div style="margin-top:14px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
             <button class="btn" data-guided-step="2">← Back</button>
             <button class="btn btn-primary" data-guided-step="4">Next: Calculate Your Estimate →</button>
           </div>
@@ -921,7 +921,7 @@
                 <input type="text" class="input" id="guided-calc-expr" placeholder="e.g. 30 * 0.8 * 0.65 * 3" value="${esc(g.calcInput)}" />
                 <button class="btn btn-secondary btn-sm" id="guided-calc-run">=</button>
               </div>
-              <div style="margin-top:8px;font-family:var(--mono);font-size:14px;color:var(--accent-bright);" id="guided-calc-out">
+              <div style="margin-top:8px;font-family:var(--mono);font-size:14px;color:var(--accent-bright);overflow-wrap:anywhere;word-break:break-word;" id="guided-calc-out">
                 ${g.calcResult ? `Result: ${esc(g.calcResult)}` : ''}
               </div>
             </div>
@@ -944,7 +944,7 @@
             </ul>
           </details>
 
-          <div style="margin-top:14px;display:flex;justify-content:space-between;">
+          <div style="margin-top:14px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
             <button class="btn" data-guided-step="3">← Back</button>
             <button class="btn btn-primary" data-guided-step="5">Next: Sanity Check &amp; Debrief →</button>
           </div>
@@ -973,7 +973,7 @@
           </div>
           <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;">
             <button class="btn" data-guided-step="4">← Back</button>
-            <div style="display:flex;gap:8px;">
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
               <button class="btn ${isMastered ? 'btn-primary' : 'btn-secondary'}" data-toggle-master="${esc(prob.id)}">
                 ${isMastered ? '✓ Mastered!' : '✓ Mark Problem Mastered'}
               </button>
@@ -1031,8 +1031,8 @@
       </div>
       <div class="card" style="margin-bottom:14px;">
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;">
-          <div>
-            <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px;">
+          <div style="min-width:0;flex:1 1 280px;">
+            <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:6px;">
               <span class="pill pill-purple">Mock Interview Simulator</span>
               <span class="pill pill-blue">${esc(prob.company)} · ${diffDots(prob.difficulty)}</span>
               <span class="pill pill-warn">${esc(phaseLabel)}</span>
@@ -1051,7 +1051,7 @@
       <div class="grid-2" style="align-items:start;">
         <!-- Left: Live Interactive Issue-Tree & Calculator Workbench -->
         <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
             <h3 style="margin:0;font-size:16px;">🌳 Your Live Issue-Tree Scratchpad</h3>
             <button class="btn btn-sm btn-primary" id="wb-add-node">+ Add Step</button>
           </div>
@@ -1061,7 +1061,7 @@
             ${computedNodes.map((n, idx) => `
               <div class="wb-node-row" data-wb-idx="${idx}">
                 <span style="font-size:11px;font-weight:700;color:var(--text-dim);width:18px;">#${idx + 1}</span>
-                <input type="text" class="wb-label" data-wb-idx="${idx}" value="${esc(n.label)}" style="flex:1.4;min-width:130px;" placeholder="Step name" />
+                <input type="text" class="wb-label" data-wb-idx="${idx}" value="${esc(n.label)}" placeholder="Step name" />
                 <select class="wb-op" data-wb-idx="${idx}" ${idx === 0 ? 'disabled' : ''}>
                   <option value="base" ${n.op === 'base' ? 'selected' : ''}>Base =</option>
                   <option value="pct" ${n.op === 'pct' ? 'selected' : ''}>× %</option>
@@ -1070,7 +1070,7 @@
                   <option value="add" ${n.op === 'add' ? 'selected' : ''}>+ Val</option>
                   <option value="sub" ${n.op === 'sub' ? 'selected' : ''}>- Val</option>
                 </select>
-                <input type="number" step="any" class="wb-val" data-wb-idx="${idx}" value="${n.val}" style="width:110px;" />
+                <input type="number" step="any" class="wb-val" data-wb-idx="${idx}" value="${n.val}" />
                 <span class="tree-node-val" title="Running subtotal">= ${formatIndian(n.computed)}</span>
                 ${idx > 0 ? `<button class="btn btn-sm btn-danger wb-del" data-wb-idx="${idx}" style="padding:4px 8px;">✕</button>` : ''}
               </div>
@@ -1102,7 +1102,7 @@
             <div style="margin-top:8px;display:flex;flex-direction:column;gap:6px;">
               ${(prob.clarifyingQuestions || []).map((cq, idx) => `
                 <div>
-                  <button class="btn btn-sm" style="width:100%;justify-content:flex-start;text-align:left;" data-mock-clarify="${idx}">
+                  <button class="btn btn-sm btn-block-left" data-mock-clarify="${idx}">
                     ❓ ${esc(cq.q)}
                   </button>
                   ${mockState.clarifiedIdx[idx] ? `<div style="font-size:12.5px;color:var(--accent-bright);padding:4px 8px;">💬 "${esc(cq.a)}"</div>` : ''}
@@ -1112,7 +1112,7 @@
           </div>
 
           <div class="section-block" style="margin-bottom:12px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
               <strong style="font-size:13px;">2. Mid-Case Curveball Twist</strong>
               <button class="btn btn-sm btn-warn" id="mock-curveball-btn">${mockState.showVariation ? 'Hide Curveball' : '⚡ Throw Curveball'}</button>
             </div>
@@ -1125,7 +1125,7 @@
           </div>
 
           <div class="section-block">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
               <strong style="font-size:13px;">3. Compare Against Reference Solution</strong>
               <button class="btn btn-sm" id="mock-reveal-sol-btn">${mockState.showSolutionRef ? 'Hide Reference' : '👁️ Reveal Answer & Tree'}</button>
             </div>
@@ -1166,7 +1166,7 @@
       const q = cheatSearch.trim().toLowerCase();
       body = `
         <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;" class="no-print">
-          <input type="text" class="input" id="cs-search" style="max-width:360px;" placeholder="Filter benchmarks (e.g. Mumbai, UPI, household, gallon)..." value="${esc(cheatSearch)}" />
+          <input type="text" class="input" id="cs-search" style="width:100%;max-width:360px;flex:1 1 200px;min-width:0;" placeholder="Filter benchmarks (e.g. Mumbai, UPI, household, gallon)..." value="${esc(cheatSearch)}" />
           <button class="btn btn-secondary btn-sm" onclick="window.print()">🖨️ Print Cheat Sheet</button>
         </div>
         <div class="grid-2">
@@ -1206,8 +1206,8 @@
       body = `
         <div class="flashcard-stage">
           <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
-            <div style="display:flex;gap:8px;align-items:center;">
-              <select class="select" id="fc-cat" style="width:160px;">
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+              <select class="select" id="fc-cat" style="width:160px;max-width:100%;">
                 ${cats.map(c => `<option ${flashState.category === c ? 'selected' : ''}>${esc(c)}</option>`).join('')}
               </select>
               <label style="font-size:13px;display:flex;align-items:center;gap:5px;cursor:pointer;">
@@ -1219,19 +1219,23 @@
 
           ${card ? `
             <div class="flashcard" id="fc-card-box">
-              <span class="flashcard-face-label">${flashState.flipped ? 'ANSWER · CLICK TO FLIP BACK' : 'QUESTION · CLICK TO REVEAL'} (${flashState.index + 1}/${filtered.length})</span>
-              <span class="pill pill-blue" style="position:absolute;top:14px;right:18px;">${esc(card.category)}</span>
-              ${!flashState.flipped ? `
-                <h2 style="margin:0;font-size:21px;max-width:520px;">${esc(card.front)}</h2>
-                <div style="margin-top:16px;font-size:12.5px;color:var(--text-dim);">Click anywhere on card to flip</div>
-              ` : `
-                <div style="font-size:22px;font-weight:800;color:var(--accent-bright);white-space:pre-line;margin-bottom:12px;">${esc(card.back)}</div>
-                <div class="pill" style="max-width:520px;white-space:normal;">💡 ${esc(card.tip)}</div>
-              `}
+              <div class="flashcard-header">
+                <span class="flashcard-face-label">${flashState.flipped ? 'ANSWER · CLICK TO FLIP BACK' : 'QUESTION · CLICK TO REVEAL'} (${flashState.index + 1}/${filtered.length})</span>
+                <span class="pill pill-blue">${esc(card.category)}</span>
+              </div>
+              <div class="flashcard-body">
+                ${!flashState.flipped ? `
+                  <h2 style="margin:0;font-size:21px;max-width:520px;width:100%;">${esc(card.front)}</h2>
+                  <div style="margin-top:8px;font-size:12.5px;color:var(--text-dim);">Click anywhere on card to flip</div>
+                ` : `
+                  <div style="font-size:22px;font-weight:800;color:var(--accent-bright);white-space:pre-line;max-width:100%;">${esc(card.back)}</div>
+                  <div class="tip-box" style="max-width:520px;text-align:left;">💡 ${esc(card.tip)}</div>
+                `}
+              </div>
             </div>
             <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:10px;flex-wrap:wrap;">
               <button class="btn" id="fc-prev">← Previous</button>
-              <div style="display:flex;gap:8px;">
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
                 <button class="btn btn-warn" id="fc-mark-review">🔁 Need Review</button>
                 <button class="btn btn-primary" id="fc-mark-mastered">✓ Got It!</button>
               </div>
@@ -1264,9 +1268,9 @@
                 <button class="btn btn-primary" id="start-drill-btn" style="font-size:15px;padding:12px 24px;">▶ Start 60-Second Drill</button>
               </div>
             ` : `
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:14px;">
                 <span class="timer-pill" style="${drillState.timeLeft <= 10 ? 'color:var(--danger);border-color:var(--danger);' : ''}">⏱️ ${drillState.timeLeft}s</span>
-                <div style="display:flex;gap:8px;">
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
                   <span class="pill pill-green">Score: ${drillState.score}</span>
                   <span class="pill pill-warn">Streak: ${drillState.streak}🔥</span>
                 </div>
