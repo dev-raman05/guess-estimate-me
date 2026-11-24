@@ -3,8 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GuessMaster Pro — Guesstimate &amp; Market Sizing Studio</title>
+  <title>GuessMaster Pro — Guesstimate Prep Studio</title>
   <meta name="description" content="Standalone interactive guesstimate & market sizing coaching app with 87 solved cases, MECE issue trees, live sensitivity models, flashcards, and timed mock simulations." />
+  <meta name="theme-color" content="#09090b" id="meta-theme-color" />
+  <meta name="application-name" content="GuessMaster Pro" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="GuessMaster Pro" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="icon" type="image/svg+xml" href="icons/logo.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png" />
+  <link rel="shortcut icon" href="favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png" />
+  <link rel="manifest" href="manifest.webmanifest" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
@@ -15,7 +26,9 @@
     <!-- Sidebar Navigation -->
     <aside class="sidebar" id="sidebar">
       <div class="brand">
-        <div class="brand-icon">GM</div>
+        <div class="brand-icon">
+          <img src="icons/logo.svg" alt="GuessMaster Pro logo" class="brand-logo-img" width="28" height="28" />
+        </div>
         <div>
           <div class="brand-title">GuessMaster Pro</div>
           <div class="brand-sub">Guesstimate Prep Studio</div>
@@ -74,7 +87,8 @@
       </div>
 
       <div class="sidebar-footer">
-        <button class="btn btn-sm" id="open-settings-btn" style="flex:1;">⚙️ Settings &amp; Backup</button>
+        <button class="btn btn-sm btn-primary install-app-btn" id="install-app-btn" style="display:none;width:100%;">⬇ Install Desktop App</button>
+        <button class="btn btn-sm" id="open-settings-btn" style="width:100%;">⚙️ Settings &amp; Backup</button>
       </div>
     </aside>
 
@@ -137,6 +151,12 @@
           <button class="btn btn-sm" data-set-mockmins="15" style="flex:1 1 90px;">15 Mins</button>
           <button class="btn btn-sm" data-set-mockmins="20" style="flex:1 1 90px;">20 Mins</button>
         </div>
+      </div>
+
+      <div class="section-block" style="margin-bottom:8px;">
+        <strong style="font-size:0.96rem;">🖥️ Desktop App (Standalone Window)</strong>
+        <p id="pwa-install-desc" style="font-size:0.9rem;color:var(--text-muted);margin:4px 0 6px;">Install GuessMaster Pro on your desktop for a dedicated app window with offline support and zero tab distractions.</p>
+        <button class="btn btn-sm btn-primary" id="settings-install-btn" style="display:none;">⬇ Install Desktop App</button>
       </div>
 
       <div class="section-block" style="margin-bottom:10px;">

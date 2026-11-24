@@ -1,0 +1,33 @@
+{
+  "id": "./",
+  "name": "GuessMaster Pro — Guesstimate Prep Studio",
+  "short_name": "GuessMaster Pro",
+  "description": "Distraction-free consulting & PM guesstimate prep studio with 87 solved cases, MECE issue trees, flashcards, 60s rapid drill, and timed mock workbench.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#09090b",
+  "theme_color": "#09090b",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

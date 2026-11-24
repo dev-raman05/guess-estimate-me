@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Verify static site files
-        run: test -f index.html && test -f styles.css && test -f app.js && test -d data
+        run: test -f index.html && test -f styles.css && test -f app.js && test -d data && test -f manifest.webmanifest && test -f sw.js && test -f favicon.ico && test -d icons
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

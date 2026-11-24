@@ -232,6 +232,8 @@
     document.querySelectorAll('[data-set-mockmins]').forEach(el => {
       el.classList.toggle('btn-primary', Number(el.dataset.setMockmins) === (state.mockDurationMins || 10));
     });
+    const themeColorMeta = document.getElementById('meta-theme-color');
+    if (themeColorMeta) themeColorMeta.setAttribute('content', state.theme === 'light' ? '#f8fafc' : '#09090b');
   }
 
   function setView(view, opts = {}) {
@@ -3018,5 +3020,80 @@
     mockState.durationSec = state.mockDurationMins * 60;
     mockState.timeLeft = mockState.durationSec;
   }
+
+  // ==================== PWA INSTALL & SERVICE WORKER ====================
+  let deferredInstallPrompt = null;
+
+  function isStandaloneMode() {
+    return (typeof window.matchMedia === 'function' && window.matchMedia('(display-mode: standalone)').matches)
+      || window.navigator.standalone === true;
+  }
+
+  function updateInstallUI() {
+    const sideBtn = document.getElementById('install-app-btn');
+    const modalBtn = document.getElementById('settings-install-btn');
+    const descEl = document.getElementById('pwa-install-desc');
+    const standalone = isStandaloneMode();
+
+    if (standalone) {
+      if (sideBtn) sideBtn.style.display = 'none';
+      if (modalBtn) modalBtn.style.display = 'none';
+      if (descEl) descEl.textContent = 'Running as an installed standalone desktop app — zero browser tabs or distractions.';
+      return;
+    }
+
+    const canPrompt = !!deferredInstallPrompt;
+    if (sideBtn) sideBtn.style.display = canPrompt ? 'inline-flex' : 'none';
+    if (modalBtn) modalBtn.style.display = canPrompt ? 'inline-flex' : 'none';
+    if (descEl) {
+      descEl.textContent = canPrompt
+        ? 'Install GuessMaster Pro on your desktop for a dedicated app window with offline support and zero tab distractions.'
+        : 'Open in Chrome or Edge on desktop and click the Install icon in the address bar (or Menu → Save & share → Install GuessMaster Pro) to run it as a standalone app.';
+    }
+  }
+
+  async function triggerDesktopInstall() {
+    if (!deferredInstallPrompt) return;
+    const promptEv = deferredInstallPrompt;
+    try {
+      await promptEv.prompt();
+      const choice = await promptEv.userChoice;
+      if (choice && choice.outcome === 'accepted') {
+        deferredInstallPrompt = null;
+      }
+    } catch {}
+    updateInstallUI();
+  }
+
+  const installSideBtn = document.getElementById('install-app-btn');
+  const installModalBtn = document.getElementById('settings-install-btn');
+  if (installSideBtn) installSideBtn.addEventListener('click', triggerDesktopInstall);
+  if (installModalBtn) installModalBtn.addEventListener('click', triggerDesktopInstall);
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    updateInstallUI();
+  });
+
+  window.addEventListener('appinstalled', () => {
+    deferredInstallPrompt = null;
+    updateInstallUI();
+  });
+
+  if (typeof window.matchMedia === 'function') {
+    const dmQuery = window.matchMedia('(display-mode: standalone)');
+    if (typeof dmQuery.addEventListener === 'function') {
+      dmQuery.addEventListener('change', updateInstallUI);
+    }
+  }
+
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+    const regSw = () => navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(() => {});
+    if (document.readyState === 'complete') regSw();
+    else window.addEventListener('load', regSw);
+  }
+
+  updateInstallUI();
   render();
 })();

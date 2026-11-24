@@ -139,18 +139,23 @@ code {
 }
 
 .brand-icon {
-  width: 26px;
-  height: 26px;
-  border-radius: 6px;
-  background: var(--bg-soft);
-  border: 1px solid var(--border-strong);
-  color: var(--accent-bright);
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  padding: 0;
+  overflow: hidden;
+  background: transparent;
+  border: none;
   display: grid;
   place-items: center;
-  font-weight: 800;
-  font-size: 0.96rem;
-  letter-spacing: -0.02em;
   flex-shrink: 0;
+}
+
+.brand-logo-img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
 }
 
 .brand-title {
@@ -301,7 +306,12 @@ code {
 
 .sidebar-footer {
   display: flex;
+  flex-direction: column;
   gap: 6px;
+}
+
+.install-app-btn {
+  justify-content: center;
 }
 
 /* Main Content */
