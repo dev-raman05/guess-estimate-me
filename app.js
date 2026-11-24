@@ -81,28 +81,8 @@
     flipped: false
   };
 
-  let drillState = {
-    active: false,
-    completed: false,
-    timeLeft: 60,
-    timerId: null,
-    advanceTimeoutId: null,
-    score: 0,
-    answered: 0,
-    correctCount: 0,
-    streak: 0,
-    bestStreak: 0,
-    currentIdx: 0,
-    questions: [],
-    lastFeedback: null,
-    lockedChoice: null,
-    beatBest: false
-  };
-
-  function abortRapidDrill() {
-    clearInterval(drillState.timerId);
-    clearTimeout(drillState.advanceTimeoutId);
-    drillState = {
+  function createEmptyDrillState() {
+    return {
       active: false,
       completed: false,
       timeLeft: 60,
@@ -115,10 +95,24 @@
       bestStreak: 0,
       currentIdx: 0,
       questions: [],
-      lastFeedback: null,
+      history: [],
+      reviewFilter: 'all',
       lockedChoice: null,
       beatBest: false
     };
+  }
+
+  let drillState = createEmptyDrillState();
+  let lastDrillLeadPrompt = '';
+
+  function hasDrillSessionData() {
+    return drillState.active || drillState.completed || drillState.history.length > 0;
+  }
+
+  function abortRapidDrill() {
+    clearInterval(drillState.timerId);
+    clearTimeout(drillState.advanceTimeoutId);
+    drillState = createEmptyDrillState();
   }
 
   let mockState = {
@@ -241,7 +235,7 @@
   }
 
   function setView(view, opts = {}) {
-    if (drillState.active && (view !== 'memorize' || (opts.memorizeTab && opts.memorizeTab !== 'drill'))) {
+    if (hasDrillSessionData() && (view !== 'memorize' || (opts.memorizeTab && opts.memorizeTab !== 'drill'))) {
       abortRapidDrill();
     }
     if (view !== 'library' && libResizeObserver) {
@@ -1544,6 +1538,38 @@
     `).join('');
   }
 
+  function renderDrillReviewListHtml() {
+    const history = drillState.history || [];
+    if (!history.length) {
+      return '<div style="font-size:0.9rem;color:var(--text-muted);padding:6px 2px;">No questions were answered before the 60-second timer ended.</div>';
+    }
+    const filter = drillState.reviewFilter || 'all';
+    const filtered = history.filter(item => {
+      if (filter === 'wrong') return !item.isCorrect;
+      if (filter === 'correct') return item.isCorrect;
+      return true;
+    });
+    if (!filtered.length) {
+      const emptyMsg = filter === 'wrong'
+        ? 'Zero wrong answers in this round! Switch to All to review every solution.'
+        : 'No correct answers in this filter yet. Review Wrong answers below to master the shortcuts.';
+      return `<div style="font-size:0.9rem;color:var(--text-muted);padding:6px 2px;">${emptyMsg}</div>`;
+    }
+    return filtered.map(item => `
+      <div class="drill-review-item ${item.isCorrect ? 'is-correct' : 'is-wrong'}">
+        <div class="drill-review-head">
+          <div class="drill-review-q"><span style="color:var(--text-dim);font-family:var(--mono);margin-right:6px;">Q${item.num}</span>${esc(item.q)}</div>
+          <span class="pill ${item.isCorrect ? 'pill-green' : 'pill-danger'}">${item.isCorrect ? `✓ Correct (+${item.pts})` : '✕ Wrong'}</span>
+        </div>
+        <div class="drill-review-answers">
+          ${item.isCorrect ? '' : `<span>Your answer: <span class="drill-ans-wrong">${esc(item.chosenText)}</span></span>`}
+          <span>Correct answer: <span class="drill-ans-right">${esc(item.correctText)}</span></span>
+        </div>
+        <div class="drill-review-exp">💡 ${esc(item.exp)}</div>
+      </div>
+    `).join('');
+  }
+
   // ==================== VIEW 6: MEMORIZE & DRILL ====================
   function renderMemorize() {
     const tab = state.memorizeTab || 'cheatsheet';
@@ -1628,28 +1654,45 @@
     } else {
       const qObj = drillState.questions[drillState.currentIdx];
       const accPct = drillState.answered ? Math.round((drillState.correctCount / drillState.answered) * 100) : 0;
+      const wrongCount = Math.max(0, drillState.answered - drillState.correctCount);
+      const rf = drillState.reviewFilter || 'all';
       body = `
-        <div class="flashcard-stage">
+        <div class="drill-stage">
           <div class="card" id="drill-card-box">
             <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
               <div>
                 <h3 style="margin:0;font-size:1.1rem;">⚡ 60-Second Rapid-Fire Consulting Drill</h3>
-                <div style="font-size:0.93rem;color:var(--text-muted);">Test your India anchors, unit conversions, and rapid mental math.</div>
+                <div style="font-size:0.93rem;color:var(--text-muted);">Pure speed test: only Correct / Wrong during the 60s timer. Solutions unlock at the end.</div>
               </div>
               <span class="pill pill-purple" id="drill-best-pill">Best Score: ${state.bestDrillScore} pts</span>
             </div>
 
             ${!drillState.active ? `
-              <div style="text-align:center;padding:14px 8px;">
+              <div style="text-align:center;padding:10px 6px;">
                 ${drillState.completed ? `
-                  <div class="good-box" style="margin-bottom:10px;">
-                    <h2 style="margin:0 0 4px;font-size:1.25rem;">⏱️ Time’s Up! Final Score: ${drillState.score} pts ${drillState.beatBest ? '🏆 New Best!' : ''}</h2>
-                    <div>Answered ${drillState.answered} (${drillState.correctCount} correct · ${accPct}% accuracy) · Best Streak: ${drillState.bestStreak}</div>
+                  <div class="good-box" style="margin-bottom:10px;text-align:left;">
+                    <h2 style="margin:0 0 4px;font-size:1.22rem;">⏱️ Time’s Up! Final Score: ${drillState.score} pts ${drillState.beatBest ? '🏆 New Best!' : ''}</h2>
+                    <div>Answered <strong>${drillState.answered}</strong> · <span style="color:var(--accent-bright);font-weight:700;">${drillState.correctCount} correct</span> · <span style="color:var(--danger);font-weight:700;">${wrongCount} wrong</span> · ${accPct}% accuracy · Best Streak: ${drillState.bestStreak}</div>
                   </div>
                 ` : ''}
-                <button class="btn btn-primary" id="start-drill-btn" style="font-size:1.05rem;padding:8px 18px;">▶ ${drillState.completed ? 'Play Again (60s)' : 'Start 60-Second Drill'}</button>
-                <p style="margin:8px auto 0;max-width:420px;font-size:0.88rem;color:var(--text-muted);">Complete the full 60s to save your Best Score. Quitting or leaving early resets the drill without saving. Tip: Use keys 1–4 for speed!</p>
+                <button class="btn btn-primary" id="start-drill-btn" style="font-size:1.05rem;padding:8px 18px;">▶ ${drillState.completed ? 'Play Again (New Random Questions)' : 'Start 60-Second Drill'}</button>
+                <p style="margin:8px auto 0;max-width:480px;font-size:0.88rem;color:var(--text-muted);">${drillState.completed ? 'Review every answer and shortcut below while staying on this screen. Switching tabs or leaving resets everything for a fresh round.' : 'Each session deals fresh random questions. During 60s you only see Correct or Wrong so you stay focused; full answers & solutions unlock after 60s (and reset when you switch tabs or leave).'}</p>
               </div>
+              ${drillState.completed ? `
+                <div class="drill-review-section" id="drill-review-section">
+                  <div class="drill-review-toolbar">
+                    <strong style="font-size:1rem;">📖 Round Solutions &amp; Right Answers (${drillState.history.length})</strong>
+                    <div class="drill-review-filters">
+                      <button class="btn btn-sm ${rf === 'all' ? 'btn-primary' : ''}" data-drill-filter="all">All (${drillState.history.length})</button>
+                      <button class="btn btn-sm ${rf === 'wrong' ? 'btn-primary' : ''}" data-drill-filter="wrong">Wrong (${wrongCount})</button>
+                      <button class="btn btn-sm ${rf === 'correct' ? 'btn-primary' : ''}" data-drill-filter="correct">Correct (${drillState.correctCount})</button>
+                    </div>
+                  </div>
+                  <div class="drill-review-list" id="drill-review-list">
+                    ${renderDrillReviewListHtml()}
+                  </div>
+                </div>
+              ` : ''}
             ` : `
               <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:10px;">
                 <span class="timer-pill" id="drill-timer-pill" style="${drillState.timeLeft <= 10 ? 'color:var(--danger);border-color:var(--danger);' : ''}">⏱️ ${drillState.timeLeft}s</span>
@@ -1663,7 +1706,7 @@
               ${qObj ? `
                 <div class="section-block">
                   <div id="drill-question-text" style="font-size:1.06rem;font-weight:700;margin-bottom:7px;">${esc(qObj.q)}</div>
-                  <div class="drill-feedback-slot" id="drill-feedback-slot">Pick an option or press keys 1–4</div>
+                  <div class="drill-feedback-slot" id="drill-feedback-slot">Pick an option or press keys 1–4 — right answers &amp; solutions unlock after 60s</div>
                   <div class="drill-options-grid" id="drill-options-grid">
                     ${renderDrillOptionsHtml(qObj)}
                   </div>
@@ -2254,7 +2297,7 @@
     document.querySelectorAll('[data-mem-tab]').forEach(btn => {
       btn.addEventListener('click', () => {
         const nextTab = btn.dataset.memTab;
-        if (drillState.active && nextTab !== 'drill') {
+        if (hasDrillSessionData() && nextTab !== 'drill') {
           abortRapidDrill();
         }
         state.memorizeTab = nextTab;
@@ -2314,6 +2357,17 @@
       });
     }
 
+    document.querySelectorAll('[data-drill-filter]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        drillState.reviewFilter = btn.dataset.drillFilter || 'all';
+        document.querySelectorAll('[data-drill-filter]').forEach(b => {
+          b.classList.toggle('btn-primary', b.dataset.drillFilter === drillState.reviewFilter);
+        });
+        const listEl = document.getElementById('drill-review-list');
+        if (listEl) listEl.innerHTML = renderDrillReviewListHtml();
+      });
+    });
+
     bindDrillOptionListeners();
   }
 
@@ -2326,9 +2380,262 @@
     return copy;
   }
 
-  function buildShuffledDrillPool(lastPrompt = '') {
-    const raw = CHEATSHEET.mathDrillQuestions || [];
-    const pool = shuffleArray(raw).map(item => {
+  function buildUniqueOptions(correctVal, candidateDistractors, formatter) {
+    const correctText = formatter(correctVal);
+    const seen = new Set([correctText]);
+    const distractors = [];
+    for (const cand of candidateDistractors) {
+      if (cand <= 0 || !Number.isFinite(cand)) continue;
+      const text = formatter(cand);
+      if (!seen.has(text)) {
+        seen.add(text);
+        distractors.push(text);
+        if (distractors.length === 3) break;
+      }
+    }
+    const step = Math.max(1, Math.round(Math.abs(correctVal) * 0.25));
+    let offset = step;
+    while (distractors.length < 3) {
+      for (const candidate of [correctVal + offset, correctVal - offset]) {
+        if (candidate > 0) {
+          const text = formatter(candidate);
+          if (!seen.has(text)) {
+            seen.add(text);
+            distractors.push(text);
+            if (distractors.length === 3) break;
+          }
+        }
+      }
+      offset += step;
+    }
+    const combined = [
+      { text: correctText, isCorrect: true },
+      ...distractors.map(t => ({ text: t, isCorrect: false }))
+    ];
+    const mixed = shuffleArray(combined);
+    return {
+      options: mixed.map(o => o.text),
+      answer: mixed.findIndex(o => o.isCorrect)
+    };
+  }
+
+  function generateDynamicDrillQuestions() {
+    const generated = [];
+
+    // 1. Percentages of India / City Populations (6 questions)
+    const pctBases = shuffleArray([
+      { base: 140, label: '140 Crore (India pop)', unit: 'Crore', pcts: [5, 10, 15, 20, 25, 30, 35, 40, 45, 55, 60, 65, 70, 75, 80, 85] },
+      { base: 1400, label: '1,400 Million', unit: 'Million', pcts: [8, 12, 14, 15, 18, 22, 24, 28, 35, 42, 45, 65] },
+      { base: 350, label: '350M Indian households', unit: 'Million', pcts: [8, 12, 16, 18, 22, 24, 28, 32, 36, 44, 52, 64] },
+      { base: 250, label: '250 Million', unit: 'Million', pcts: [8, 12, 14, 16, 18, 24, 28, 32, 36, 44, 56] },
+      { base: 500, label: '500 Million', unit: 'Million', pcts: [7, 9, 13, 14, 16, 18, 22, 24, 27, 34, 42] },
+      { base: 30, label: '30M (Delhi NCR pop)', unit: 'Million', pcts: [10, 20, 30, 40, 60, 70, 80] },
+      { base: 20, label: '20M (Mumbai MMR pop)', unit: 'Million', pcts: [15, 25, 35, 45, 55, 65, 75, 85] }
+    ]);
+    pctBases.slice(0, 6).forEach(cfg => {
+      const pct = shuffleArray(cfg.pcts)[0];
+      const ans = Math.round((pct * cfg.base) / 100);
+      const step = Math.max(1, Math.round(cfg.base * 0.05));
+      const { options, answer } = buildUniqueOptions(
+        ans,
+        [Math.round(ans * 0.8), Math.round(ans * 1.25), ans + step, Math.max(1, ans - step), Math.round(ans * 1.5)],
+        v => `${v.toLocaleString('en-IN')} ${cfg.unit}`
+      );
+      generated.push({
+        q: `Mental math: What is ${pct}% of ${cfg.label}?`,
+        options,
+        answer,
+        exp: `${pct}% of ${cfg.base.toLocaleString('en-IN')} = (${pct} × ${cfg.base.toLocaleString('en-IN')}) ÷ 100 = ${ans.toLocaleString('en-IN')} ${cfg.unit}.`
+      });
+    });
+
+    // 2. Crore <-> Million Conversions (4 questions)
+    const crVals = shuffleArray([1.2, 1.5, 1.8, 2.2, 2.4, 2.8, 3.2, 3.5, 4.5, 6.5, 8.5, 12, 14, 18, 25, 32, 45]).slice(0, 2);
+    crVals.forEach(cr => {
+      const ans = Math.round(cr * 10);
+      const { options, answer } = buildUniqueOptions(
+        ans,
+        [Math.round(cr * 100), Math.max(1, Math.round(cr)), Math.round(cr * 5), Math.round(cr * 20), ans + 10],
+        v => `${v.toLocaleString('en-IN')} Million`
+      );
+      generated.push({
+        q: `Convert ${cr} Crore to Millions:`,
+        options,
+        answer,
+        exp: `1 Crore = 10 Million, so ${cr} Crore × 10 = ${ans.toLocaleString('en-IN')} Million.`
+      });
+    });
+    const mVals = shuffleArray([15, 25, 35, 45, 65, 75, 120, 140, 180, 240, 320, 480, 640, 850]).slice(0, 2);
+    mVals.forEach(m => {
+      const ans = m / 10;
+      const fmtCr = v => `${Number.isInteger(v) ? v.toLocaleString('en-IN') : v.toFixed(1)} Crore`;
+      const { options, answer } = buildUniqueOptions(
+        ans,
+        [m, m / 100, ans * 2, ans + 10, Math.max(0.5, ans - 2)],
+        fmtCr
+      );
+      generated.push({
+        q: `Convert ${m} Million to Crore:`,
+        options,
+        answer,
+        exp: `10 Million = 1 Crore, so ${m} Million ÷ 10 = ${fmtCr(ans)}.`
+      });
+    });
+
+    // 3. Revenue Scale (Million x ₹Price -> ₹ Crore) (4 questions)
+    const revItems = shuffleArray(['streaming subs', 'annual OTT passes', 'bus pass holders', 'coffee buyers', 'monthly cab riders', 'fitness members', 'cinema buyers', 'ebook readers']);
+    const userPools = shuffleArray([5, 8, 10, 12, 15, 20, 25, 30, 40]);
+    const pricePools = shuffleArray([200, 300, 400, 500, 600, 800, 1000, 1200, 1500, 2000]);
+    for (let i = 0; i < 4; i++) {
+      const usersM = userPools[i];
+      const price = pricePools[i];
+      const revCr = Math.round((usersM * price) / 10);
+      const { options, answer } = buildUniqueOptions(
+        revCr,
+        [revCr * 10, Math.max(10, Math.round(revCr / 10)), revCr * 2, Math.round(revCr * 0.5), revCr + 200],
+        v => `₹${v.toLocaleString('en-IN')} Crore`
+      );
+      generated.push({
+        q: `${usersM} Million ${revItems[i]} × ₹${price.toLocaleString('en-IN')} average spend = ?`,
+        options,
+        answer,
+        exp: `1M × ₹10 = ₹1 Crore, so ${usersM}M × ₹${price.toLocaleString('en-IN')} = (${usersM} × ${price}) ÷ 10 = ₹${revCr.toLocaleString('en-IN')} Crore.`
+      });
+    }
+
+    // 4. Durable Replacement Demand (Stock ÷ Lifespan) (4 questions)
+    const durableItems = shuffleArray(['smartphones', 'laptops', 'refrigerators', 'air conditioners', 'two-wheelers', 'cars', 'LED TVs', 'washing machines', 'microwaves', 'bicycles']);
+    const lifePool = shuffleArray([3, 4, 5, 6, 7, 8, 10, 12]);
+    const annualPool = shuffleArray([12, 15, 18, 20, 24, 25, 28, 30, 32, 35, 36, 40, 45]);
+    for (let i = 0; i < 4; i++) {
+      const life = lifePool[i];
+      const annualM = annualPool[i];
+      const stockM = life * annualM;
+      const { options, answer } = buildUniqueOptions(
+        annualM,
+        [stockM, Math.round(annualM * 1.5), Math.max(2, annualM - 6), annualM + 10, Math.round(annualM * 2)],
+        v => `${v} Million/yr`
+      );
+      generated.push({
+        q: `Installed stock = ${stockM}M ${durableItems[i]}; avg lifespan = ${life} years. Annual replacement demand?`,
+        options,
+        answer,
+        exp: `Replacement demand = Stock ÷ Lifespan = ${stockM}M ÷ ${life} yrs = ${annualM} Million/yr.`
+      });
+    }
+
+    // 5. Supply Throughput (3,600 ÷ sec & stations × hrs × occ% ÷ serviceHrs) (4 questions)
+    const rateUnits = shuffleArray(['toll lane', 'metro turnstile', 'airport security lane', 'QR checkout kiosk']);
+    const secsPool = shuffleArray([6, 8, 9, 10, 12, 15, 18, 20, 24, 30, 36, 40, 45, 60]);
+    for (let i = 0; i < 2; i++) {
+      const sec = secsPool[i];
+      const ans = Math.round(3600 / sec);
+      const { options, answer } = buildUniqueOptions(
+        ans,
+        [Math.round(ans * 0.5), ans * 2, Math.round(60 / sec) || 10, ans + 60, Math.max(10, ans - 60)],
+        v => `${v}/hr`
+      );
+      const unitArticle = /^[aeiou]/i.test(rateUnits[i]) ? 'An' : 'A';
+      generated.push({
+        q: `${unitArticle} ${rateUnits[i]} processes 1 customer every ${sec} seconds continuously. Hourly throughput?`,
+        options,
+        answer,
+        exp: `1 hour = 3,600 seconds. 3,600 ÷ ${sec}s = ${ans} customers/hr.`
+      });
+    }
+    const capStations = shuffleArray([
+      { name: 'dental clinic', unit: 'chairs' },
+      { name: 'EV hub', unit: 'chargers' },
+      { name: 'salon', unit: 'styling chairs' },
+      { name: 'service bay hub', unit: 'bays' },
+      { name: 'passport office', unit: 'counters' }
+    ]);
+    for (let i = 0; i < 2; i++) {
+      let stations, hrs, occPct, serviceMins;
+      for (let attempt = 0; attempt < 50; attempt++) {
+        const s = [6, 8, 10, 12, 15, 16, 20, 24][Math.floor(Math.random() * 8)];
+        const h = [8, 9, 10, 12][Math.floor(Math.random() * 4)];
+        const o = [50, 60, 75, 80][Math.floor(Math.random() * 4)];
+        const m = [15, 20, 30, 45, 60][Math.floor(Math.random() * 5)];
+        if ((s * h * o * 60) % (100 * m) === 0) {
+          stations = s; hrs = h; occPct = o; serviceMins = m;
+          break;
+        }
+      }
+      if (!stations) { stations = 12; hrs = 10; occPct = 75; serviceMins = 30; }
+      const ans = Math.round((stations * hrs * occPct * 60) / (100 * serviceMins));
+      const { options, answer } = buildUniqueOptions(
+        ans,
+        [stations * hrs, Math.round(ans * 0.5), ans * 2, ans + 40, Math.max(10, ans - 30)],
+        v => `${v} customers/day`
+      );
+      const capArticle = /^[aeiou]/i.test(capStations[i].name) ? 'An' : 'A';
+      generated.push({
+        q: `${capArticle} ${capStations[i].name} has ${stations} ${capStations[i].unit}, runs ${hrs} hrs/day at ${occPct}% utilization, ${serviceMins} mins/visit. Daily customers?`,
+        options,
+        answer,
+        exp: `${stations} × ${hrs} hrs × ${occPct}% = ${(stations * hrs * occPct) / 100} active hrs ÷ (${serviceMins}/60 hr) = ${ans} customers/day.`
+      });
+    }
+
+    // 6. Geometric Mean (3 questions) & Little's Law (3 questions)
+    const gmPairs = shuffleArray([
+      [4, 16, 8], [4, 25, 10], [4, 36, 12], [9, 16, 12], [9, 25, 15], [9, 36, 18],
+      [10, 40, 20], [10, 90, 30], [16, 36, 24], [20, 80, 40], [25, 100, 50], [40, 90, 60],
+      [50, 200, 100], [80, 180, 120], [100, 400, 200], [100, 900, 300], [250, 1000, 500], [400, 900, 600]
+    ]).slice(0, 3);
+    gmPairs.forEach(([lo, hi, gm]) => {
+      const arithMean = Math.round((lo + hi) / 2);
+      const { options, answer } = buildUniqueOptions(
+        gm,
+        [arithMean, Math.round(gm * 0.5), gm * 2, Math.max(2, lo * 2)],
+        v => `${v.toLocaleString('en-IN')}`
+      );
+      generated.push({
+        q: `Geometric mean trick for a wide order-of-magnitude range of ${lo.toLocaleString('en-IN')} to ${hi.toLocaleString('en-IN')}:`,
+        options,
+        answer,
+        exp: `Geometric mean = √(${lo.toLocaleString('en-IN')} × ${hi.toLocaleString('en-IN')}) = √${(lo * hi).toLocaleString('en-IN')} = ${gm.toLocaleString('en-IN')} (avoids upward skew of the ${arithMean.toLocaleString('en-IN')} arithmetic mean).`
+      });
+    });
+
+    const littlesCases = shuffleArray([
+      { rate: 400, rateUnit: 'flights/hr', dur: 2, durUnit: 'hrs avg flight', factor: 60, outUnit: 'flights airborne' },
+      { rate: 300, rateUnit: 'cabs starting/hr', dur: 0.5, durUnit: 'hr avg trip', factor: 80, outUnit: 'cabs occupied' },
+      { rate: 600, rateUnit: 'diners entering/hr', dur: 0.75, durUnit: 'hr avg meal', factor: 80, outUnit: 'diners seated' },
+      { rate: 120, rateUnit: 'metro trains/hr', dur: 1.5, durUnit: 'hr loop', factor: 70, outUnit: 'active trains' },
+      { rate: 500, rateUnit: 'deliveries dispatched/hr', dur: 0.4, durUnit: 'hr avg run', factor: 60, outUnit: 'riders in transit' },
+      { rate: 250, rateUnit: 'cars entering toll highway/hr', dur: 2, durUnit: 'hrs drive', factor: 50, outUnit: 'cars on highway' }
+    ]).slice(0, 3);
+    littlesCases.forEach(lc => {
+      const ans = Math.round(lc.rate * lc.dur * (lc.factor / 100));
+      const fullCap = Math.round(lc.rate * lc.dur);
+      const { options, answer } = buildUniqueOptions(
+        ans,
+        [fullCap, Math.round(ans * 0.5), ans * 2, ans + 50],
+        v => `${v.toLocaleString('en-IN')} ${lc.outUnit}`
+      );
+      generated.push({
+        q: `Little’s Law: ${lc.rate} ${lc.rateUnit} × ${lc.dur} ${lc.durUnit} at ${lc.factor}% time-of-day factor = ?`,
+        options,
+        answer,
+        exp: `Active = Rate × Avg Duration × Factor = ${lc.rate} × ${lc.dur} × ${lc.factor}% = ${ans.toLocaleString('en-IN')} ${lc.outUnit}.`
+      });
+    });
+
+    return shuffleArray(generated);
+  }
+
+  function buildShuffledDrillPool(avoidFirstPrompt = '') {
+    const combined = [...(CHEATSHEET.mathDrillQuestions || []), ...generateDynamicDrillQuestions()];
+    const seenQ = new Set();
+    const unique = [];
+    for (const item of combined) {
+      if (!item || !item.q || seenQ.has(item.q)) continue;
+      seenQ.add(item.q);
+      unique.push(item);
+    }
+    const pool = shuffleArray(unique).map(item => {
       const mappedOpts = item.options.map((text, idx) => ({ text, isCorrect: idx === item.answer }));
       const mixedOpts = shuffleArray(mappedOpts);
       return {
@@ -2338,9 +2645,9 @@
         exp: item.exp
       };
     });
-    if (pool.length > 1 && lastPrompt && pool[0].q === lastPrompt) {
-      const last = pool.length - 1;
-      [pool[0], pool[last]] = [pool[last], pool[0]];
+    if (pool.length > 1 && avoidFirstPrompt && pool[0].q === avoidFirstPrompt) {
+      const swapIdx = 1 + Math.floor(Math.random() * (pool.length - 1));
+      [pool[0], pool[swapIdx]] = [pool[swapIdx], pool[0]];
     }
     return pool;
   }
@@ -2362,7 +2669,7 @@
 
     qEl.textContent = qObj.q;
     fbEl.className = 'drill-feedback-slot';
-    fbEl.textContent = 'Pick an option or press keys 1–4';
+    fbEl.textContent = 'Pick an option or press keys 1–4 — right answers & solutions unlock after 60s';
     gridEl.innerHTML = renderDrillOptionsHtml(qObj);
     bindDrillOptionListeners();
   }
@@ -2401,6 +2708,16 @@
       drillState.streak = 0;
     }
 
+    drillState.history.push({
+      num: drillState.answered,
+      q: q.q,
+      chosenText: q.options[chosenIdx],
+      correctText: q.options[q.answer],
+      isCorrect,
+      pts,
+      exp: q.exp
+    });
+
     const scoreEl = document.getElementById('drill-score-pill');
     const streakEl = document.getElementById('drill-streak-pill');
     const countEl = document.getElementById('drill-count-pill');
@@ -2412,13 +2729,15 @@
     optBtns.forEach(btn => {
       const idx = Number(btn.dataset.drillOpt);
       btn.disabled = true;
-      const hint = btn.querySelector('.drill-key-hint');
-      if (idx === q.answer) {
-        btn.classList.add('correct');
-        if (hint) hint.textContent = '✓';
-      } else if (idx === chosenIdx) {
-        btn.classList.add('wrong');
-        if (hint) hint.textContent = '✕';
+      if (idx === chosenIdx) {
+        const hint = btn.querySelector('.drill-key-hint');
+        if (isCorrect) {
+          btn.classList.add('correct');
+          if (hint) hint.textContent = '✓';
+        } else {
+          btn.classList.add('wrong');
+          if (hint) hint.textContent = '✕';
+        }
       }
     });
 
@@ -2426,15 +2745,15 @@
     if (fbEl) {
       if (isCorrect) {
         fbEl.className = 'drill-feedback-slot good';
-        fbEl.textContent = `✅ Correct! (+${pts} pts) — ${q.exp}`;
+        fbEl.textContent = `✅ Correct! (+${pts} pts)`;
       } else {
         fbEl.className = 'drill-feedback-slot bad';
-        fbEl.textContent = `❌ Answer: ${q.options[q.answer]} — ${q.exp}`;
+        fbEl.textContent = '❌ Wrong!';
       }
     }
 
     clearTimeout(drillState.advanceTimeoutId);
-    drillState.advanceTimeoutId = setTimeout(advanceDrillQuestion, isCorrect ? 400 : 900);
+    drillState.advanceTimeoutId = setTimeout(advanceDrillQuestion, 260);
   }
 
   function bindDrillOptionListeners() {
@@ -2491,23 +2810,14 @@
   }
 
   function startRapidDrill() {
+    const prevLead = lastDrillLeadPrompt;
     abortRapidDrill();
-    const pool = buildShuffledDrillPool();
+    const pool = buildShuffledDrillPool(prevLead);
+    lastDrillLeadPrompt = pool[0] ? pool[0].q : '';
     drillState = {
+      ...createEmptyDrillState(),
       active: true,
-      completed: false,
-      timeLeft: 60,
-      score: 0,
-      answered: 0,
-      correctCount: 0,
-      streak: 0,
-      bestStreak: 0,
-      currentIdx: 0,
       questions: pool,
-      lastFeedback: null,
-      lockedChoice: null,
-      beatBest: false,
-      advanceTimeoutId: null,
       timerId: setInterval(() => {
         if (!drillState.active) return;
         if (drillState.timeLeft > 1) {
@@ -2619,6 +2929,7 @@
   if (resetBtn) {
     resetBtn.addEventListener('click', () => {
       if (confirm('Reset all roadmap checkmarks, mastered problems, and flashcard progress?')) {
+        abortRapidDrill();
         localStorage.removeItem(STORAGE_KEY);
         state = loadState();
         toggleSettings(false);
@@ -2679,6 +2990,20 @@
     window.addEventListener('resize', () => {
       if (state.view === 'library' && typeof window.__gmSyncLibraryListHeight === 'function') {
         window.__gmSyncLibraryListHeight();
+      }
+    });
+    window.addEventListener('pagehide', () => {
+      if (hasDrillSessionData()) abortRapidDrill();
+    });
+  }
+
+  if (typeof document.addEventListener === 'function') {
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && hasDrillSessionData()) {
+        abortRapidDrill();
+        if (state.view === 'memorize' && state.memorizeTab === 'drill') {
+          render();
+        }
       }
     });
   }
