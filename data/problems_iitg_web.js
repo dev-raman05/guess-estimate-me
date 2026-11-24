@@ -6,9 +6,6 @@ window.GM_DATA.problems.push(
     id: 'iitg-watches-delhi',
     title: 'Number of Watches Currently in Use in Delhi',
     prompt: 'Estimate the number of wristwatches currently in use in Delhi.',
-    source: 'IITG Guess-It-Matters',
-    pdfRef: 'Guess-It-Matters.pdf — p. 11 (Book p. 7)',
-    company: 'IITG CAC',
     difficulty: 1,
     archetype: 'Market Sizing',
     approachType: 'Top-Down (Demand-Side)',
@@ -16,7 +13,7 @@ window.GM_DATA.problems.push(
     tags: ['Beginner Friendly', 'Delhi', 'Income Split', 'Smartwatches'],
     clarifyingQuestions: [
       { q: 'Include both analog/quartz watches and smartwatches/fitness bands?', a: 'Yes, all wristwatches in working condition currently in use.', why: 'Avoids arbitrarily slicing out smartwatches.' },
-      { q: 'Assume 1 active watch per user at any moment, or collectors with multiple?', a: 'Book uses 1 watch/owner (mention collectors ~10% have 2+ for extra credit!).', why: 'Keeps mental math fast.' }
+      { q: 'Assume 1 active watch per user at any moment, or collectors with multiple?', a: 'The baseline uses 1 watch/owner (mention collectors ~10% have 2+ for extra credit!).', why: 'Keeps mental math fast.' }
     ],
     strategyOverview: 'Clean Level-1 Income Split Funnel! Delhi Pop = 3 Crore (30M). Rural ~2% is ignored for simplicity. Split 3 Cr by Income: Upper (20%, 75% own a watch), Middle (40%, 50% own), Lower (40%, 25% own). Weighted ownership = (0.2×0.75) + (0.4×0.50) + (0.4×0.25) = 0.15 + 0.20 + 0.10 = 45%. 3 Cr × 45% = 1.35 Crore watches!',
     formula: 'Watches = Delhi Pop × ∑ (Income Share % × Watch Ownership %)',
@@ -34,12 +31,12 @@ window.GM_DATA.problems.push(
         { label: 'Total Watches Currently in Use', valueText: '1.35 Crore Watches', highlight: true }
       ]
     },
-    finalAnswer: '~1.2 – 1.5 Crore Watches in Delhi (Book: 1.35 Crore)',
+    finalAnswer: '~1.2 – 1.5 Crore Watches in Delhi (Baseline: 1.35 Crore)',
     acceptableRange: { min: 8000000, max: 20000000, unit: 'Watches', display: '80 Lakh – 2 Crore watches' },
     sanityCheck: '45% penetration across 3 Crore people = roughly 1 in 2 Delhiites wears a wristwatch/smartwatch regularly. Very intuitive!',
     interviewerTrap: 'Forgetting to specify whether smartwatches count or dividing by lifespan (this asks for watches CURRENTLY IN USE, not annual sales!).',
     variations: [
-      { question: 'Estimate the number of laptops in working condition in Delhi (IITG Variation!).', hint: 'Split into Personal (75L HH × weighted laptops/HH = 45L) + Work Laptops (1.5 Cr workers × 25% office × 25% laptops = 9.4L) × 90% working = ~49.5 Lakh laptops!' }
+      { question: 'Estimate the number of laptops in working condition in Delhi.', hint: 'Split into Personal (75L HH × weighted laptops/HH = 45L) + Work Laptops (1.5 Cr workers × 25% office × 25% laptops = 9.4L) × 90% working = ~49.5 Lakh laptops!' }
     ],
     guidedPractice: {
       correctApproach: 'Top-Down (Demand-Side)',
@@ -75,9 +72,6 @@ window.GM_DATA.problems.push(
     id: 'iitg-aeroplanes-flying',
     title: 'Number of Aeroplanes Flying in India Right Now',
     prompt: 'Estimate the number of aeroplanes flying in Indian airspace right now.',
-    source: 'IITG Guess-It-Matters',
-    pdfRef: 'Guess-It-Matters.pdf — p. 12 (Book p. 8)',
-    company: 'IITG CAC',
     difficulty: 4,
     archetype: 'Supply & Capacity',
     approachType: 'Bottom-Up (Supply-Side)',
@@ -143,9 +137,6 @@ window.GM_DATA.problems.push(
     id: 'iitg-tea-india-week',
     title: 'Cups of Tea Consumed in All of India Every Week',
     prompt: 'How many cups of tea are consumed in all of India every week?',
-    source: 'IITG Guess-It-Matters',
-    pdfRef: 'Guess-It-Matters.pdf — p. 13 (Book p. 9)',
-    company: 'IITG CAC',
     difficulty: 1,
     archetype: 'Usage & Behavioral',
     approachType: 'Top-Down (Demand-Side)',
@@ -176,8 +167,8 @@ window.GM_DATA.problems.push(
     sanityCheck: 'India consumes ~1.1–1.2 Million tonnes (1.1B kg) of tea leaves annually! At ~2.5–3 grams of tea leaves per cup, that makes ~350–450 Billion cups/year ÷ 52 weeks ≈ ~700–850 Crore cups/week! Bullseye!',
     interviewerTrap: 'Assuming 100% of adults drink 3 cups/day (forgetting South India’s strong coffee culture and children 0–14!).',
     variations: [
-      { question: 'How many video games are sold across all platforms in India annually? (IITG Var)', hint: 'Same age-split matrix! Focus heavily on 10–30 age bracket × gaming PC/console/mobile ownership.' },
-      { question: 'What is the average age of people who buy cars in India? (IITG Var)', hint: 'Weight ages 22–30 (20%), 30–45 (55%), 45–60 (25%) → ~37–39 years!' }
+      { question: 'How many video games are sold across all platforms in India annually?', hint: 'Same age-split matrix! Focus heavily on 10–30 age bracket × gaming PC/console/mobile ownership.' },
+      { question: 'What is the average age of people who buy cars in India?', hint: 'Weight ages 22–30 (20%), 30–45 (55%), 45–60 (25%) → ~37–39 years!' }
     ],
     guidedPractice: {
       correctApproach: 'Top-Down (Demand-Side)',
@@ -210,21 +201,18 @@ window.GM_DATA.problems.push(
     id: 'iitg-chewing-gum',
     title: 'Market Size of Chewing Gum in India',
     prompt: 'Estimate the annual market size (revenue) of the chewing gum market in India.',
-    source: 'IITG Guess-It-Matters',
-    pdfRef: 'Guess-It-Matters.pdf — p. 14–15 (Book p. 10–11)',
-    company: 'IITG CAC',
     difficulty: 3,
     archetype: 'Market Sizing',
     approachType: 'Top-Down (Demand-Side)',
     templateId: 'tpl-fmcg',
-    tags: ['FMCG', 'Impulse Buy', 'Age Frequency Matrix', 'IITG CAC'],
+    tags: ['FMCG', 'Impulse Buy', 'Age Frequency Matrix'],
     clarifyingQuestions: [
       { q: 'All chewing gums & bubble gums (Center Fresh, Happydent, Boomer, Orbit), or sugar-free mints too?', a: 'Chewing/bubble gums (typically ₹1–2/piece or ₹5–10 packs).', why: 'Sets average pack price cleanly.' }
     ],
-    strategyOverview: 'Age × Frequency Matrix! India Pop = 140 Cr → Focus on Middle & Upper Income (50% = 70 Cr, ignoring rural/urban lower-income ~50%, though note kids everywhere buy ₹1 Center Fresh!). Segment 70 Cr by Age (excluding 0–14? Wait—kids 6–14 actually chew bubble gum too! Book excludes <15 & 50+ leaving ages 15–50 = 36 Cr!). Categorize each age bracket into High (2 packs/wk), Medium (1 pack/wk), Low (0.5 packs/wk) at ₹5/pack × 50 weeks/year = ₹8,000 Crore!',
+    strategyOverview: 'Age × Frequency Matrix! India Pop = 140 Cr → Focus on Middle & Upper Income (50% = 70 Cr, ignoring rural/urban lower-income ~50%, though note kids everywhere buy ₹1 Center Fresh!). Segment 70 Cr by Age (excluding 0–14? Wait—kids 6–14 actually chew bubble gum too! The baseline excludes <15 & 50+ leaving ages 15–50 = 36 Cr!). Categorize each age bracket into High (2 packs/wk), Medium (1 pack/wk), Low (0.5 packs/wk) at ₹5/pack × 50 weeks/year = ₹8,000 Crore!',
     formula: 'Market Size = ∑ (Age Segment Consumers × Frequency Bucket % × Packs/Yr × Price/Pack)',
     assumptions: [
-      { label: 'Focus Pool = 70 Cr (50% middle/high income); Active Ages 15–50 = 36 Cr (Book)', rationale: '18–24 has highest frequency (60% buy 2 packs/wk); 35–50 lowest.' },
+      { label: 'Focus Pool = 70 Cr (50% middle/high income); Active Ages 15–50 = 36 Cr (Baseline)', rationale: '18–24 has highest frequency (60% buy 2 packs/wk); 35–50 lowest.' },
       { label: 'Pack Price = ₹5 (4 pieces) | Weeks/Year = 50 (clean rounding!)', rationale: 'Note: In reality, Center Fresh/Happydent single ₹1–2 pieces dominate impulse paan-shop counter change! So ~₹2,500–5,000 Cr is real-world Indian gum market size (since not 100% of 18–50 buy packs every week!).' }
     ],
     tree: {
@@ -235,16 +223,16 @@ window.GM_DATA.problems.push(
         { label: '18–24 (7 Cr): High skew (60% × ₹500/yr)', valueText: '₹2,625 Cr', highlight: true },
         { label: '25–35 (11 Cr): Med skew', valueText: '₹2,375 Cr' },
         { label: '35–50 (11 Cr): Low skew', valueText: '₹1,937.5 Cr' },
-        { label: 'Total Chewing Gum Market (Book)', valueText: '₹8,000 Crore / Year', highlight: true }
+        { label: 'Total Chewing Gum Market (Baseline)', valueText: '₹8,000 Crore / Year', highlight: true }
       ]
     },
-    finalAnswer: '~₹3,000 – ₹8,000 Crore/Year (Book: ₹8,000 Cr)',
+    finalAnswer: '~₹3,000 – ₹8,000 Crore/Year (Baseline: ₹8,000 Cr)',
     acceptableRange: { min: 2000, max: 10000, unit: '₹ Crore/year', display: '₹2,000 Cr – ₹10,000 Cr/yr' },
     sanityCheck: 'India’s confectionery + gum industry is ~₹25,000–35,000 Crore, with chewing/bubble gum accounting for ~₹3,000–5,000 Cr (~15%). Mentioning that ₹5/week assumes 100% of middle/upper 15–50 chew gum weekly—and discounting by ~50% active gum chewers yields ~₹4,000 Cr—is super sharp!',
     interviewerTrap: 'Assuming 100% of an age group buys chewing gum every week without a "Non-Consumers = 0%" bucket!',
     variations: [
-      { question: 'Estimate the market size of formal ties in India. (IITG Var)', hint: 'White-collar corporate/hospitality/school uniform segments × ties bought/2–3 yrs × ₹500!' },
-      { question: 'Estimate the annual size of socks sales in India. (IITG Var)', hint: 'Urban/Mid-income + students × ~3–4 pairs/year × ₹120!' }
+      { question: 'Estimate the market size of formal ties in India.', hint: 'White-collar corporate/hospitality/school uniform segments × ties bought/2–3 yrs × ₹500!' },
+      { question: 'Estimate the annual size of socks sales in India.', hint: 'Urban/Mid-income + students × ~3–4 pairs/year × ₹120!' }
     ],
     guidedPractice: {
       correctApproach: 'Top-Down (Demand-Side)',
@@ -278,19 +266,16 @@ window.GM_DATA.problems.push(
     id: 'iitg-atms-delhi',
     title: 'Number of ATMs in Delhi',
     prompt: 'Estimate the number of ATM machines currently in Delhi.',
-    source: 'IITG Guess-It-Matters',
-    pdfRef: 'Guess-It-Matters.pdf — p. 15 (Book p. 11)',
-    company: 'IITG CAC',
     difficulty: 3,
     archetype: 'Supply & Capacity',
     approachType: 'Hybrid (Demand + Supply)',
     templateId: 'tpl-bottleneck',
-    tags: ['Banking', 'Spatial Density', 'Delhi', 'IITG CAC'],
+    tags: ['Banking', 'Spatial Density', 'Delhi'],
     clarifyingQuestions: [
       { q: 'All bank ATMs across Delhi (both standalone and bank-branch attached)?', a: 'Yes, all active ATMs in Delhi.', why: 'Covers full cash withdrawal infrastructure.' },
-      { q: 'Factor in UPI reducing cash ATM usage?', a: 'Great point to mention in sensitivity! Book models via ATM cards/population density.', why: 'Shows modern fintech awareness.' }
+      { q: 'Factor in UPI reducing cash ATM usage?', a: 'Great point to mention in sensitivity! The baseline models via ATM cards/population density.', why: 'Shows modern fintech awareness.' }
     ],
-    strategyOverview: 'Two great ways! Method A (IITG Card Density Model): Delhi Pop (3 Cr ÷ 4 = 75L HH) → Income Split (Lower 40% × 1 card, Mid 40% × 2, Upper 20% × 4 → avg 2 cards/HH) = 1.5 Cr ATM/debit cards. Split into High-Density areas (60% = 90L cards @ 1 ATM per 5,000 cards = 1,800) + Low-Density areas (40% = 60L cards @ 1 ATM per 2,500 cards = 2,400) = 4,200 ATMs! Method B (Area Grid Check): Delhi Area ~1,500 sq km → ~700 sq km inhabited × ~6 ATMs/sq km = ~4,200 ATMs! Validate via monthly transactions: 1 ATM (16 hrs × 20 txns/hr = 320/day → ~7,200–9,000/mo) easily serves 5,000 cards (~1.5 withdrawals/card/month)!',
+    strategyOverview: 'Two great ways! Method A (Card-Density Model): Delhi Pop (3 Cr ÷ 4 = 75L HH) → Income Split (Lower 40% × 1 card, Mid 40% × 2, Upper 20% × 4 → avg 2 cards/HH) = 1.5 Cr ATM/debit cards. Split into High-Density areas (60% = 90L cards @ 1 ATM per 5,000 cards = 1,800) + Low-Density areas (40% = 60L cards @ 1 ATM per 2,500 cards = 2,400) = 4,200 ATMs! Method B (Area Grid Check): Delhi Area ~1,500 sq km → ~700 sq km inhabited × ~6 ATMs/sq km = ~4,200 ATMs! Validate via monthly transactions: 1 ATM (16 hrs × 20 txns/hr = 320/day → ~7,200–9,000/mo) easily serves 5,000 cards (~1.5 withdrawals/card/month)!',
     formula: 'ATMs = (High-Density Cards ÷ Cards/ATM) + (Low-Density Cards ÷ Cards/ATM)',
     assumptions: [
       { label: 'Delhi Pop = 3 Cr (75L HH); Avg 2 ATM/Debit cards per household = 1.5 Cr cards', rationale: 'Working adults + Jan Dhan accounts.' },
@@ -306,7 +291,7 @@ window.GM_DATA.problems.push(
         { label: 'Total ATMs in Delhi', valueText: '4,200 ATMs', highlight: true }
       ]
     },
-    finalAnswer: '~4,000 – 5,000 ATMs in Delhi (Book: 4,200 ATMs)',
+    finalAnswer: '~4,000 – 5,000 ATMs in Delhi (Baseline: 4,200 ATMs)',
     acceptableRange: { min: 2500, max: 7000, unit: 'ATMs', display: '2,500 – 7,000 ATMs' },
     sanityCheck: 'India has ~2.1–2.2 Lakh ATMs nationwide. Delhi NCR accounts for ~2–2.5% of India’s population and ~4–5% of urban banking infrastructure → ~4,500–5,500 ATMs! Remarkably close to 4,200!',
     interviewerTrap: 'Using the exact same cards-per-ATM ratio across dense commercial markets and sparse residential outskirts!',
@@ -345,14 +330,11 @@ window.GM_DATA.problems.push(
     id: 'iitg-noodles-campus',
     title: 'Packets of Noodles Consumed Monthly at a Residential College Campus',
     prompt: 'How many packets of instant noodles (like Maggi) are consumed monthly at a residential college campus?',
-    source: 'IITG Guess-It-Matters',
-    pdfRef: 'Guess-It-Matters.pdf — p. 16–17 (Book p. 12–13)',
-    company: 'IITG CAC',
     difficulty: 2,
     archetype: 'Usage & Behavioral',
     approachType: 'Top-Down (Demand-Side)',
     templateId: 'tpl-fmcg',
-    tags: ['Campus', 'FMCG', 'Segmented Frequency', 'IITG CAC'],
+    tags: ['Campus', 'FMCG', 'Segmented Frequency'],
     clarifyingQuestions: [
       { q: 'Are we estimating an IIT-sized residential campus (~7,000 students + resident faculty/staff families)?', a: 'Yes! Students + on-campus faculty/staff families (exclude daily non-resident workers/guards).', why: 'Captures ALL campus residents without leaking non-residents.' },
       { q: 'Both hostel canteen Maggi AND room-cooked packets?', a: 'Yes, total monthly packets consumed on campus.', why: 'Covers midnight hostel kettles + night canteens!' }
@@ -413,14 +395,11 @@ window.GM_DATA.problems.push(
     id: 'iitg-hotel-shampoo-global',
     title: 'Hotel-Sized Mini Bottles of Shampoo Sold Every Year Globally',
     prompt: 'How many hotel-sized mini bottles of shampoo are sold (supplied to hotels) globally every year?',
-    source: 'IITG Guess-It-Matters',
-    pdfRef: 'Guess-It-Matters.pdf — p. 17 (Book p. 13)',
-    company: 'IITG CAC',
     difficulty: 4,
     archetype: 'Supply & Capacity',
     approachType: 'Bottom-Up (Supply-Side)',
     templateId: 'tpl-outlet',
-    tags: ['Global Hospitality', 'B2B Supply', 'Occupancy', 'IITG CAC'],
+    tags: ['Global Hospitality', 'B2B Supply', 'Occupancy'],
     clarifyingQuestions: [
       { q: 'Counting mini single-stay bottles globally (noting luxury chains switching to wall dispensers)?', a: 'Yes, global mini shampoo bottles supplied to hotels (you can note wall-dispenser shift as a sensitivity!).', why: 'Huge real-world hospitality trend!' }
     ],
@@ -479,9 +458,6 @@ window.GM_DATA.problems.push(
     id: 'iitg-mazda-usa',
     title: 'Number of Mazda Dealerships in the USA',
     prompt: 'How many Mazda car dealerships are there in the USA?',
-    source: 'IITG Guess-It-Matters',
-    pdfRef: 'Guess-It-Matters.pdf — p. 18 (Book p. 14)',
-    company: 'IITG CAC',
     difficulty: 4,
     archetype: 'Market Sizing',
     approachType: 'Hybrid (Demand + Supply)',
@@ -546,23 +522,20 @@ window.GM_DATA.problems.push(
     id: 'iitg-mall-loose-change',
     title: 'Loose Change Found on the Floor of an Average Mall in a Day',
     prompt: 'How much loose change (money) would you expect to find on the floor of an average shopping mall in a day?',
-    source: 'IITG Guess-It-Matters',
-    pdfRef: 'Guess-It-Matters.pdf — p. 19 (Book p. 15)',
-    company: 'IITG CAC',
     difficulty: 4,
     archetype: 'Volume & Geometry',
     approachType: 'Bottom-Up (Supply-Side)',
     templateId: 'tpl-outlet',
-    tags: ['Creative Proxy', 'Retail Mall', 'Probability', 'IITG CAC'],
+    tags: ['Creative Proxy', 'Retail Mall', 'Probability'],
     clarifyingQuestions: [
       { q: 'Counting only dropped coins (change), or paper notes too?', a: 'Dropped coins primarily (₹1, ₹2, ₹5, ₹10).', why: 'Paper notes are much rarer to drop unnoticed, or clarify both!' },
       { q: 'Average Tier-1 urban mall open 16 hours/day (10 AM–10 PM / 12 AM)?', a: 'Standard 2-floor urban mall (~60 stores).', why: 'Sets store & counter capacity cleanly.' }
     ],
-    strategyOverview: 'Spatial → Counter Capacity → Behavioral Drop Funnel! Step 1 (Mall Stores): 2 floors × 3,00,000 sq ft usable/floor = 6,00,000 sq ft ÷ 10,000 sq ft/store = 60 stores. Step 2 (Daily Visitors via Billing Counters): Peak 4 hrs (2 counters/store × 12 orders/hr × 60 stores ≈ 1,500 visitors/hr × 4 = 6,000) + Med 6 hrs (1,000/hr = 6,000) + Low 6 hrs (500/hr = 3,000) = 15,000 daily visitors! Step 3 (Coin Drop): 50% pay cash (note: in UPI India, cash is ~20–30%!) × 5% (or ~1% realistic!) lose a coin × ₹2–5 avg coin value = ₹750/day (Book; ~₹150–400/day in UPI India)!',
+    strategyOverview: 'Spatial → Counter Capacity → Behavioral Drop Funnel! Step 1 (Mall Stores): 2 floors × 3,00,000 sq ft usable/floor = 6,00,000 sq ft ÷ 10,000 sq ft/store = 60 stores. Step 2 (Daily Visitors via Billing Counters): Peak 4 hrs (2 counters/store × 12 orders/hr × 60 stores ≈ 1,500 visitors/hr × 4 = 6,000) + Med 6 hrs (1,000/hr = 6,000) + Low 6 hrs (500/hr = 3,000) = 15,000 daily visitors! Step 3 (Coin Drop): 50% pay cash (note: in UPI India, cash is ~20–30%!) × 5% (or ~1% realistic!) lose a coin × ₹2–5 avg coin value = ₹750/day (Baseline; ~₹150–400/day in UPI India)!',
     formula: 'Loose Change = Daily Mall Visitors × Cash Payment % × Coin Drop Probability % × Avg Coin Value',
     assumptions: [
       { label: '60 Stores in Mall (6L usable sq ft ÷ 10k sq ft/store) → 15,000 daily visitors via billing throughput', rationale: 'Clever bottom-up way to estimate mall footfall from scratch!' },
-      { label: 'Cash Buyers = 50% (Book; ~25% in 2026 UPI-first malls) | Drop Rate = 5% (or 1% realistic) | Avg Coin = ₹2–5', rationale: 'Notice 5% means 1 in 20 cash payers drops a coin—pretty clumsy! Realistically ~1% (1 in 100 cash payers) drops a ₹5 coin = ~₹200–350/day.' }
+      { label: 'Cash Buyers = 50% (Baseline; ~25% in 2026 UPI-first malls) | Drop Rate = 5% (or 1% realistic) | Avg Coin = ₹2–5', rationale: 'Notice 5% means 1 in 20 cash payers drops a coin—pretty clumsy! Realistically ~1% (1 in 100 cash payers) drops a ₹5 coin = ~₹200–350/day.' }
     ],
     tree: {
       label: 'Mall Usable Area (6L sq ft) ÷ 10K/Store = 60 Stores',
@@ -573,7 +546,7 @@ window.GM_DATA.problems.push(
         { label: '× ₹2 Avg Coin Value', valueText: '₹750 / Day (UPI-adjusted: ~₹200–400)', highlight: true }
       ]
     },
-    finalAnswer: '~₹200 – ₹750 / Day (Book: ₹750/day)',
+    finalAnswer: '~₹200 – ₹750 / Day (Baseline: ₹750/day)',
     acceptableRange: { min: 100, max: 1200, unit: '₹/day', display: '₹100 – ₹1,200/day' },
     sanityCheck: 'Walking around a huge mall, housekeeping sweeps up maybe 30–100 dropped ₹1/₹2/₹5 coins across 60 stores, food court, and parking = ~₹150–500/day! Mentioning UPI reducing physical cash usage in India adds brilliant modern realism.',
     interviewerTrap: 'Guessing a flat number like "₹500" without breaking down (1) Mall Footfall AND (2) Cash Transaction % × Drop Probability × Avg Coin Value!',
@@ -613,14 +586,11 @@ window.GM_DATA.problems.push(
     id: 'iitg-newspaper-words',
     title: 'How Many Words Are in an Average Daily Newspaper?',
     prompt: 'Estimate the total number of words in an average daily broadsheet newspaper (e.g., Times of India / The Hindu).',
-    source: 'IITG Guess-It-Matters',
-    pdfRef: 'Guess-It-Matters.pdf — p. 20 (Book p. 16)',
-    company: 'IITG CAC',
     difficulty: 3,
     archetype: 'Volume & Geometry',
     approachType: 'Geometry & Proxy',
     templateId: 'tpl-geometry',
-    tags: ['Spatial / Area', 'Print Media', 'Word Density', 'IITG CAC'],
+    tags: ['Spatial / Area', 'Print Media', 'Word Density'],
     clarifyingQuestions: [
       { q: 'Standard broadsheet English daily (approx. 20–24 pages), excluding classifieds/supplements?', a: 'Standard 24-page daily broadsheet (4 full-page ad/photo pages → 20 content pages).', why: 'Sets page count cleanly.' },
       { q: 'Total words printed, or UNIQUE vocabulary words?', a: 'Total word count first (see Variations for unique words!).', why: 'Unique words is a classic follow-up curveball!' }
@@ -641,12 +611,12 @@ window.GM_DATA.problems.push(
         { label: '× 20 Content Pages', valueText: '55,600 (~55K) Words', highlight: true }
       ]
     },
-    finalAnswer: '~50,000 – 65,000 Words (Book: 55,600 words)',
+    finalAnswer: '~50,000 – 65,000 Words (Baseline: 55,600 words)',
     acceptableRange: { min: 30000, max: 90000, unit: 'Words', display: '30,000 – 90,000 words' },
     sanityCheck: 'An average news story runs ~250–400 words. With ~8–10 stories per page across 20 pages (~180 articles × ~300 words) = ~54,000 words! Also ~8 columns × ~150 lines × ~5 words/line × ~10 full text-equivalent pages = 60,000 words!',
     interviewerTrap: 'Forgetting to subtract full-page advertisements (front-page jackets, classifieds) and images (~40–50% of a real newspaper is ads & photos!).',
     variations: [
-      { question: 'Estimate the number of UNIQUE words in a newspaper. (IITG Var)', hint: 'Heaps’ Law / sample-sentence trick! In 55,000 total words, common stopwords ("the, is, a, in") repeat constantly—unique vocabulary is roughly ~4,000–7,000 words (~8–12%)!' }
+      { question: 'Estimate the number of UNIQUE words in a newspaper.', hint: 'Heaps’ Law / sample-sentence trick! In 55,000 total words, common stopwords ("the, is, a, in") repeat constantly—unique vocabulary is roughly ~4,000–7,000 words (~8–12%)!' }
     ],
     guidedPractice: {
       correctApproach: 'Geometry & Proxy',
@@ -680,14 +650,11 @@ window.GM_DATA.problems.push(
     id: 'iitg-fuel-station-mumbai',
     title: 'Daily Revenue of an Average Fuel Station in Mumbai',
     prompt: 'Estimate the daily revenue of an average petrol/diesel fuel station in Mumbai.',
-    source: 'IITG Guess-It-Matters',
-    pdfRef: 'Guess-It-Matters.pdf — p. 22 (Book p. 18)',
-    company: 'IITG CAC',
     difficulty: 3,
     archetype: 'Revenue & Cost',
     approachType: 'Bottom-Up (Supply-Side)',
     templateId: 'tpl-outlet',
-    tags: ['Energy / Retail', 'Mumbai', 'Pump Capacity', 'IITG Practice'],
+    tags: ['Energy / Retail', 'Mumbai', 'Pump Capacity'],
     clarifyingQuestions: [
       { q: 'Focus on petrol + diesel retail fuel revenue (ignoring negligible air-check/lubricant bottle add-ons)?', a: 'Yes, petrol & diesel sales (CNG optional if noted).', why: 'Fuel accounts for 98%+ of pump revenue.' },
       { q: 'Standard urban Mumbai fuel station (~4 dispenser islands = 8 nozzles)?', a: 'Yes, 4 booths × 2 nozzles = 8 dispensers operating 16–24 hrs.', why: 'Sets physical refueling throughput.' }
@@ -713,7 +680,7 @@ window.GM_DATA.problems.push(
     sanityCheck: 'In India, average petrol pumps sell ~6,000–8,000 Liters/day (~₹6–8L/day), while busy metro pumps in Mumbai sell ~12,000–20,000 Liters/day (~₹12–20L/day)! Note dealer commission is only ~₹3–4/liter (~₹45k gross margin/day before staff & rent)!',
     interviewerTrap: 'Forgetting to separate 2-wheelers (₹200–350 fills) from 4-wheelers (₹1,500–2,500 fills) and commercial diesel trucks (₹5,000+)!',
     variations: [
-      { question: 'How many fuel stations are there in India? (Next IITG Practice)', hint: 'See next problem! Total vehicle fuel demand ÷ ~8,000–10,000 L/day avg pump throughput!' }
+      { question: 'How many fuel stations are there in India? (Follow-up Case)', hint: 'See next problem! Total vehicle fuel demand ÷ ~8,000–10,000 L/day avg pump throughput!' }
     ],
     guidedPractice: {
       correctApproach: 'Bottom-Up (Supply-Side)',
@@ -749,14 +716,11 @@ window.GM_DATA.problems.push(
     id: 'iitg-fuel-stations-india',
     title: 'How Many Fuel Stations (Petrol Pumps) Are There in India?',
     prompt: 'Estimate the total number of fuel stations (petrol/diesel pumps) in India.',
-    source: 'IITG Guess-It-Matters',
-    pdfRef: 'Guess-It-Matters.pdf — p. 22 (Book p. 18)',
-    company: 'IITG CAC',
     difficulty: 3,
     archetype: 'Supply & Capacity',
     approachType: 'Hybrid (Demand + Supply)',
     templateId: 'tpl-workforce',
-    tags: ['Energy / Infra', 'India', 'Demand-Supply Match', 'IITG Practice'],
+    tags: ['Energy / Infra', 'India', 'Demand-Supply Match'],
     clarifyingQuestions: [
       { q: 'Retail petrol/diesel stations across urban, rural, and highway corridors?', a: 'Yes, all retail fuel outlets in India.', why: 'Covers IOCL, BPCL, HPCL, Reliance, Nayara.' }
     ],
@@ -815,9 +779,6 @@ window.GM_DATA.problems.push(
     id: 'iitg-flipkart-bbd-phones',
     title: 'Smartphones Purchased on Flipkart During Big Billion Days Sale',
     prompt: 'Estimate the number of customers purchasing smartphones from Flipkart during its annual Big Billion Days Diwali sale.',
-    source: 'IITG Guess-It-Matters',
-    pdfRef: 'Guess-It-Matters.pdf — p. 23–24 (Book p. 19–20)',
-    company: 'IITG CAC',
     difficulty: 4,
     archetype: 'Market Sizing',
     approachType: 'Top-Down (Demand-Side)',
@@ -883,9 +844,6 @@ window.GM_DATA.problems.push(
     id: 'iitg-gmail-india',
     title: 'Number of Active Gmail Users in India',
     prompt: 'Determine the number of monthly active Gmail users in India.',
-    source: 'IITG Guess-It-Matters',
-    pdfRef: 'Guess-It-Matters.pdf — p. 24 (Book p. 20)',
-    company: 'IITG CAC',
     difficulty: 2,
     archetype: 'Market Sizing',
     approachType: 'Top-Down (Demand-Side)',
@@ -915,7 +873,7 @@ window.GM_DATA.problems.push(
     sanityCheck: 'India has ~700M internet/smartphone users (~95% Android). Roughly half (~300–350M) actively send/read personal or work emails monthly (~240–300M on Gmail). Spot on!',
     interviewerTrap: 'Assuming all 700M smartphone users are active email users (millions of blue-collar/rural users use WhatsApp & YouTube exclusively and never open Gmail!).',
     variations: [
-      { question: 'Estimate the number of WhatsApp messages sent daily in India. (IITG Var)', hint: '500M active WhatsApp users × ~40–50 messages sent/user/day (factoring forwards & group chats) = ~20–25 Billion messages/day!' }
+      { question: 'Estimate the number of WhatsApp messages sent daily in India.', hint: '500M active WhatsApp users × ~40–50 messages sent/user/day (factoring forwards & group chats) = ~20–25 Billion messages/day!' }
     ],
     guidedPractice: {
       correctApproach: 'Top-Down (Demand-Side)',
@@ -949,9 +907,6 @@ window.GM_DATA.problems.push(
     id: 'iitg-medium-factories-mumbai',
     title: 'Number of Medium-Sized Factories in Mumbai',
     prompt: 'Estimate the number of medium-sized factories operating in Mumbai.',
-    source: 'IITG Guess-It-Matters',
-    pdfRef: 'Guess-It-Matters.pdf — p. 25 (Book p. 21)',
-    company: 'IITG CAC',
     difficulty: 4,
     archetype: 'Supply & Capacity',
     approachType: 'Top-Down (Demand-Side)',
@@ -1018,9 +973,6 @@ window.GM_DATA.problems.push(
     id: 'iitg-expressway-rush-toll',
     title: 'Hourly Rush-Hour Toll Collection on Delhi–Mumbai Expressway',
     prompt: 'How much money is collected per hour during rush hour at a toll plaza on the Delhi–Mumbai Expressway?',
-    source: 'IITG Guess-It-Matters',
-    pdfRef: 'Guess-It-Matters.pdf — p. 25 (Book p. 21)',
-    company: 'IITG CAC',
     difficulty: 2,
     archetype: 'Supply & Capacity',
     approachType: 'Bottom-Up (Supply-Side)',
@@ -1084,36 +1036,33 @@ window.GM_DATA.problems.push(
     id: 'iitg-diaper-india',
     title: 'Size of the Diaper Market in India',
     prompt: 'Estimate the annual market size (revenue) of the diaper industry in India.',
-    source: 'IITG Guess-It-Matters',
-    pdfRef: 'Guess-It-Matters.pdf — p. 26–27 (Book p. 22–23)',
-    company: 'IITG CAC',
     difficulty: 3,
     archetype: 'Market Sizing',
     approachType: 'Top-Down (Demand-Side)',
     templateId: 'tpl-fmcg',
-    tags: ['FMCG', 'Baby + Adult Diapers', 'Life Expectancy Proxy', 'IITG CAC'],
+    tags: ['FMCG', 'Baby + Adult Diapers', 'Life Expectancy Proxy'],
     clarifyingQuestions: [
       { q: 'Include BOTH baby diapers AND adult/elderly incontinence diapers?', a: 'Yes! Including adult diapers shows complete MECE thinking (and is a common interviewer surprise!).', why: 'Seniors/post-surgery patients drive a fast-growing ~25–30% segment.' },
       { q: 'Disposable diapers only (excluding reusable cloth nappies)?', a: 'Yes, commercial disposable diapers (~₹10–12 each).', why: 'Low-income rural families heavily use cloth nappies—filter accordingly!' }
     ],
-    strategyOverview: 'Dual-Segment MECE Demand Funnel! Segment 1 (Infants 0–3 yrs): Use the Life Expectancy uniform trick: 140 Cr ÷ 70 yrs × 3 yrs = 6 Crore infants! Segment by Income & Affordability: High (10% × 100% = 0.6 Cr), Middle (30% × 70% = 1.26 Cr), Lower (60% × 10% = 0.36 Cr) = 2.22 Cr diaper-using babies × 5/day × 365 × ₹10 = ₹40,515 Cr! Segment 2 (Adults/Elderly): Age 26–59 (56 Cr × 2% medical need = 1 Cr) + Age 60+ (21–42 Cr × 10% = 4.2 Cr) × 2/day × 365 × ₹10 (adjusted for affordability ~30%!). Compare Book total vs real Indian market!',
+    strategyOverview: 'Dual-Segment MECE Demand Funnel! Segment 1 (Infants 0–3 yrs): Use the Life Expectancy uniform trick: 140 Cr ÷ 70 yrs × 3 yrs = 6 Crore infants! Segment by Income & Affordability: High (10% × 100% = 0.6 Cr), Middle (30% × 70% = 1.26 Cr), Lower (60% × 10% = 0.36 Cr) = 2.22 Cr diaper-using babies × 5/day × 365 × ₹10 = ₹40,515 Cr! Segment 2 (Adults/Elderly): Age 26–59 (56 Cr × 2% medical need = 1 Cr) + Age 60+ (21–42 Cr × 10% = 4.2 Cr) × 2/day × 365 × ₹10 (adjusted for affordability ~30%!). Compare unadjusted total vs real Indian market!',
     formula: 'Total Market = (Baby Diaper Users × Daily Usage × 365 × Price) + (Adult Need Pool × Affordability % × Daily Usage × 365 × Price)',
     assumptions: [
       { label: '0–3 Infants = (140 Cr ÷ 70) × 3 = 6 Crore babies (or ~7–7.5 Cr using India’s ~2.4 Cr annual births × 3 yrs!)', rationale: 'Note: Birth rate 16/1000 × 140 Cr ≈ 2.24 Cr births/year × 3 yrs = 6.7 Cr babies—almost identical to 6 Cr!' },
-      { label: 'Baby Affordability: 2.22 Cr babies × 5/day? Wait—Sanity Check! Not all 2.22 Cr wear 5 disposables/day all 365 days (middle-class uses ~1–2/day for outings/night + cloth at home!)', rationale: 'Watch out for that! At 1.5–2 disposables/day avg → ~₹12,000–15,000 Cr baby market (+ ~₹2,000–3,000 Cr adult market after affordability filter) = ~₹15,000–18,000 Crore realistically (vs Book’s ₹78,000 Cr)!' }
+      { label: 'Baby Affordability: 2.22 Cr babies × 5/day? Wait—Sanity Check! Not all 2.22 Cr wear 5 disposables/day all 365 days (middle-class uses ~1–2/day for outings/night + cloth at home!)', rationale: 'Watch out for that! At 1.5–2 disposables/day avg → ~₹12,000–15,000 Cr baby market (+ ~₹2,000–3,000 Cr adult market after affordability filter) = ~₹15,000–18,000 Crore realistically (vs the baseline’s ₹78,000 Cr)!' }
     ],
     tree: {
       label: 'India Population (140 Crore)',
       valueText: '140 Crore',
       children: [
-        { label: 'Infants 0–3 (6 Cr → 2.22 Cr affordable) × Daily Usage × 365 × ₹10', valueText: '₹40,515 Cr (Book) | ~₹12K Cr (Real)' },
-        { label: 'Adults 26+ & Seniors 60+ (Medical/Incontinence)', valueText: '₹37,960 Cr (Book) | ~₹3K Cr (Real)' },
-        { label: 'Total Diaper Market', valueText: '₹15,000 Cr (Real) | ₹78,000 Cr (Book)', highlight: true }
+        { label: 'Infants 0–3 (6 Cr → 2.22 Cr affordable) × Daily Usage × 365 × ₹10', valueText: '₹40,515 Cr (Baseline) | ~₹12K Cr (Real)' },
+        { label: 'Adults 26+ & Seniors 60+ (Medical/Incontinence)', valueText: '₹37,960 Cr (Baseline) | ~₹3K Cr (Real)' },
+        { label: 'Total Diaper Market', valueText: '₹15,000 Cr (Real) | ₹78,000 Cr (Baseline)', highlight: true }
       ]
     },
-    finalAnswer: '~₹15,000 Crore/year realistically (Book unadjusted: ₹78,000 Crore)',
+    finalAnswer: '~₹15,000 Crore/year realistically (Baseline: ₹78,000 Crore)',
     acceptableRange: { min: 10000, max: 85000, unit: '₹ Crore/year', display: '₹10,000 Cr – ₹80,000 Cr/yr' },
-    sanityCheck: 'CRITICAL SANITY CHECK: Look at IITG’s own Validation on p. 27! Book noted ₹78,000 Cr ÷ 35 Cr households ÷ 12 = ₹185/mo across ALL India, or ₹720/mo among 25% of homes! Real Indian disposable diaper industry (Pampers, MamyPoko, Huggies + Friends Adult) is ~$2 Billion (~₹15,000–18,000 Crore) because middle-class Indian families use disposables mainly at NIGHT/travel (1–2/day, not 5/day!) and only ~15% of 60+ elderly afford ₹30/day adult diapers! Saying that wins instant offers.',
+    sanityCheck: 'CRITICAL SANITY CHECK: Baseline noted ₹78,000 Cr ÷ 35 Cr households ÷ 12 = ₹185/mo across ALL India, or ₹720/mo among 25% of homes! Real Indian disposable diaper industry (Pampers, MamyPoko, Huggies + Friends Adult) is ~$2 Billion (~₹15,000–18,000 Crore) because middle-class Indian families use disposables mainly at NIGHT/travel (1–2/day, not 5/day!) and only ~15% of 60+ elderly afford ₹30/day adult diapers! Saying that wins instant offers.',
     interviewerTrap: 'Forgetting ADULT/elderly diapers completely, OR assuming middle-class Indian families use 5 disposable diapers every day like US households (vs night-only 1–2/day)!',
     variations: [
       { question: 'Estimate the market size of sanitary pads in India.', hint: '140 Cr × 50% female × ~45% menstruating age (13–49) = ~31 Cr women × ~55% disposable pad penetration × 12 cycles × 10 pads × ₹8 ≈ ~₹16,000 Cr!' }
@@ -1153,14 +1102,11 @@ window.GM_DATA.problems.push(
     id: 'iitg-cement-india',
     title: 'Size of the Indian Cement Industry',
     prompt: 'Estimate the annual market size (tonnes & revenue) of the Indian cement industry.',
-    source: 'IITG Guess-It-Matters',
-    pdfRef: 'Guess-It-Matters.pdf — p. 27 (Book p. 23)',
-    company: 'IITG CAC',
     difficulty: 5,
     archetype: 'Market Sizing',
     approachType: 'Hybrid (Demand + Supply)',
     templateId: 'tpl-durable',
-    tags: ['Infrastructure', 'B2B Heavy Industry', 'Construction', 'IITG Practice'],
+    tags: ['Infrastructure', 'B2B Heavy Industry', 'Construction'],
     clarifyingQuestions: [
       { q: 'Include residential housing, commercial real estate, AND public infrastructure (roads/bridges/railways)?', a: 'Yes! Roughly ~55–60% Housing, ~25% Infrastructure, ~15–20% Commercial/Industrial.', why: 'Housing alone misses half the cement consumed in highways & metros!' }
     ],
@@ -1222,14 +1168,11 @@ window.GM_DATA.problems.push(
     id: 'iitg-traffic-signals',
     title: 'Number of Traffic Signals in Your City (e.g., Delhi / Bengaluru)',
     prompt: 'Estimate the number of traffic signals (signalized intersections) in a major city like Delhi or Bengaluru.',
-    source: 'IITG Guess-It-Matters',
-    pdfRef: 'Guess-It-Matters.pdf — p. 27 (Book p. 23)',
-    company: 'IITG CAC',
     difficulty: 4,
     archetype: 'Volume & Geometry',
     approachType: 'Geometry & Proxy',
     templateId: 'tpl-geometry',
-    tags: ['Spatial Grid', 'Urban Planning', 'Road Network', 'IITG Practice'],
+    tags: ['Spatial Grid', 'Urban Planning', 'Road Network'],
     clarifyingQuestions: [
       { q: 'Are we counting signalized INTERSECTIONS (junctions) or individual traffic light poles/faces?', a: 'Signalized intersections (clarify 1 intersection usually has 4 poles!).', why: 'Prevents 4x pole vs intersection mismatch!' },
       { q: 'Which city (e.g., Delhi ~1,500 sq km or Bengaluru ~700 sq km)?', a: 'Let’s model a major metro (~1,000–1,500 sq km, e.g., Delhi).', why: 'City area sets your grid size!' }
@@ -1254,7 +1197,7 @@ window.GM_DATA.problems.push(
     sanityCheck: 'Delhi Traffic Police officially operates ~1,000 traffic signal junctions (~400+ blinkers/signals in Bengaluru, ~700 in Mumbai)! Our 1 km arterial grid model lands right on ~1,000 junctions!',
     interviewerTrap: 'Assuming EVERY tiny neighborhood street corner has a traffic light (that would give 50,000!) OR not clarifying whether "traffic signal" means 1 intersection vs 4 light poles at that intersection!',
     variations: [
-      { question: 'Estimate the total length of paved roads in the USA. (IITG Var)', hint: 'US Area (~9.8M sq km) × ~70% inhabited grid spaced every ~1–2 miles → ~4 Million miles (~6.5M km)!' }
+      { question: 'Estimate the total length of paved roads in the USA.', hint: 'US Area (~9.8M sq km) × ~70% inhabited grid spaced every ~1–2 miles → ~4 Million miles (~6.5M km)!' }
     ],
     guidedPractice: {
       correctApproach: 'Geometry & Proxy',
@@ -1288,21 +1231,18 @@ window.GM_DATA.problems.push(
     id: 'iitg-cigarettes-india',
     title: 'Number of Cigarettes Smoked in India Per Month',
     prompt: 'Estimate the number of cigarettes smoked in India in a month.',
-    source: 'IITG Guess-It-Matters',
-    pdfRef: 'Guess-It-Matters.pdf — p. 28 (Book p. 24)',
-    company: 'IITG CAC',
     difficulty: 3,
     archetype: 'Usage & Behavioral',
     approachType: 'Top-Down (Demand-Side)',
     templateId: 'tpl-fmcg',
-    tags: ['Tobacco / FMCG', 'Multi-Layer Split', 'Gender & Locality', 'IITG CAC'],
+    tags: ['Tobacco / FMCG', 'Multi-Layer Split', 'Gender & Locality'],
     clarifyingQuestions: [
       { q: 'Machine-made cigarettes only, excluding bidis & smokeless tobacco?', a: 'Cigarettes only (bidis are 5x–8x larger by volume in rural India!).', why: 'Crucial distinction in Indian tobacco cases!' }
     ],
     strategyOverview: 'Multi-Level Demographic Matrix! India Pop = 140 Cr. Exclude <16 yrs (30% = 42 Cr). Split 16–22 (10% = 14 Cr) and 22+ (60% = 84 Cr) across Urban/Rural and Male/Female. Apply Smoking Penetration (much higher in Urban Male ~50–60% vs Female ~5–20% and Rural Male ~20–25% who often smoke bidis!) × Cigarettes per Month (20 to 90 sticks/month = 1–3/day) → Total = ~1,269 Crore (12.7 Billion) cigarettes/month!',
     formula: 'Monthly Cigarettes = ∑ (Age × Locality × Gender Pop × Smoker % × Sticks/Month)',
     assumptions: [
-      { label: 'Exclude <16 (30%); Active Ages: 16–22 (10% = 14 Cr) & 22+ (60% = 84 Cr)', rationale: 'Note: Book table accidentally typed "Hyderabad is 0.9 Cr" in one intro sentence while its entire table correctly used 140 Cr India!' },
+      { label: 'Exclude <16 (30%); Active Ages: 16–22 (10% = 14 Cr) & 22+ (60% = 84 Cr)', rationale: 'Note: Baseline table accidentally typed "Hyderabad is 0.9 Cr" in one intro sentence while its entire table correctly used 140 Cr India!' },
       { label: 'Urban Male 22+ drives bulk: 7.56 Cr smokers × 90 sticks/mo (~3/day) = 680.4 Cr/month', rationale: 'Notice rural male cigarette penetration is lower (20%) because bidis dominate rural smoking.' },
       { label: 'Total Monthly Sticks = 1,269 Crore (~12.7 Billion/month = ~152 Billion/year)', rationale: 'Let’s check real India stats!' }
     ],
@@ -1355,9 +1295,6 @@ window.GM_DATA.problems.push(
     id: 'iitg-misc-phone-bill',
     title: 'What Will My Monthly Phone Bill Be in 5 Years? (KPMG Case)',
     prompt: 'Estimate how much your family’s monthly mobile phone bill will amount to five years from now.',
-    source: 'IITG Guess-It-Matters',
-    pdfRef: 'Guess-It-Matters.pdf — p. 29 (Book p. 25)',
-    company: 'KPMG',
     difficulty: 3,
     archetype: 'Fermi & Brainteaser',
     approachType: 'Hybrid (Demand + Supply)',
@@ -1423,9 +1360,6 @@ window.GM_DATA.problems.push(
     id: 'iitg-misc-penguins-antarctica',
     title: 'How Many Penguins Can Live in Antarctica?',
     prompt: 'Estimate the maximum carrying capacity (how many penguins can live) in Antarctica.',
-    source: 'IITG Guess-It-Matters',
-    pdfRef: 'Guess-It-Matters.pdf — p. 29 (Book p. 25)',
-    company: 'IITG CAC',
     difficulty: 5,
     archetype: 'Fermi & Brainteaser',
     approachType: 'Geometry & Proxy',
@@ -1439,7 +1373,7 @@ window.GM_DATA.problems.push(
     assumptions: [
       { label: 'Antarctica Area = ~14M sq km → Coastline ~18,000 km × ~1 km livable coastal strip = ~18,000 sq km', rationale: 'Inland ice sheet is uninhabitable; penguins need ocean access for food.' },
       { label: 'Effective Coastal Density (accounting for cliffs/glaciers/uninhabitable rocks ~70% unusable): ~5,000–10,000/km² on usable 5,400 km²', rationale: 'Gives ~30M – 60M (up to ~100M) coastal nesting capacity!' },
-      { label: 'Climate Change Twist (IITG Note): Sea-ice melt reduces breeding shelves by 20–30% & krill stocks by ~20%!', rationale: 'Cuts carrying capacity proportionally.' }
+      { label: 'Climate Change Twist: Sea-ice melt reduces breeding shelves by 20–30% & krill stocks by ~20%!', rationale: 'Cuts carrying capacity proportionally.' }
     ],
     tree: {
       label: 'Antarctica (~14M sq km) → Coastal Ice Shelf (~18,000 km)',
@@ -1455,7 +1389,7 @@ window.GM_DATA.problems.push(
     sanityCheck: 'Actual Antarctic penguin population (Adélie, Chinstrap, Emperor, Gentoo) is ~20–30 Million breeding pairs (~40–60 Million total birds)! Identifying "Coastline-only habitat, NOT all 14M sq km" is the exact insight interviewers wait for!',
     interviewerTrap: 'Multiplying ALL 14 Million sq km of Antarctica by 100 penguins/sq km = 1.4 Billion penguins—forgetting that inland Antarctica is a lifeless -60°C ice desert 1,000 km from fish!',
     variations: [
-      { question: 'How does climate change alter your estimate? (IITG Note)', hint: 'Reduces coastal pack-ice breeding platforms AND warms waters reducing krill—dropping carrying capacity by 25–40%!' }
+      { question: 'How does climate change alter your estimate?', hint: 'Reduces coastal pack-ice breeding platforms AND warms waters reducing krill—dropping carrying capacity by 25–40%!' }
     ],
     guidedPractice: {
       correctApproach: 'Geometry & Proxy',
@@ -1489,9 +1423,6 @@ window.GM_DATA.problems.push(
     id: 'iitg-misc-dog-hairs',
     title: 'Are There Two Dogs in the World With the Same Number of Hairs?',
     prompt: 'Are there two dogs in the world with the exact same number of hairs? Prove it logically.',
-    source: 'IITG Guess-It-Matters',
-    pdfRef: 'Guess-It-Matters.pdf — p. 29 (Book p. 25)',
-    company: 'IITG CAC',
     difficulty: 3,
     archetype: 'Fermi & Brainteaser',
     approachType: 'Geometry & Proxy',
@@ -1555,14 +1486,11 @@ window.GM_DATA.problems.push(
     id: 'web-golf-balls-bus',
     title: 'How Many Golf Balls Can Fit Inside a School Bus?',
     prompt: 'Estimate how many golf balls can fit inside a standard school bus.',
-    source: 'Internet / MBB & PM Classics',
-    pdfRef: 'Google / McKinsey Classic (also cited in Vol 2 Theory p. 5)',
-    company: 'McKinsey / Google',
     difficulty: 3,
     archetype: 'Volume & Geometry',
     approachType: 'Geometry & Proxy',
     templateId: 'tpl-geometry',
-    tags: ['Volume Packing', 'McKinsey', 'Google PM', 'Classic'],
+    tags: ['Volume Packing', '3D Geometry', 'Classic'],
     clarifyingQuestions: [
       { q: 'Standard full-size 50-seater school bus with seats STILL inside (not stripped hollow)?', a: 'Standard bus with seats/dashboard inside (subtract ~20–25% unusable volume!).', why: 'Mentioning seats & sphere packing efficiency is what interviewers test!' }
     ],
@@ -1621,9 +1549,6 @@ window.GM_DATA.problems.push(
     id: 'web-piano-tuners',
     title: 'How Many Piano Tuners Are There in Chicago (or Mumbai)?',
     prompt: 'Estimate the number of piano tuners working in a major metro like Chicago (~3M city / ~9M metro) or Mumbai.',
-    source: 'Internet / MBB & PM Classics',
-    pdfRef: 'Original Enrico Fermi Guesstimate Classic',
-    company: 'McKinsey / BCG',
     difficulty: 3,
     archetype: 'Fermi & Brainteaser',
     approachType: 'Hybrid (Demand + Supply)',
@@ -1689,9 +1614,6 @@ window.GM_DATA.problems.push(
     id: 'web-whatsapp-messages-india',
     title: 'Number of WhatsApp Messages Sent Daily in India',
     prompt: 'Estimate the total number of WhatsApp messages sent per day in India.',
-    source: 'Internet / MBB & PM Classics',
-    pdfRef: 'Product Management Classic (also IITG Variation p. 20)',
-    company: 'Google / Meta PM',
     difficulty: 3,
     archetype: 'Usage & Behavioral',
     approachType: 'Top-Down (Demand-Side)',
@@ -1754,9 +1676,6 @@ window.GM_DATA.problems.push(
     id: 'web-windows-city',
     title: 'How Many Windows Are There in a Metro City (e.g., Mumbai / Delhi)?',
     prompt: 'Estimate the total number of windows in buildings across a metro city like Delhi or Mumbai.',
-    source: 'Internet / MBB & PM Classics',
-    pdfRef: 'Classic BCG / Bain Structural Spatial Case',
-    company: 'BCG / Bain',
     difficulty: 4,
     archetype: 'Volume & Geometry',
     approachType: 'Hybrid (Demand + Supply)',

@@ -6,9 +6,6 @@ window.GM_DATA.problems.push(
     id: 'vol1-healthy-biscuits',
     title: 'Market Size of the Healthy Biscuit Industry in India',
     prompt: 'Estimate the annual market size (revenue) of the healthy biscuit industry in India.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 14 (Book p. 10)',
-    company: 'Accenture',
     difficulty: 2,
     archetype: 'Market Sizing',
     approachType: 'Top-Down (Demand-Side)',
@@ -61,9 +58,9 @@ window.GM_DATA.problems.push(
         { label: 'Rural (65%)', valueText: '910M (negligible premium share)', muted: true }
       ]
     },
-    finalAnswer: '~₹23,153 Crore (₹231.5 Billion) [Book Value]; Realistic retail benchmark ~₹3,000–6,000 Cr if priced per pack',
+    finalAnswer: '~₹23,153 Crore (₹231.5 Billion) [Unadjusted Baseline]; Realistic retail benchmark ~₹3,000–6,000 Cr if priced per pack',
     acceptableRange: { min: 2000, max: 30000, unit: '₹ Crore', display: '₹3,000 Cr – ₹25,000 Cr (depending on per-biscuit vs per-pack pricing)' },
-    sanityCheck: 'Book value gives ₹23,153 Cr (~₹13,500/consumer/year = ₹37/day), which is high for biscuits alone because the book priced a single biscuit at ₹25 instead of ₹2.5–₹5. Pointing this out in an interview—and adjusting to ₹3–5/biscuit (~₹2,300–4,600 Cr)—shows sharp business sense!',
+    sanityCheck: 'Unadjusted baseline gives ₹23,153 Cr (~₹13,500/consumer/year = ₹37/day), which is high for biscuits alone because the baseline priced a single biscuit at ₹25 instead of ₹2.5–₹5. Pointing this out in an interview—and adjusting to ₹3–5/biscuit (~₹2,300–4,600 Cr)—shows sharp business sense!',
     interviewerTrap: 'Beginner mistake: Confusing price per PACK (₹50) with price per SINGLE BISCUIT (₹25), inflating the market 10x! Also ignoring younger 25–40 gym-goers (protein/oats cookies) entirely.',
     variations: [
       { question: 'Estimate the market size of protein bars in Urban India.', hint: 'Shift age skew from 40+ to 18–35 fitness-conscious urban upper/upper-middle class.' },
@@ -105,9 +102,6 @@ window.GM_DATA.problems.push(
     id: 'vol1-ola-uber-delhi',
     title: 'Number of Ola & Uber Cabs Running in Delhi NCR in a Day',
     prompt: 'Estimate the number of Ola and Uber cabs running in Delhi NCR in a day.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 15 (Book p. 11)',
-    company: 'Accenture',
     difficulty: 2,
     archetype: 'Supply & Capacity',
     approachType: 'Hybrid (Demand + Supply)',
@@ -120,7 +114,7 @@ window.GM_DATA.problems.push(
     strategyOverview: 'Estimate total daily cab rides demanded from Delhi NCR’s population segmented by Urban/Rural and Income (taking adoption % of riders per day), adjust for peak vs non-peak occupancy/utilization, and divide total daily rides by average rides completed by one cab per day (~10 rides/day).',
     formula: 'Cabs Running = Total Daily Cab Rides Demanded ÷ Average Rides per Cab per Day',
     assumptions: [
-      { label: 'Delhi NCR Population = 33 Million (Urban 40%, Rural/Outskirts 60% — or 70/30 NCR split)', rationale: 'Note: In Vol 1 PDF, Rural/Urban split was modeled at 60/40 for broader NCR; Vol 2 adjusts this cleanly to 1.98M total users.' },
+      { label: 'Delhi NCR Population = 33 Million (Urban 40%, Rural/Outskirts 60% — or 70/30 NCR split)', rationale: 'Broader NCR models often use a 60/40 Rural/Urban split (~1.98M active users).' },
       { label: 'Daily Cab Riders = ~2.24M potential pool × Peak/Non-Peak occupancy factors', rationale: 'Peak hours (40%) at 50% active ride share + Non-peak (60%) at 20% → ~718,000 daily cab rides.' },
       { label: 'Rides per Cab per Day = 10 rides', rationale: 'In an 11-hour shift at ~45 min per ride cycle (including pickup), a driver completes ~10–12 trips/day.' }
     ],
@@ -146,7 +140,7 @@ window.GM_DATA.problems.push(
     finalAnswer: '~63,000 – 72,000 Cabs per day',
     acceptableRange: { min: 40000, max: 120000, unit: 'Cabs', display: '40,000 – 1,20,000 cabs' },
     sanityCheck: 'Delhi NCR has ~35L–40L total passenger cars; ~70,000 app cabs represents ~2% of all cars on the road and ~7L daily rides (~2% of Delhi population taking a cab on a given day). Very realistic!',
-    interviewerTrap: 'Watch out for the Vol 1 PDF arithmetic typo where Rural Lower was printed as "118M" and Middle as ".594M". In an interview, verify sub-segments add back to 33M (never exceed total population!). Also remember 1 ride can carry ~1.5 passengers on average (pool/friends), so dividing by avg group size ~1.2–1.5 makes it even sharper.',
+    interviewerTrap: 'Watch out for arithmetic slips where Rural Lower was printed as "118M" and Middle as ".594M". In an interview, verify sub-segments add back to 33M (never exceed total population!). Also remember 1 ride can carry ~1.5 passengers on average (pool/friends), so dividing by avg group size ~1.2–1.5 makes it even sharper.',
     variations: [
       { question: 'How many Uber drivers work in Bengaluru?', hint: 'Scale Delhi NCR (~33M) down to Bengaluru (~14–15M) and adjust upward for IT-commuter cab penetration.' },
       { question: 'What is Uber’s daily commission revenue in Delhi NCR?', hint: 'Multiply 718K rides × ₹250 avg fare × 25% take rate = ~₹4.5 Cr/day.' }
@@ -185,9 +179,6 @@ window.GM_DATA.problems.push(
     id: 'vol1-flights-delhi-week',
     title: 'Number of Flights Taking Off from Delhi Airport in a Week',
     prompt: 'Estimate the number of flights taking off from Delhi Airport in a week.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 16 (Book p. 12)',
-    company: 'Accenture',
     difficulty: 2,
     archetype: 'Supply & Capacity',
     approachType: 'Bottom-Up (Supply-Side)',
@@ -200,7 +191,7 @@ window.GM_DATA.problems.push(
     strategyOverview: 'Use a pure Supply-Side Capacity approach. Separate Weekdays (Mon–Fri, 5 days) and Weekends (Sat–Sun, 2 days). Split operating hours into Peak and Non-Peak, calculate departures per hour based on turnaround/headway (1 flight every 5 min peak = 12/hr; every 10 min non-peak = 6/hr), and scale across operational units (terminals/runways).',
     formula: 'Weekly Takeoffs = [Mon–Fri Daily Takeoffs × 5] + [Sat–Sun Daily Takeoffs × 2]',
     assumptions: [
-      { label: 'Operational Units = 6 departure channels (Book assumes 6 terminals; in reality IGI has 3 terminals / 3–4 runways)', rationale: 'Note: In an interview, saying "3 terminals or 4 runways (3 active for departures/arrivals)" is even more realistic than 6 terminals!' },
+      { label: 'Operational Units = 6 departure channels (Baseline assumes 6 terminals; in reality IGI has 3 terminals / 3–4 runways)', rationale: 'Note: In an interview, saying "3 terminals or 4 runways (3 active for departures/arrivals)" is even more realistic than 6 terminals!' },
       { label: 'Mon–Fri: 8 Peak hours (12/hr) + 6 Non-Peak hours (6/hr) per unit', rationale: 'Peak morning (10–2) and evening (5–9) see 1 takeoff every 5 min; off-peak every 10 min; late-night maintenance/low ops.' },
       { label: 'Sat–Sun: 10 Peak hours + 6 Non-Peak hours per unit', rationale: 'Weekend leisure travel extends peak window.' }
     ],
@@ -267,9 +258,6 @@ window.GM_DATA.problems.push(
     id: 'vol1-teacups-delhi',
     title: 'Number of Teacups Consumed in Delhi in One Day',
     prompt: 'Estimate the number of teacups consumed in Delhi in one day.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 17 (Book p. 13)',
-    company: 'Accenture',
     difficulty: 1,
     archetype: 'Usage & Behavioral',
     approachType: 'Top-Down (Demand-Side)',
@@ -277,13 +265,13 @@ window.GM_DATA.problems.push(
     tags: ['Beverages', 'Delhi', 'Beginner Friendly', 'Daily Consumption'],
     clarifyingQuestions: [
       { q: 'Are we counting both home-brewed tea and outside tapri/office tea?', a: 'Yes, total cups consumed across all locations in a day.', why: 'Ensures office cups aren’t dropped.' },
-      { q: 'Does "Delhi" mean Delhi-NCR (~30–40M) or NCT proper (~20M)?', a: 'Standard Delhi-NCR benchmark (~30–40M; book uses 40M or 30M).', why: 'Always align base population upfront!' }
+      { q: 'Does "Delhi" mean Delhi-NCR (~30–40M) or NCT proper (~20M)?', a: 'Standard Delhi-NCR benchmark (~30–40M; The baseline uses 40M or 30M).', why: 'Always align base population upfront!' }
     ],
     strategyOverview: 'A classic Level-1 warm-up guesstimate! Start with Delhi population, exclude young children (0–15 yrs, ~20%), split into Urban vs Rural (or directly by Occupation), segment tea drinkers vs non-drinkers, and assign realistic cups/day (office-goers drink extra cups at work!).',
     formula: 'Total Cups = ∑ (Segment Population × Tea Drinker % × Cups per Day)',
     assumptions: [
       { label: 'Delhi Population = 40M (exclude 20% children 0–15 → 32M eligible)', rationale: 'Young children predominantly drink milk/health drinks rather than tea.' },
-      { label: 'Urban (40% = 12.8M) vs Rural NCR (60% = 19.2M)', rationale: 'Note: In Delhi NCT proper, Urban is 97%; in broader NCR/book benchmark, 40/60 or 80/20 is used—state clearly!' },
+      { label: 'Urban (40% = 12.8M) vs Rural NCR (60% = 19.2M)', rationale: 'Note: In Delhi NCT proper, Urban is 97%; in broader NCR benchmark, 40/60 or 80/20 is used—state clearly!' },
       { label: 'Urban Drinkers: 30% Normal (2 cups/day), 30% Office-goers (4 cups/day), 40% Non-drinkers', rationale: 'Office-goers consume 2 cups at home + 2 office chai breaks.' },
       { label: 'Rural Drinkers: 70% drink tea at 3 cups/day; 30% non-drinkers', rationale: 'Tea is the primary household hospitality beverage.' }
     ],
@@ -351,9 +339,6 @@ window.GM_DATA.problems.push(
     id: 'vol1-salon-revenue',
     title: 'Estimating the Annual Revenue of a Salon',
     prompt: 'Estimate the annual revenue of a medium-sized unisex salon in a metro city.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 19 (Book p. 15)',
-    company: 'Bain (BCN)',
     difficulty: 2,
     archetype: 'Revenue & Cost',
     approachType: 'Bottom-Up (Supply-Side)',
@@ -397,8 +382,8 @@ window.GM_DATA.problems.push(
     },
     finalAnswer: '~₹3.55 Crore/year (~₹30 Lakh/month) for a large 20-chair flagship salon',
     acceptableRange: { min: 50, max: 450, unit: '₹ Lakh/year', display: '₹60 Lakh – ₹4 Crore/year (scales directly with chairs: 6–20)' },
-    sanityCheck: 'Watch the Vol 1 PDF math carefully: 20 chairs is huge (a flagship Toni&Guy/Geetanjali)! For a typical 6–8 chair neighborhood salon, revenue would be ~₹1–1.2 Cr/yr (~₹8–10L/month), which easily covers ₹2–3L rent + 8 stylists salaries + supplies and leaves healthy 20% margin.',
-    interviewerTrap: 'In the Vol 1 book, notice they accidentally mixed "220 chair-hours" with "Average Order Value ₹600" instead of "Revenue per Chair-Hour"! Never multiply chair-hours by per-visit ticket size unless service duration = 1 hour—always match units (Hours × ₹/Hour OR Customers × ₹/Customer)!',
+    sanityCheck: 'Check the capacity assumptions carefully: 20 chairs is huge (a flagship Toni&Guy/Geetanjali)! For a typical 6–8 chair neighborhood salon, revenue would be ~₹1–1.2 Cr/yr (~₹8–10L/month), which easily covers ₹2–3L rent + 8 stylists salaries + supplies and leaves healthy 20% margin.',
+    interviewerTrap: 'Classic unit mismatch trap: beginners often accidentally mixed "220 chair-hours" with "Average Order Value ₹600" instead of "Revenue per Chair-Hour"! Never multiply chair-hours by per-visit ticket size unless service duration = 1 hour—always match units (Hours × ₹/Hour OR Customers × ₹/Customer)!',
     variations: [
       { question: 'What is the annual profit of this salon?', hint: 'Subtract Fixed Costs (Rent ₹2–4L/mo + Salaries ₹4–8L/mo + Utilities) and Variable Costs (Products ~15% of rev).' },
       { question: 'How many salons are there in Delhi?', hint: 'Demand side: 3 Cr population ÷ 1 haircut/month vs capacity of 1 salon.' }
@@ -440,16 +425,13 @@ window.GM_DATA.problems.push(
     id: 'vol1-fantasy-sports',
     title: 'Market Size of Fantasy Sports Users in India',
     prompt: 'Estimate the market size (active users / revenue) of fantasy sports platforms (like Dream11) in India.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 20 (Book p. 16)',
-    company: 'Bain (BCN)',
     difficulty: 2,
     archetype: 'Market Sizing',
     approachType: 'Top-Down (Demand-Side)',
     templateId: 'tpl-fmcg',
     tags: ['Digital App', 'Gaming', 'India', 'Men/Youth Skew'],
     clarifyingQuestions: [
-      { q: 'Are we estimating active users (volume) or annual platform revenue (₹)?', a: 'Start with active user base (book stops at users), and optionally extend to ARPU.', why: 'Clarifies exact target metric.' },
+      { q: 'Are we estimating active users (volume) or annual platform revenue (₹)?', a: 'Start with active user base (The baseline stops at users), and optionally extend to ARPU.', why: 'Clarifies exact target metric.' },
       { q: 'Include all fantasy sports (cricket, football, kabaddi) or cricket only?', a: 'All fantasy sports (cricket dominates ~85–90%).', why: 'Avoids over-narrowing.' }
     ],
     strategyOverview: 'Top-Down Digital Consumer Funnel. Start with 1.4B population, filter for primary audience (historically heavily male-skewed ~50% = 700M, though note ~15–20% female users exist too), select prime digital-payment age group (18–25 or 18–35), layer Smartphone Penetration, Internet/UPI readiness, Sports Interest %, and Fantasy App Adoption %.',
@@ -528,9 +510,6 @@ window.GM_DATA.problems.push(
     id: 'vol1-swiggy-delhi',
     title: 'Number of Orders Placed on Swiggy in Delhi in a Day',
     prompt: 'Estimate the number of food delivery orders placed on Swiggy in Delhi in a day.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 21 (Book p. 17) & Vol 2 p. 31',
-    company: 'Bain (BCN)',
     difficulty: 2,
     archetype: 'Market Sizing',
     approachType: 'Top-Down (Demand-Side)',
@@ -540,13 +519,13 @@ window.GM_DATA.problems.push(
       { q: 'Are we estimating food delivery only, or Instamart quick-commerce orders too?', a: 'Core restaurant food delivery orders only.', why: 'Instamart has a completely different frequency and basket.' },
       { q: 'Should we estimate for Delhi NCR (~35–40M) or NCT (~20M)?', a: 'Delhi NCR region (~30–40M).', why: 'Sets your top-line population anchor.' }
     ],
-    strategyOverview: 'Apply a clean Demand-Side Digital Funnel on Delhi NCR: Filter to Urban population → exclude BPL/Low income → apply Smartphone + Internet penetration → apply Online Food Delivery adoption → take Swiggy’s market share (~40% vs Zomato ~55%) → multiply by order frequency (note: Vol 1 assumed 1–2 orders/day, whereas Vol 2 fixed that to a much more realistic 1–2 orders/WEEK ÷ 7!).',
+    strategyOverview: 'Apply a clean Demand-Side Digital Funnel on Delhi NCR: Filter to Urban population → exclude BPL/Low income → apply Smartphone + Internet penetration → apply Online Food Delivery adoption → take Swiggy’s market share (~40% vs Zomato ~55%) → multiply by order frequency (always use realistic weekly frequency ÷ 7 rather than 1–2 orders every single day!).',
     formula: 'Daily Swiggy Orders = ∑ (Segment Users × Swiggy Share × Orders per Week ÷ 7)',
     assumptions: [
-      { label: 'Delhi NCR Population = 40M; Urban = 90% (36M) [or Vol 1: 40% Urban]', rationale: 'Swiggy operates heavily in urbanized Delhi NCR zones (use 80–90% urban for Delhi!).' },
+      { label: 'Delhi NCR Population = 40M; Urban = 90% (36M) [or Conservative: 40% Urban]', rationale: 'Swiggy operates heavily in urbanized Delhi NCR zones (use 80–90% urban for Delhi!).' },
       { label: 'Target Income: Middle (60% = 21.6M) & High (20% = 7.2M); Low excluded', rationale: 'Delivery fees + restaurant markups make daily use unaffordable for low-income.' },
       { label: 'Internet (85% Mid / 95% High) × Food App Adoption (50% Mid / 70% High) × Swiggy Share (40%)', rationale: 'Swiggy & Zomato hold a near-duopoly in NCR (~40% Swiggy).' },
-      { label: 'Frequency: Middle = 1 order/week, High = 2 orders/week (divide weekly total by 7)', rationale: 'Vol 2 corrected Vol 1’s typo of 1–2 orders/day (which gave 2.48M/day—almost higher than all of India!).' }
+      { label: 'Frequency: Middle = 1 order/week, High = 2 orders/week (divide weekly total by 7)', rationale: 'More realistic than assuming 1–2 orders/day (which gave 2.48M/day—almost higher than all of India!).' }
     ],
     tree: {
       label: 'Delhi NCR (40M) → Urban (90% = 36M)',
@@ -573,10 +552,10 @@ window.GM_DATA.problems.push(
         }
       ]
     },
-    finalAnswer: '~5 Lakh – 10.7 Lakh orders/day (Vol 2 refined ~10.7L/day; note Vol 1 gave 24.8L/day)',
+    finalAnswer: '~5 Lakh – 10.7 Lakh orders/day (refined ~10.7L/day; unadjusted frequency ~24.8L/day)',
     acceptableRange: { min: 300000, max: 1500000, unit: 'Orders/day', display: '3 Lakh – 15 Lakh orders/day' },
     sanityCheck: 'All-India Swiggy handles roughly 2–2.5 Million food orders per day. Delhi NCR typically drives ~15–20% of India’s food delivery volume (~3.5–5 Lakh orders/day)! If your answer hits 2.5M in Delhi alone, check if you forgot to divide by households (group orders!) or confused weekly with daily frequency.',
-    interviewerTrap: 'Massive trap in Vol 1: Assuming every individual middle-class user orders 1–2 times PER DAY instead of PER WEEK, AND forgetting that a family of 4 shares ONE order rather than ordering 4 separate Swiggy deliveries!',
+    interviewerTrap: 'Classic frequency trap: Assuming every individual middle-class user orders 1–2 times PER DAY instead of PER WEEK, AND forgetting that a family of 4 shares ONE order rather than ordering 4 separate Swiggy deliveries!',
     variations: [
       { question: 'How many Swiggy delivery riders are needed in Delhi?', hint: 'Take 5 Lakh orders/day → 60% in 4 peak lunch/dinner hours (75K orders/hr) ÷ 2.5 orders/hr per rider = ~30,000 active riders!' },
       { question: 'Estimate Swiggy’s annual revenue from Delhi.', hint: 'Daily orders × ₹450 AOV × ~22% commission + delivery fees × 365.' }
@@ -616,9 +595,6 @@ window.GM_DATA.problems.push(
     id: 'vol1-toll-plaza',
     title: 'Daily Revenue of a Delhi–Gurgaon Toll Plaza',
     prompt: 'Estimate the total revenue collected by a Delhi–Gurgaon toll plaza in a day.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 22 (Book p. 18) & Vol 2 p. 30',
-    company: 'Bain (BCN)',
     difficulty: 3,
     archetype: 'Supply & Capacity',
     approachType: 'Bottom-Up (Supply-Side)',
@@ -633,26 +609,26 @@ window.GM_DATA.problems.push(
     assumptions: [
       { label: '30 Booths total (15 Delhi→Gurgaon + 15 Gurgaon→Delhi), operational 24 hrs', rationale: 'Major NCR expressway toll plazas (like Kherki Daula / Sirhaul) are massive 24–32 lane gateways.' },
       { label: 'Traffic Slots: High (8 hrs), Medium (6 hrs), Low (10 hrs)', rationale: 'Morning & evening office rush (8–12 AM, 5–9 PM) drives bulk of traffic.' },
-      { label: 'Throughput (Vol 1 vs Vol 2): Vol 1 = 60/12/6 veh/hr (18,360 total) | Vol 2 FASTag = 360/60/12 veh/hr (1,00,800 total)', rationale: 'Cashless FASTag processes 1 car every ~10 seconds during rush hour!' },
+      { label: 'Throughput (Baseline vs Baseline): Baseline = 60/12/6 veh/hr (18,360 total) | FASTag = 360/60/12 veh/hr (1,00,800 total)', rationale: 'Cashless FASTag processes 1 car every ~10 seconds during rush hour!' },
       { label: 'Vehicle Mix & Tariff: 10% 2W (₹50) | 60% 4W (₹100) | 30% Heavy (₹300)', rationale: 'Weighted average toll = 0.1(50) + 0.6(100) + 0.3(300) = ₹155/vehicle.' }
     ],
     tree: {
       label: '30 Toll Booths (24 Hours)',
       valueText: '30 booths',
       children: [
-        { label: 'Low Freq (10 hrs × 6 veh/hr × 30) [FASTag: 12/hr → 3,600]', valueText: '1,800 veh (Vol 1)' },
-        { label: 'Medium Freq (6 hrs × 12 veh/hr × 30) [FASTag: 60/hr → 10,800]', valueText: '2,160 veh (Vol 1)' },
+        { label: 'Low Freq (10 hrs × 6 veh/hr × 30) [FASTag: 12/hr → 3,600]', valueText: '1,800 veh (Conservative)' },
+        { label: 'Medium Freq (6 hrs × 12 veh/hr × 30) [FASTag: 60/hr → 10,800]', valueText: '2,160 veh (Conservative)' },
         {
           label: 'High Freq (8 hrs × 60 veh/hr × 30) [FASTag: 360/hr → 86,400]',
-          valueText: '14,400 veh (Vol 1)',
+          valueText: '14,400 veh (Conservative)',
           highlight: true,
           children: [
-            { label: 'Weighted Mix (₹155 avg toll) × 18,360 (Vol 1) / 1,00,800 (Vol 2)', valueText: '₹28.5L (Vol 1) | ₹1.56 Cr (Vol 2)', highlight: true }
+            { label: 'Weighted Mix (₹155 avg toll) × 18,360 (Conservative) / 1,00,800 (Refined)', valueText: '₹28.5L (Conservative) | ₹1.56 Cr (Refined)', highlight: true }
           ]
         }
       ]
     },
-    finalAnswer: '₹28.46 Lakh/day (Vol 1 conservative) to ₹1.56 Crore/day (Vol 2 FASTag peak)',
+    finalAnswer: '₹28.46 Lakh/day (Conservative cash lanes) to ₹1.56 Crore/day (FASTag peak throughput)',
     acceptableRange: { min: 25, max: 180, unit: '₹ Lakh/day', display: '₹25 Lakh – ₹1.8 Crore/day' },
     sanityCheck: 'Kherki Daula & DND/Gurgaon toll corridors historically processed ~60,000–1,00,000+ vehicles/day. At ~₹100–150 avg toll, ₹60L–₹1.2 Cr/day is dead-on realistic!',
     interviewerTrap: 'Not all 30 booths run at 100% capacity simultaneously during low-traffic night hours (many lanes are closed at 2 AM!). Mentioning active lane utilization adds extra polish.',
@@ -695,9 +671,6 @@ window.GM_DATA.problems.push(
     id: 'vol1-credit-cards-india',
     title: 'Number of Credit Cards in India',
     prompt: 'Estimate the total number of credit cards currently issued/in circulation in India.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 23–24 (Book p. 19–20) & Vol 2 p. 32',
-    company: 'Bain (BCN)',
     difficulty: 3,
     archetype: 'Market Sizing',
     approachType: 'Top-Down (Demand-Side)',
@@ -719,9 +692,9 @@ window.GM_DATA.problems.push(
       valueText: '1,400M',
       children: [
         { label: 'High Income (140M) → Earn (100%) → Willing (50%) → Apply (70%) × 2 cards', valueText: '100M cards', highlight: true },
-        { label: 'Middle Income (840M) → Earn (50%) → Willing (30%) → Apply (40%) × 1 card', valueText: '50M cards (Vol 2: 100M)' },
+        { label: 'Middle Income (840M) → Earn (50%) → Willing (30%) → Apply (40%) × 1 card', valueText: '50M cards (Refined: 100M)' },
         { label: 'Low Income (420M) → Willing (10%) → Apply (20%) × 1 card', valueText: '10M cards' },
-        { label: 'Total Credit Cards', valueText: '160M (Vol 1) | 210M (Vol 2)', highlight: true }
+        { label: 'Total Credit Cards', valueText: '160M (Conservative) | 210M (Refined)', highlight: true }
       ]
     },
     finalAnswer: '~100M – 160M Cards (Note: RBI actuals are ~10.5 Crore = 105M credit cards across ~60–70M unique users)',
@@ -766,9 +739,6 @@ window.GM_DATA.problems.push(
     id: 'vol1-paint-car',
     title: 'Amount of Paint Required to Paint Your Car',
     prompt: 'Estimate the amount of paint required to paint a standard car.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 25 (Book p. 21)',
-    company: 'Bain (BCN)',
     difficulty: 2,
     archetype: 'Volume & Geometry',
     approachType: 'Geometry & Proxy',
@@ -781,9 +751,9 @@ window.GM_DATA.problems.push(
     strategyOverview: 'Approximate the car’s shape using 2 stacked cuboids (Lower body + Upper cabin), compute total exterior surface area (remembering NOT to paint the underside or cabin-to-body shared seam!), subtract glass window/windshield areas, and apply paint coverage per square meter (using a house door as an intuitive proxy!).',
     formula: 'Paint Needed = (Body Surface Area - Windows/Unpainted Area) × Coats ÷ Coverage (m²/Liter)',
     assumptions: [
-      { label: 'Lower Cuboid ≈ 4m (L) × 1.7m (W) × 0.8m (H) | Upper Cabin ≈ 1.8m × 1.5m × 0.7m', rationale: 'Note: Vol 1 PDF had a slight formula typo using 2×(L+B+H) instead of 2×(LB+BH+LH)! Always compute true surface area (m²) cleanly!' },
+      { label: 'Lower Cuboid ≈ 4m (L) × 1.7m (W) × 0.8m (H) | Upper Cabin ≈ 1.8m × 1.5m × 0.7m', rationale: 'Note: Many beginners make a slight formula typo using 2×(L+B+H) instead of 2×(LB+BH+LH)! Always compute true surface area (m²) cleanly!' },
       { label: 'Window/Glass area to subtract ≈ 2.5–3 m² (front + rear windshield + 4 side windows)', rationale: 'Glass is never painted.' },
-      { label: 'Coverage Proxy: Standard 2 m² door takes ~0.5–1 L per coat (so ~4–5 m²/L with 2–3 coats)', rationale: 'In real automotive painting, ~3–5 Liters of paint covers a whole car across coats (note Vol 1 book arrived at ~20 gallons due to unit/proxy exaggeration—flagging realistic ~4–6L in an interview is huge!).' }
+      { label: 'Coverage Proxy: Standard 2 m² door takes ~0.5–1 L per coat (so ~4–5 m²/L with 2–3 coats)', rationale: 'In real automotive painting, ~3–5 Liters of paint covers a whole car across coats (note Baseline The baseline arrived at ~20 gallons due to unit/proxy exaggeration—flagging realistic ~4–6L in an interview is huge!).' }
     ],
     tree: {
       label: 'Hatchback Exterior Surface Area',
@@ -791,12 +761,12 @@ window.GM_DATA.problems.push(
       children: [
         { label: 'Lower Body (~3.8m × 1.7m × 0.8m, no bottom)', valueText: '~15.3 m²' },
         { label: 'Upper Cabin (~1.8m × 1.5m × 0.7m, minus bottom) - Windows (~3 m²)', valueText: '~4.3 m² - 3 m² ≈ 1.3 m²' },
-        { label: 'Net Paintable Area (~15–16 m²) × 2–3 coats ÷ ~8–10 m²/L', valueText: '~4 – 6 Liters (Book: 20 gal proxy)', highlight: true }
+        { label: 'Net Paintable Area (~15–16 m²) × 2–3 coats ÷ ~8–10 m²/L', valueText: '~4 – 6 Liters (Baseline: 20 gal proxy)', highlight: true }
       ]
     },
-    finalAnswer: '~4 to 6 Liters (approx. 1.5 gallons) realistically; [Book proxy answer: 20 gallons]',
+    finalAnswer: '~4 to 6 Liters (approx. 1.5 gallons) realistically; [Baseline: 20 gallons]',
     acceptableRange: { min: 3, max: 25, unit: 'Liters', display: '3 – 20 Liters (1 – 5 Gallons)' },
-    sanityCheck: 'A standard 1-Liter wall paint tin covers ~10–12 m² for 1 coat. A car’s metal surface is ~15 m²; with 3 coats (primer + base + clear) and spray overspray loss (~30%), you need ~5–6 Liters (~1.5 gallons). Catching Vol 1’s "2×(L+B+H)" perimeter vs surface area typo makes you look sharp!',
+    sanityCheck: 'A standard 1-Liter wall paint tin covers ~10–12 m² for 1 coat. A car’s metal surface is ~15 m²; with 3 coats (primer + base + clear) and spray overspray loss (~30%), you need ~5–6 Liters (~1.5 gallons). Catching the "2×(L+B+H)" perimeter vs surface area typo makes you look sharp!',
     interviewerTrap: 'Using perimeter 2(L+B+H) instead of area 2(LB+BH+LH), forgetting to subtract windows/underside, and confusing wall-paint bucket thickness with automotive spray.',
     variations: [
       { question: 'How much paint is needed to paint a standard bedroom?', hint: '4 walls (2×(L+B)×H) + ceiling (L×B) minus door & window areas ÷ 10 m²/L × 2 coats.' },
@@ -837,9 +807,6 @@ window.GM_DATA.problems.push(
     id: 'vol1-bollywood-movies',
     title: 'Number of Bollywood Movies Released in India in a Year',
     prompt: 'Estimate the number of Bollywood (Hindi feature) movies released in India in a year.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 26 (Book p. 22)',
-    company: 'Bain (BCN)',
     difficulty: 2,
     archetype: 'Supply & Capacity',
     approachType: 'Bottom-Up (Supply-Side)',
@@ -908,9 +875,6 @@ window.GM_DATA.problems.push(
     id: 'vol1-tyre-industry',
     title: 'Market Size of the 4-Wheeler Tyre Industry in India',
     prompt: 'Estimate the annual market size (revenue) of the tyre industry in India.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 27 (Book p. 23)',
-    company: 'Bain (BCN)',
     difficulty: 3,
     archetype: 'Market Sizing',
     approachType: 'Replacement & Stock-Flow',
@@ -923,9 +887,9 @@ window.GM_DATA.problems.push(
     strategyOverview: 'Durable Stock + Replacement model! Start with 1.4B population → Urban (30%, family size 4) vs Rural (70%, family size 5) → Households affording 4-wheelers → Cars per household → Total Cars × 5 tyres/car = Total Installed Tyres (~10–25 Crore tyres). Divide by Tyre Lifespan (~4–5 yrs) OR price directly for replacement/annual demand.',
     formula: 'Annual Revenue = [(Total 4-Wheelers × 5 Tyres ÷ Lifespan) + (New Cars Sold × 5)] × Avg Tyre Price',
     assumptions: [
-      { label: 'India Pop = 1.4B; Urban 30% (420M / 4 = 105M HH) & Rural 70% (980M / 5 = 196M HH)', rationale: 'Note: In Vol 1 PDF, a scaling error divided 420M by 1000 giving "0.426" households but still scaled cars to 4.26M + 16.44M = ~20.7M total cars—which actually matches India’s ~3–5 Cr personal cars fairly well!' },
+      { label: 'India Pop = 1.4B; Urban 30% (420M / 4 = 105M HH) & Rural 70% (980M / 5 = 196M HH)', rationale: 'Note:, a scaling error divided 420M by 1000 giving "0.426" households but still scaled cars to 4.26M + 16.44M = ~20.7M total cars—which actually matches India’s ~3–5 Cr personal cars fairly well!' },
       { label: 'Cars in India ≈ 3.5–4.5 Crore (Cheat sheet: 34 cars per 1,000 people ≈ 4.76 Cr cars)', rationale: 'Using cheat sheet anchor: 34/1000 × 1.4B = ~4.8 Crore 4-wheelers!' },
-      { label: '5 Tyres per Car (4 active + 1 spare), Lifespan ~4–5 years, Avg Price = ₹4,000–5,000/tyre', rationale: 'Notice Vol 1 PDF forgot to divide total stock (103.5M tyres) by lifespan (4–5 yrs)—dividing by 4 gives ~25–30M replacement tyres + ~20M OEM tyres for ~4M new cars/yr = ~45–50M car tyres/yr!' }
+      { label: '5 Tyres per Car (4 active + 1 spare), Lifespan ~4–5 years, Avg Price = ₹4,000–5,000/tyre', rationale: 'A common error forgets to divide total stock (103.5M tyres) by lifespan (4–5 yrs)—dividing by 4 gives ~25–30M replacement tyres + ~20M OEM tyres for ~4M new cars/yr = ~45–50M car tyres/yr!' }
     ],
     tree: {
       label: 'India Population (1.4B)',
@@ -934,9 +898,9 @@ window.GM_DATA.problems.push(
         { label: 'Total 4-Wheelers Stock (Rural 4.3M + Urban 16.4M — or ~4.8 Cr via benchmark)', valueText: '20.7M – 48M Cars' },
         {
           label: 'Total Tyres on Road (× 5 tyres/car)',
-          valueText: '103.5M tyres (Book)',
+          valueText: '103.5M tyres (Baseline)',
           children: [
-            { label: 'Without Lifespan Division (Book Total Stock × ₹4,000)', valueText: '₹41,391 Cr (₹414B)' },
+            { label: 'Without Lifespan Division (Baseline Total Stock × ₹4,000)', valueText: '₹41,391 Cr (₹414B)' },
             { label: 'True Annual (÷ 4 yr life + ~4M OEM cars × 5) × ₹4,500', valueText: '~₹20,000 – ₹45,000 Cr', highlight: true }
           ]
         }
@@ -945,10 +909,10 @@ window.GM_DATA.problems.push(
     finalAnswer: '~₹20,000 – ₹45,000 Crore/yr (4W personal); ~₹90,000+ Cr including 2W & Commercial Trucks',
     acceptableRange: { min: 15000, max: 100000, unit: '₹ Crore/year', display: '₹15,000 Cr – ₹1,00,000 Cr/yr' },
     sanityCheck: 'India sells ~4M new cars/year (20M OEM tyres) + ~35–40M replacement tyres = ~55–60M passenger car tyres/yr × ₹4,500 ≈ ₹25,000–27,000 Cr! Including 2-wheelers and heavy trucks triples it to ~₹85,000–95,000 Cr—right in line with the real ₹90,000 Cr Indian tyre market!',
-    interviewerTrap: 'Huge trap in Vol 1 PDF: Multiplying TOTAL stock of tyres on existing cars by ₹4,000 gives STOCK VALUE, not ANNUAL market revenue! You MUST divide installed tyre stock by lifespan (~4 years) and add OEM new car tyres!',
+    interviewerTrap: 'Classic stock-vs-flow trap: Multiplying TOTAL stock of tyres on existing cars by ₹4,000 gives STOCK VALUE, not ANNUAL market revenue! You MUST divide installed tyre stock by lifespan (~4 years) and add OEM new car tyres!',
     variations: [
       { question: 'Estimate the market size for commercial truck tyres in India.', hint: 'Trucks have 10–18 tyres and run 80,000 km/yr, replacing tyres every 1–1.5 years!' },
-      { question: 'How many used tyres are currently in Delhi?', hint: 'See Vol 2 Problem: Delhi 3.5 Cr → Cars (~3M) × 5 tyres = ~1.5 Cr used tyres!' }
+      { question: 'How many used tyres are currently in Delhi?', hint: 'NCR Comparison: Delhi 3.5 Cr → Cars (~3M) × 5 tyres = ~1.5 Cr used tyres!' }
     ],
     guidedPractice: {
       correctApproach: 'Stock & Replacement',
@@ -987,14 +951,11 @@ window.GM_DATA.problems.push(
     id: 'vol1-education-loans',
     title: 'Number of Outstanding Education Loans in India',
     prompt: 'Estimate the number of active/outstanding education loans in India.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 29 (Book p. 25) & Vol 2 p. 34',
-    company: 'BCG',
     difficulty: 3,
     archetype: 'Market Sizing',
     approachType: 'Top-Down (Demand-Side)',
     templateId: 'tpl-fmcg',
-    tags: ['Banking', 'Education', 'BCG', 'Public vs Private'],
+    tags: ['Banking', 'Education', 'Public vs Private'],
     clarifyingQuestions: [
       { q: 'Are we counting domestic higher-education loans only, or study-abroad loans too?', a: 'Domestic undergraduate/postgraduate students.', why: 'Abroad loans have huge ticket sizes (~₹40L) but smaller volume (~1–2L/yr).' },
       { q: 'What is the typical repayment tenure of an outstanding loan?', a: 'Active cohort + borrowers still repaying (~7–10 years total cycle).', why: 'Clarifies why 18–25 age cohort acts as a clean proxy.' }
@@ -1014,13 +975,13 @@ window.GM_DATA.problems.push(
         { label: 'Lower Middle (98M → 49M college): Pub 19.6M + Pvt 7.84M', valueText: '27.44M loans', highlight: true },
         { label: 'Upper Middle (70M → 63M college): Pub 7.56M + Pvt 10.08M', valueText: '17.64M loans' },
         { label: 'Elite (28M → 28M college): Pvt 10%', valueText: '1.68M loans' },
-        { label: 'Total Outstanding Loans', valueText: '46.76 Million (Book)', highlight: true }
+        { label: 'Total Outstanding Loans', valueText: '46.76 Million (Baseline)', highlight: true }
       ]
     },
-    finalAnswer: '~4.7 Cr (46.8M) in Book model [Note: RBI formal bank edu loans are ~20–30 Lakh active accounts—clarify formal bank vs informal/NBFC/cohort!]',
+    finalAnswer: '~4.7 Cr (46.8M) in unadjusted model [Note: RBI formal bank edu loans are ~20–30 Lakh active accounts—clarify formal bank vs informal/NBFC/cohort!]',
     acceptableRange: { min: 2, max: 50, unit: 'Million loans', display: '2M (formal RBI banks) – 47M (broad cohort)' },
     sanityCheck: 'Wait—always do a 15-second sanity check! India has ~4.3 Crore total college students across all 3–4 years (~1.1 Cr/year). If 46.7M people had active formal education loans, nearly 100% of graduates across 7 years would have a bank loan! Real formal bank education loans in India are ~25–30 Lakh (~2.5–3M) because most Indian families pay tuition out of savings or take informal/gold loans. Highlighting "Only ~5–10% of private/collateral-eligible students actually qualify for formal bank loans" turns a good answer into a BCG-offer answer!',
-    interviewerTrap: 'Overestimating formal bank loan penetration in India! Public colleges cost ₹10k–30k/year so very few take formal bank loans (50% in book is way too high; ~5% is realistic!).',
+    interviewerTrap: 'Overestimating formal bank loan penetration in India! Public colleges cost ₹10k–30k/year so very few take formal bank loans (50% in baseline math is way too high; ~5% is realistic!).',
     variations: [
       { question: 'Estimate the total ₹ value of outstanding education loans in India.', hint: 'Multiply formal loans (~3M) × avg ₹8–10 Lakh = ~₹2.5–3 Lakh Crore.' },
       { question: 'How many Indian students take loans to study abroad each year?', hint: '~1.3M Indians abroad → ~400K new students/yr × ~40–50% taking loans ≈ 1.8 Lakh loans/yr.' }
@@ -1059,9 +1020,6 @@ window.GM_DATA.problems.push(
     id: 'vol1-dentist-revenue',
     title: 'Daily Revenue of a Dentist Clinic in Delhi',
     prompt: 'Estimate the average daily revenue of a dentist in Delhi.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 31 (Book p. 27)',
-    company: 'Indus Insights',
     difficulty: 2,
     archetype: 'Revenue & Cost',
     approachType: 'Bottom-Up (Supply-Side)',
@@ -1075,7 +1033,7 @@ window.GM_DATA.problems.push(
     formula: 'Daily Rev = [Weekly Patients × Weighted Fee per Patient] ÷ 7',
     assumptions: [
       { label: 'Operating Hours = 9 hrs/day (11 AM–8 PM); Avg patient turnaround = 20 mins (3 patients/hr)', rationale: '5 min intro + 10 min procedure/check + 5 min billing/prep.' },
-      { label: 'Weekday (5 days): 3 Peak hrs (100% = 9 pax) + 6 Non-Peak hrs (50% = 9 pax) = 18 pax/day', rationale: 'Wait—check Vol 1 PDF carefully! In Vol 1, they added Peak (9) + Non-Peak (9) for ONLY ONE weekday (18) + ONE weekend (22.5) = 40.5 patients and then divided ₹76,950 by 7! Catching that missing ×5 weekdays and ×2 weekends in the PDF is critical!' },
+      { label: 'Weekday (5 days): 3 Peak hrs (100% = 9 pax) + 6 Non-Peak hrs (50% = 9 pax) = 18 pax/day', rationale: 'Wait—check Baseline draft carefully! In Baseline, they added Peak (9) + Non-Peak (9) for ONLY ONE weekday (18) + ONE weekend (22.5) = 40.5 patients and then divided ₹76,950 by 7! Catching that missing ×5 weekdays and ×2 weekends is critical!' },
       { label: 'Corrected 7-day total: (5 × 18) + (2 × 22.5) = 90 + 45 = 135 patients/week → ~19.3 patients/day', rationale: 'Or if each patient takes ~30–40 mins for complicated procedures, ~10–12 patients/day!' },
       { label: 'Mix & Total Fee (incl. ₹1,000 consult): 50% Complicated (₹2,500) + 30% Simple (₹1,500) + 20% Consult (₹1,000) = ₹1,900 weighted avg', rationale: 'Wait: Complicated root canals can be ₹4,000–6,000 across multiple sittings, averaging ₹2,000–2,500 per sitting.' }
     ],
@@ -1083,7 +1041,7 @@ window.GM_DATA.problems.push(
       label: 'Solo Dentist Clinic (9 Hrs/Day, 3 slots/hr)',
       valueText: 'Avg ~11–19 patients/day',
       children: [
-        { label: 'Book Calc (1 WD + 1 WE = 40.5 ÷ 7 = 5.8 pax/day × ₹1,900)', valueText: '₹10,993/day (Book)' },
+        { label: 'Baseline Calc (1 WD + 1 WE = 40.5 ÷ 7 = 5.8 pax/day × ₹1,900)', valueText: '₹10,993/day (Baseline)' },
         { label: 'Full 7-Day Calc (135 pax/wk ÷ 7 = 19.3 pax/day × ₹1,900)', valueText: '₹36,640/day (Corrected)', highlight: true },
         { label: 'Realistic 40-min avg slot (~10 pax/day × ₹1,800)', valueText: '~₹18,000/day', highlight: true }
       ]
@@ -1091,7 +1049,7 @@ window.GM_DATA.problems.push(
     finalAnswer: '~₹11,000 – ₹36,000/day (Realistic solo Delhi dentist: ~₹15,000–25,000/day = ₹4.5–7.5 Lakh/month)',
     acceptableRange: { min: 8000, max: 45000, unit: '₹/day', display: '₹8,000 – ₹45,000/day' },
     sanityCheck: 'A solo Delhi dentist makes ~₹4–6 Lakh/month gross revenue, pays ~₹60k rent + ₹40k assistant + ₹50k consumables/lab fees, netting ~₹2.5–3.5 Lakh/month profit—matches real Delhi practitioner economics!',
-    interviewerTrap: 'Watch out for the Vol 1 PDF math bug! The PDF added ONE weekday (18) + ONE weekend day (22.5) = 40.5 and then divided by 7 instead of multiplying weekdays × 5 and weekends × 2 (or dividing by 2)! Always double-check your weighted average denominator!',
+    interviewerTrap: 'Watch out for the missing weekday/weekend multiplier bug where a solution added ONE weekday (18) + ONE weekend day (22.5) = 40.5 and then divided by 7 instead of multiplying weekdays × 5 and weekends × 2 (or dividing by 2)! Always double-check your weighted average denominator!',
     variations: [
       { question: 'Estimate the number of dentists in Delhi.', hint: 'Population 3 Cr × ~1 visit/year ÷ (19 pax/day × 300 days ≈ 5,700 visits/yr) ≈ ~5,000–6,000 dentists!' },
       { question: 'What if the dentist adds a second chair and junior associate?', hint: 'Supply capacity doubles, though occupancy drops slightly (~70%) → ~1.5x revenue.' }
@@ -1130,9 +1088,6 @@ window.GM_DATA.problems.push(
     id: 'vol1-laundry-delhi',
     title: 'Annual Revenue of a Laundry Service in Delhi',
     prompt: 'Estimate the annual revenue of a neighborhood laundry & dry-cleaning service in Delhi.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 32 (Book p. 28)',
-    company: 'Indus Insights',
     difficulty: 3,
     archetype: 'Revenue & Cost',
     approachType: 'Bottom-Up (Supply-Side)',
@@ -1148,7 +1103,7 @@ window.GM_DATA.problems.push(
       { label: 'Primary Stream (Wash & Fold/Iron): 100 clothes/day @ ₹9–10/cloth = ₹900/day', rationale: 'Daily bread-and-butter volume from nearby bachelor/working households.' },
       { label: 'Dry Cleaning: 7 clothes/day @ ₹60 = ₹420/day', rationale: 'Sarees, suits, winter jackets.' },
       { label: 'Same-Day Express: 10 clothes/day @ ₹40 = ₹400/day | Pickup & Delivery premium: 10 @ ₹30 = ₹300/day', rationale: 'Convenience premiums.' },
-      { label: 'Total Daily Revenue = ₹2,020/day × 365 days ≈ ₹7.37 Lakh/year (Note: Vol 1 PDF had a miscalculation dividing by hours/day getting ₹3.38L; ₹2,020 × 365 = ₹7.37L!)', rationale: 'Always verify daily × days = annual without random extra multipliers!' }
+      { label: 'Total Daily Revenue = ₹2,020/day × 365 days ≈ ₹7.37 Lakh/year (Note: Baseline draft had a miscalculation dividing by hours/day getting ₹3.38L; ₹2,020 × 365 = ₹7.37L!)', rationale: 'Always verify daily × days = annual without random extra multipliers!' }
     ],
     tree: {
       label: 'Daily Revenue Streams',
@@ -1157,13 +1112,13 @@ window.GM_DATA.problems.push(
         { label: 'Wash & Fold (100/day × ₹9)', valueText: '₹900/day' },
         { label: 'Dry Cleaning (7/day × ₹60)', valueText: '₹420/day' },
         { label: 'Same Day (10 × ₹40) + Pickup (10 × ₹30)', valueText: '₹700/day' },
-        { label: 'Annual Revenue (× 365 days)', valueText: '₹7.37 Lakh/Yr (Book: ₹3.38L)', highlight: true }
+        { label: 'Annual Revenue (× 365 days)', valueText: '₹7.37 Lakh/Yr (Baseline: ₹3.38L)', highlight: true }
       ]
     },
-    finalAnswer: '~₹7.4 Lakh/year (₹60,000/month) [Note: Catching Vol 1 PDF’s ₹3.38L arithmetic slip]',
+    finalAnswer: '~₹7.4 Lakh/year (₹60,000/month) [Checking against the common ₹3.38L arithmetic slip]',
     acceptableRange: { min: 3, max: 20, unit: '₹ Lakh/year', display: '₹3.5 Lakh – ₹20 Lakh/year' },
     sanityCheck: 'A neighborhood laundry shop serves ~15–20 regular households/day (~₹120–150 per order = ₹2,000–2,500/day = ₹60–75k/month). After paying ~₹15–20k rent + ₹15k helper + electricity/detergent, the owner nets ~₹25–30k/month—totally realistic!',
-    interviewerTrap: 'Catching the Vol 1 PDF mistake where it printed ₹2,020/day and then computed ₹3.38L/year instead of ₹2,020 × 365 = ₹7.37L! In an interview, always sanity-check Daily × 365 mentally (₹2,000 × 365 ≈ ₹7.3 Lakh)!',
+    interviewerTrap: 'Catching the common mistake where a solution printed ₹2,020/day and then computed ₹3.38L/year instead of ₹2,020 × 365 = ₹7.37L! In an interview, always sanity-check Daily × 365 mentally (₹2,000 × 365 ≈ ₹7.3 Lakh)!',
     variations: [
       { question: 'How many customers can 2 commercial 10kg washing machines serve?', hint: '10kg ≈ 30 clothes/cycle × 8 cycles/day × 2 machines = 480 clothes max capacity.' },
       { question: 'Estimate the market size of organized laundry chains in Delhi.', hint: 'Upper/Upper-Mid urban households (20% of 75L HH = 15L HH) × 30% outsourcing × ₹1,000/mo.' }
@@ -1203,9 +1158,6 @@ window.GM_DATA.problems.push(
     id: 'vol1-food-court-mall',
     title: 'Weekly Revenue from Food Stalls in a Delhi Mall Food Court',
     prompt: 'Estimate the weekly revenue from all food stalls in a mall food court in Delhi.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 33 (Book p. 29)',
-    company: 'Indus Insights',
     difficulty: 3,
     archetype: 'Revenue & Cost',
     approachType: 'Bottom-Up (Supply-Side)',
@@ -1215,10 +1167,10 @@ window.GM_DATA.problems.push(
       { q: 'Are we counting only food court quick-service stalls, or full-service sit-down restaurants too?', a: 'Food court stalls (~15–30 stalls in a typical Delhi mall).', why: 'Avoids mixing ₹2,000 sit-down dining bills with ₹300 food court orders.' },
       { q: 'Include online delivery orders (Zomato/Swiggy) from those mall outlets?', a: 'Walk-in mall diner revenue primarily (optionally note 20% delivery uplift).', why: 'Anchors cleanly to mall footfall.' }
     ],
-    strategyOverview: 'Two great routes! Route A (Footfall Conversion): Estimate weekly mall footfall (Weekdays ~20K/day × 5 + Weekends ~35K/day × 2 ≈ 1.7L visitors/week) × % eating at food court (~20–30%) ÷ avg group size (or × individual AOV ₹250–350). Route B (Stall Capacity): 20–30 stalls × orders/hour (peak vs non-peak) × AOV. Note: Vol 1 PDF had a huge unit error arriving at ₹1.56L for ALL 30 stalls combined (only ₹5,200/week per stall!!)—let’s see the realistic check!',
+    strategyOverview: 'Two great routes! Route A (Footfall Conversion): Estimate weekly mall footfall (Weekdays ~20K/day × 5 + Weekends ~35K/day × 2 ≈ 1.7L visitors/week) × % eating at food court (~20–30%) ÷ avg group size (or × individual AOV ₹250–350). Route B (Stall Capacity): 20–30 stalls × orders/hour (peak vs non-peak) × AOV. Note: Baseline draft had a huge unit error arriving at ₹1.56L for ALL 30 stalls combined (only ₹5,200/week per stall!!)—let’s see the realistic check!',
     formula: 'Weekly Revenue = Weekly Mall Visitors × Food Court Conversion % × Avg Spend per Visitor',
     assumptions: [
-      { label: 'Mall Footfall: ~22,000/day Weekdays (×5 = 110K) + ~24,000–35,000/day Weekends (×2 = 50–70K) ≈ 1.6L–1.8L/wk', rationale: 'Notice Vol 1 PDF accidentally computed 23,460/week TOTAL instead of per day!' },
+      { label: 'Mall Footfall: ~22,000/day Weekdays (×5 = 110K) + ~24,000–35,000/day Weekends (×2 = 50–70K) ≈ 1.6L–1.8L/wk', rationale: 'A common unit error computes 23,460/week TOTAL instead of per day!' },
       { label: '% of Mall Visitors Eating at Food Court = ~25% (~40,000–45,000 diners/wk)', rationale: 'Shoppers & moviegoers frequently grab a meal or snack.' },
       { label: 'Average Spend per Diner = ₹250–₹350', rationale: 'Combo meal + drink at McDonald’s/Haldiram’s/Domino’s.' }
     ],
@@ -1229,12 +1181,12 @@ window.GM_DATA.problems.push(
         { label: 'Weekday Footfall (22K × 5 = 110K) + Weekend (30K × 2 = 60K)', valueText: '1,70,000 visitors/wk' },
         { label: 'Food Court Conversion (25% eat)', valueText: '42,500 diners/wk', highlight: true },
         { label: '× ₹300 Avg Spend per Person', valueText: '₹1.275 Crore/wk (~₹4.25L/stall across 30 stalls)', highlight: true },
-        { label: '[Book PDF printed ₹1.56L — missing ~80x factor!]', valueText: 'Sanity check caught it!', muted: true }
+        { label: '[Unadjusted baseline: ₹1.56L — missing ~80x factor!]', valueText: 'Sanity check caught it!', muted: true }
       ]
     },
     finalAnswer: '~₹1.0 – 1.4 Crore/week (~₹3.5–4.5 Lakh/week per stall across 30 stalls)',
     acceptableRange: { min: 50, max: 200, unit: '₹ Lakh/week', display: '₹50 Lakh – ₹2 Crore/week (for 20–30 stalls)' },
-    sanityCheck: 'CRITICAL SANITY CHECK: In the Vol 1 PDF, the final figure was ₹1,56,400/week for 30 stalls = ₹5,200 per stall per week = ₹740/day!! No mall food stall can even pay ₹2 Lakh/month mall rent on ₹740/day! Realistic sales are ~₹40,000–65,000/day per stall → ~₹3.5–4.5 Lakh/week per stall → ~₹1–1.35 Cr/week for 30 stalls! This is a golden example of WHY Step 6 (Sanity Check) saves your interview!',
+    sanityCheck: 'CRITICAL SANITY CHECK: In the Baseline draft, the final figure was ₹1,56,400/week for 30 stalls = ₹5,200 per stall per week = ₹740/day!! No mall food stall can even pay ₹2 Lakh/month mall rent on ₹740/day! Realistic sales are ~₹40,000–65,000/day per stall → ~₹3.5–4.5 Lakh/week per stall → ~₹1–1.35 Cr/week for 30 stalls! This is a golden example of WHY Step 6 (Sanity Check) saves your interview!',
     interviewerTrap: 'Dividing daily mall footfall by 7 instead of multiplying by 7, or forgetting to multiply by number of stalls! Always divide your final answer by the number of stalls to check daily sales per stall.',
     variations: [
       { question: 'What is the monthly revenue of a single McDonald’s outlet in a mall?', hint: 'Take ₹4.5L/week × 4.3 ≈ ₹18–20 Lakh/month (or higher ~₹30–40L for anchor brands).' },
@@ -1275,9 +1227,6 @@ window.GM_DATA.problems.push(
     id: 'vol1-books-lifetime',
     title: 'Number of Books Read by an Indian During Their Lifetime',
     prompt: 'Estimate the average number of books read by an Indian during their lifetime.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 34 (Book p. 30)',
-    company: 'Indus Insights',
     difficulty: 2,
     archetype: 'Usage & Behavioral',
     approachType: 'Top-Down (Demand-Side)',
@@ -1347,9 +1296,6 @@ window.GM_DATA.problems.push(
     id: 'vol1-commute-delhi',
     title: 'Weekly Commute Time for Office-Goers in Delhi',
     prompt: 'Estimate the total weekly commute time (in hours) spent by office-goers in Delhi.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 35 (Book p. 31) & Vol 2 p. 28',
-    company: 'Indus Insights',
     difficulty: 3,
     archetype: 'Usage & Behavioral',
     approachType: 'Top-Down (Demand-Side)',
@@ -1388,7 +1334,7 @@ window.GM_DATA.problems.push(
         },
         {
           label: 'Total Weekly Commute Hours',
-          valueText: '~82.5 Million Hrs/Wk (Vol 2) [Vol 1: ~49.8M hrs]',
+          valueText: '~82.5 Million Hrs/Wk (Refined) [Conservative: ~49.8M hrs]',
           highlight: true
         }
       ]
@@ -1435,9 +1381,6 @@ window.GM_DATA.problems.push(
     id: 'vol1-lok-sabha-expenditure',
     title: 'Govt Expenditure in the Lok Sabha Elections',
     prompt: 'Estimate the expenditure incurred by the Government of India in conducting the Lok Sabha elections.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 36 (Book p. 32)',
-    company: 'Indus Insights',
     difficulty: 4,
     archetype: 'Revenue & Cost',
     approachType: 'Hybrid (Demand + Supply)',
@@ -1453,7 +1396,7 @@ window.GM_DATA.problems.push(
       { label: 'Eligible Voters (18+ = ~70% of 1.4B) ≈ 960M–980M voters', rationale: 'Universal adult suffrage in India.' },
       { label: '1 Polling Booth per ~1,000 voters → ~10 Lakh (1 Million) polling stations', rationale: 'ECI rule caps voters per polling booth around 1,000–1,500.' },
       { label: 'Cost per Booth ≈ ₹80,000 – ₹1,20,000 (polling staff pay/TA/DA, EVM transport, ink, tents, security)', rationale: '~5–6 personnel per booth × 3–4 days duty + security + admin.' },
-      { label: 'Extrapolation Check: 2019 (~₹8,000 Cr) × (1 + 30% inflation + 5% voter growth + 10% tech/security + 5% buffer)', rationale: 'Matches Vol 1 extrapolation of ₹12,180 Crore!' }
+      { label: 'Extrapolation Check: 2019 (~₹8,000 Cr) × (1 + 30% inflation + 5% voter growth + 10% tech/security + 5% buffer)', rationale: 'Matches the prior-cycle inflation extrapolation of ~₹12,180 Crore!' }
     ],
     tree: {
       label: 'Lok Sabha Election Govt Cost',
@@ -1504,16 +1447,13 @@ window.GM_DATA.problems.push(
     id: 'vol1-alco-bev-mumbai',
     title: 'Market Size for an Alco-Beverage Firm in Mumbai',
     prompt: 'Estimate the target market size (addressable consumers) for a branded alco-beverage firm in Mumbai.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 38 (Book p. 34)',
-    company: 'Kepler Cannon',
     difficulty: 2,
     archetype: 'Market Sizing',
     approachType: 'Top-Down (Demand-Side)',
     templateId: 'tpl-fmcg',
     tags: ['Beverages', 'Mumbai', 'Slum vs Urban', 'Legal Drinking Age'],
     clarifyingQuestions: [
-      { q: 'Are we estimating the number of target consumers (volume) or annual ₹ revenue?', a: 'Target consumer base (book) — optionally multiply by monthly spend for revenue.', why: 'Matches firm’s SOM/SAM sizing.' },
+      { q: 'Are we estimating the number of target consumers (volume) or annual ₹ revenue?', a: 'Target consumer base (standard scope) — optionally multiply by monthly spend for revenue.', why: 'Matches firm’s SOM/SAM sizing.' },
       { q: 'Branded/premium spirits & beer, or cheap local/country liquor too?', a: 'Branded retail & bar/pub alcohol (hence exclude slum/BPL population).', why: 'Slums account for ~40% of Mumbai’s population!' }
     ],
     strategyOverview: 'Mumbai-specific Top-Down Funnel! Always remember Mumbai’s iconic 60% Formal Urban / 40% Slum split. Exclude Slum (40%) for branded alcohol, exclude underage 0–18 (or legal drinking age 0–21/25 in Maharashtra!), segment remaining urban population by Age drinking propensity (18–30: 80%, 30–50: 50%, 50+: 20%), and apply Income Affordability filters.',
@@ -1587,9 +1527,6 @@ window.GM_DATA.problems.push(
     id: 'vol1-red-cars-delhi',
     title: 'Number of Red Cars in Delhi',
     prompt: 'Estimate the number of red cars currently in Delhi.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 40 (Book p. 36)',
-    company: 'Nation with NaMo',
     difficulty: 2,
     archetype: 'Market Sizing',
     approachType: 'Top-Down (Demand-Side)',
@@ -1603,7 +1540,7 @@ window.GM_DATA.problems.push(
     formula: 'Red Cars = (Delhi Pop ÷ Household Size) × ∑ (Income Share × Cars/HH) × Red Color %',
     assumptions: [
       { label: 'Delhi Pop = 33M; Household size = 4 → 8.25 Million households', rationale: 'Cars are household-level durable assets!' },
-      { label: 'Lower/Lower-Mid (75%) = 0 cars (or small %); Upper Mid (15%) = 1 car/HH (1.24M); Upper (10%) = 2 cars/HH (1.65M)', rationale: 'Total ~2.89M cars (note Vol 1 diagram forgot ÷4 inside the Lower Middle box label, though its final 2.89M sum correctly used ÷4!).' },
+      { label: 'Lower/Lower-Mid (75%) = 0 cars (or small %); Upper Mid (15%) = 1 car/HH (1.24M); Upper (10%) = 2 cars/HH (1.65M)', rationale: 'Total ~2.89M cars (note Baseline diagram forgot ÷4 inside the Lower Middle box label, though its final 2.89M sum correctly used ÷4!).' },
       { label: 'Red Car Share = 15% (10–15% realistic; White ~45%, Silver/Grey ~30%, Blue/Black/Red ~25%)', rationale: 'White & silver dominate for heat reflection & resale value; red is ~10–15%.' }
     ],
     tree: {
@@ -1664,9 +1601,6 @@ window.GM_DATA.problems.push(
     id: 'vol1-chairs-delhi',
     title: 'Number of Chairs in Households of Delhi',
     prompt: 'Estimate the total number of chairs in households across Delhi.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 41 (Book p. 37)',
-    company: 'Nation with NaMo',
     difficulty: 1,
     archetype: 'Market Sizing',
     approachType: 'Top-Down (Demand-Side)',
@@ -1733,18 +1667,15 @@ window.GM_DATA.problems.push(
   },
   {
     id: 'vol1-srcc-metro',
-    title: 'SRCC Students Traveling by Metro Everyday',
-    prompt: 'Estimate the number of students in SRCC (or a large DU college) who travel by metro every day.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 42 (Book p. 38)',
-    company: 'Nation with NaMo',
+    title: 'College Students Traveling by Metro Every Day',
+    prompt: 'Estimate the number of students at a large Delhi University college (~3,500 students) who travel by metro every day.',
     difficulty: 2,
     archetype: 'Usage & Behavioral',
     approachType: 'Top-Down (Demand-Side)',
     templateId: 'tpl-fmcg',
     tags: ['Campus', 'Delhi Metro', 'Commute', 'Student Life'],
     clarifyingQuestions: [
-      { q: 'Are we estimating an average regular college day (adjusting for attendance)?', a: 'Regular academic day (book assumes 100% present; realistic ~75–85% attendance!).', why: 'Attendance rate is a great nuance to mention.' },
+      { q: 'Are we estimating an average regular college day (adjusting for attendance)?', a: 'Regular academic day (The baseline assumes 100% present; realistic ~75–85% attendance!).', why: 'Attendance rate is a great nuance to mention.' },
       { q: 'Include all UG + PG students?', a: 'Yes, entire enrolled student body (~3,500–4,000 students).', why: 'Avoids undercounting PG or B.Com/BA batches.' }
     ],
     strategyOverview: 'Micro-population Bottom-Up/Funnel! Start with Total Enrolled Students (3,500). Split immediately by Accommodation: Outstation students (~60% = 2,100) live in nearby hostels/PGs within walking/e-rickshaw distance of North Campus (~0% Metro) vs Local Delhi NCR Day Scholars (~40% = 1,400). Segment Day Scholars by Income (Low 40%, Mid 50%, High 10%) and apply Metro mode share for each tier.',
@@ -1755,7 +1686,7 @@ window.GM_DATA.problems.push(
       { label: 'Income Metro Split (on 1,400 locals): Low (40% = 560, 30% Metro = 168), Mid (50% = 700, 40% Metro = 280), High (10% = 140, 40% Metro = 56)', rationale: 'Low income often prefers cheaper DTC bus; High income mixes Metro & personal cars/cabs.' }
     ],
     tree: {
-      label: 'Total SRCC Students (3,500)',
+      label: 'Total College Students (3,500)',
       valueText: '3,500 students',
       children: [
         { label: 'Outstation in Nearby PGs/Hostels (60% = 2,100)', valueText: '0 Metro (walk/e-rickshaw)', muted: true },
@@ -1812,9 +1743,6 @@ window.GM_DATA.problems.push(
     id: 'vol1-wine-bottles',
     title: 'Number of Wine Bottles Sold in India in a Year',
     prompt: 'Estimate the number of wine bottles sold in India in one year.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 43 (Book p. 39)',
-    company: 'Nation with NaMo',
     difficulty: 3,
     archetype: 'Market Sizing',
     approachType: 'Top-Down (Demand-Side)',
@@ -1827,7 +1755,7 @@ window.GM_DATA.problems.push(
     strategyOverview: 'Top-Down Niche Alcohol Funnel! Start with 1.4B population → filter to Legal Drinking Age 21+ (~65%) → filter to Upper/Upper-Middle Urban (~15–20% max, since wine is a luxury niche in India) → filter Alcohol Drinkers (~30%) → Wine Preference Share (~10–15% of urban affluent drinkers, as whiskey/beer dominate!) → Bottles/Year (e.g. 4–12 bottles/yr for casual/regular wine drinkers) × 80% bottle share.',
     formula: 'Bottles = India Pop × Legal Age % × Target Urban Affluent % × Drinker % × Wine Share % × Bottles/Yr × Bottle Format %',
     assumptions: [
-      { label: 'Book Note: Vol 1 PDF arrived at 3.13 BILLION bottles/yr (assuming 40 bottles/yr across 98M wine drinkers!!)—Wait, let’s sanity check!', rationale: '3.13B bottles = ~2.3 billion liters of wine, which is more than FRANCE or ITALY drinks! Real India wine consumption is ~30–50 Million liters (~40–70 Million bottles/year)!' },
+      { label: 'Baseline Note: Baseline draft arrived at 3.13 BILLION bottles/yr (assuming 40 bottles/yr across 98M wine drinkers!!)—Wait, let’s sanity check!', rationale: '3.13B bottles = ~2.3 billion liters of wine, which is more than FRANCE or ITALY drinks! Real India wine consumption is ~30–50 Million liters (~40–70 Million bottles/year)!' },
       { label: 'Realistic India Wine Funnel: 1.4B × 65% (21+) × 15% (Urban Upper/Upper-Mid) × 30% (Alcohol Drinkers) × 15% (Drink Wine) ≈ 6.1M wine drinkers', rationale: 'Wine is heavily concentrated in Mumbai, Delhi NCR, Bengaluru, Pune, Goa.' },
       { label: 'Frequency: ~6–10 bottles/yr per wine drinker (occasional 2–4, regular 15–20) × 85% in bottles', rationale: 'Gives ~40–60 Million bottles/year!' }
     ],
@@ -1838,13 +1766,13 @@ window.GM_DATA.problems.push(
         { label: 'Age 21+ (65%) × Urban Affluent (15%)', valueText: '~136.5M' },
         { label: 'Alcohol Drinkers (30%) × Wine Drinkers (15%)', valueText: '~6.1M Wine Drinkers', highlight: true },
         { label: '× ~8 bottles/yr × 85% Bottle format', valueText: '~42–50 Million Bottles/Yr', highlight: true },
-        { label: '[Vol 1 PDF Answer: 3.13 Billion — 60x too high!]', valueText: 'Use Sanity Check to avoid!', muted: true }
+        { label: '[Baseline draft Answer: 3.13 Billion — 60x too high!]', valueText: 'Use Sanity Check to avoid!', muted: true }
       ]
     },
-    finalAnswer: '~40 – 65 Million Bottles/Year realistically [Book PDF printed 3.13 Billion]',
+    finalAnswer: '~40 – 65 Million Bottles/Year realistically [Unadjusted baseline: 3.13 Billion]',
     acceptableRange: { min: 25, max: 120, unit: 'Million bottles/year', display: '25M – 120M bottles/year (realistic)' },
     sanityCheck: 'CRITICAL SANITY CHECK: Sula Vineyards holds ~55–60% of India’s domestic wine market and sells ~1.2–1.5 Million cases (~15–18M bottles/year)! That means the ENTIRE Indian wine market is ~30–50 Million bottles/year—NOT 3.13 Billion! Checking global analogies (France drinks ~3B bottles/yr; India prefers whiskey/beer) protects you from a 60x blunder.',
-    interviewerTrap: 'Vol 1 PDF fell into a classic beginner trap: assuming 100M Indians each drink 40 bottles of wine/year (~1 bottle every week!), forgetting that 85%+ of Indian alcohol drinkers consume spirits/beer, not grape wine!',
+    interviewerTrap: 'Classic beginner trap: assuming 100M Indians each drink 40 bottles of wine/year (~1 bottle every week!), forgetting that 85%+ of Indian alcohol drinkers consume spirits/beer, not grape wine!',
     variations: [
       { question: 'Estimate the market size of Sula Vineyards in India.', hint: '~45M bottles × 50% share × ₹700 retail ≈ ~₹1,500 Cr retail (~₹600 Cr net company revenue).' },
       { question: 'Estimate total beer bottles consumed in India annually.', hint: 'Much larger mass market (~300–400 Million cases = ~3.5–4.5 Billion bottles/year).' }
@@ -1884,9 +1812,6 @@ window.GM_DATA.problems.push(
     id: 'vol1-india-gate',
     title: 'Number of People That Visit India Gate in a Day',
     prompt: 'Estimate the number of people who visit India Gate in New Delhi on a given day.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 44 (Book p. 40)',
-    company: 'Nation with NaMo',
     difficulty: 3,
     archetype: 'Supply & Capacity',
     approachType: 'Hybrid (Demand + Supply)',
@@ -1912,7 +1837,7 @@ window.GM_DATA.problems.push(
         { label: 'Total Daily Footfall', valueText: '~1.15 Lakh Visitors/Day', highlight: true }
       ]
     },
-    finalAnswer: '~80,000 – 1,20,000 Visitors/Day (Book: 1,16,500)',
+    finalAnswer: '~80,000 – 1,20,000 Visitors/Day (Baseline: 1,16,500)',
     acceptableRange: { min: 40000, max: 180000, unit: 'Visitors/day', display: '40,000 – 1,80,000 visitors/day' },
     sanityCheck: 'Cross-check via Supply/Spatial Capacity! India Gate lawns span ~16 hours active (6 AM–10 PM). Peak evening 4 hrs (6–10 PM) holds ~15,000 people at a time turning over every 60–90 mins (~45K–60K evening visitors) + ~40K daytime visitors = ~90,000–1,00,000/day! Matches closely.',
     interviewerTrap: 'Forgetting to separate TOURISTS from LOCALS! Tourists have a 60–80% probability of visiting India Gate, while locals have <0.3% probability on any random Tuesday.',
@@ -1955,9 +1880,6 @@ window.GM_DATA.problems.push(
     id: 'vol1-du-north-campus-metro',
     title: 'Students Using Metro to Commute to DU North Campus',
     prompt: 'Estimate the number of students using the Delhi Metro to commute to North Campus colleges of Delhi University daily.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 45 (Book p. 41)',
-    company: 'Nation with NaMo',
     difficulty: 2,
     archetype: 'Usage & Behavioral',
     approachType: 'Bottom-Up (Supply-Side)',
@@ -1965,7 +1887,7 @@ window.GM_DATA.problems.push(
     tags: ['Education', 'Delhi Metro', 'DU North Campus', 'Accommodation Split'],
     clarifyingQuestions: [
       { q: 'Regular academic semester weekday?', a: 'Yes, regular working day (no exam/vacation dip).', why: 'Avoids seasonal outliers.' },
-      { q: 'Which colleges are included in North Campus?', a: 'Major colleges around Vishwavidyalaya (~10 colleges: SRCC, Hindu, Stephens, Hansraj, Miranda, Ramjas, Kirori Mal, SGTB Khalsa, Daulat Ram, IP).', why: 'Bottom-up college count is super accurate!' }
+      { q: 'Which colleges are included in North Campus?', a: 'Major colleges around Vishwavidyalaya (~10 major colleges: Hindu, Stephens, Hansraj, Miranda, Ramjas, Kirori Mal, SGTB Khalsa, Daulat Ram, IP, Commerce).', why: 'Bottom-up college count is super accurate!' }
     ],
     strategyOverview: 'Bottom-Up Campus Aggregation! Start with ~10 North Campus colleges × ~5,000 average enrolled students = 50,000 students. Segment by Accommodation: Hostels (3,000) + Nearby PGs (30,000) = 33,000 living nearby (walk/e-rickshaw). Remaining 17,000 are Day Scholars from across Delhi. Split Day Scholars by Income & Transport Preference to get Metro riders.',
     formula: 'Metro Commuters = (Colleges × Avg Students) × Day Scholar % × Long-Distance Commuter % × Metro Share %',
@@ -1993,7 +1915,7 @@ window.GM_DATA.problems.push(
     finalAnswer: '~10,540 Students/Day (~21% of North Campus)',
     acceptableRange: { min: 7000, max: 16000, unit: 'Students/day', display: '7,000 – 16,000 students/day' },
     sanityCheck: 'Vishwavidyalaya station sees ~20,000–25,000 entries/exits on a normal college day (~10,000–12,000 unique round-trip commuters including faculty/staff). 10,540 students fits like a glove!',
-    interviewerTrap: 'Notice in Vol 1 PDF, 5,440 + 7,480 + 680 = 13,600 (meaning ~20% of the 17,000 day scholars live nearby in North Delhi and walk/cycle!). Stating that explicitly makes your math sum cleanly to 100%.',
+    interviewerTrap: 'Notice the leftover check: 5,440 + 7,480 + 680 = 13,600 (meaning ~20% of the 17,000 day scholars live nearby in North Delhi and walk/cycle!). Stating that explicitly makes your math sum cleanly to 100%.',
     variations: [
       { question: 'How many e-rickshaws operate around Vishwavidyalaya Metro station?', hint: '10,540 metro arrivals + 30,000 PG students taking short hops ÷ ~40 passengers/e-rickshaw/day ≈ ~500–800 e-rickshaws.' }
     ],
@@ -2030,9 +1952,6 @@ window.GM_DATA.problems.push(
     id: 'vol1-flights-day-delhi',
     title: 'Number of Flights Arriving/Departing Delhi Airport in a Day',
     prompt: 'Estimate the number of flights arriving at Delhi Airport in a single day.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 46 (Book p. 42)',
-    company: 'Nation with NaMo',
     difficulty: 2,
     archetype: 'Supply & Capacity',
     approachType: 'Bottom-Up (Supply-Side)',
@@ -2042,7 +1961,7 @@ window.GM_DATA.problems.push(
       { q: 'Arrivals ONLY, or combined movements (arrivals + departures)?', a: 'Arrivals (or departures, since daily arrivals ≈ departures!).', why: 'Always verify whether to divide total runway movements by 2.' },
       { q: 'Include both domestic and international flights?', a: 'Yes, all commercial flights.', why: 'Covers full airport runway utilization.' }
     ],
-    strategyOverview: 'Runway/Terminal Throughput model! Split 24 hours into Peak (12 hrs: 8 AM–8 PM, 1 arrival every 10 min = 6/hr) and Non-Peak (12 hrs: 8 PM–8 AM, 1 every 30 min = 2/hr). Weighted average = 4 flights/hr × 24 hrs = 96 arrivals/runway/day. Multiply by active runways/terminals (book uses 3 terminals × 2 runways = 6 channels → 576 arrivals/day; note realistically IGI has 4 physical runways splitting arrivals & departures → ~650–700 arrivals/day!).',
+    strategyOverview: 'Runway/Terminal Throughput model! Split 24 hours into Peak (12 hrs: 8 AM–8 PM, 1 arrival every 10 min = 6/hr) and Non-Peak (12 hrs: 8 PM–8 AM, 1 every 30 min = 2/hr). Weighted average = 4 flights/hr × 24 hrs = 96 arrivals/runway/day. Multiply by active runways/terminals (The baseline uses 3 terminals × 2 runways = 6 channels → 576 arrivals/day; note realistically IGI has 4 physical runways splitting arrivals & departures → ~650–700 arrivals/day!).',
     formula: 'Daily Arrivals = Active Channels × 24 hrs × Weighted Avg Arrivals/Hr',
     assumptions: [
       { label: 'Peak (12 hrs @ 10-min gap = 6/hr) + Non-Peak (12 hrs @ 30-min gap = 2/hr) → 4/hr weighted avg', rationale: 'Captures day vs red-eye night slowdown.' },
@@ -2055,7 +1974,7 @@ window.GM_DATA.problems.push(
         { label: 'Peak Hours (12 hrs, 10-min gap = 6/hr)', valueText: '72 flights' },
         { label: 'Non-Peak (12 hrs, 30-min gap = 2/hr)', valueText: '24 flights' },
         {
-          label: '96 arrivals/day × 6 channels (Book: 3 term × 2 runways)',
+          label: '96 arrivals/day × 6 channels (Baseline: 3 term × 2 runways)',
           valueText: '576 Flights Arriving/Day',
           highlight: true
         }
@@ -2066,7 +1985,7 @@ window.GM_DATA.problems.push(
     sanityCheck: 'Delhi IGI handles ~1,300–1,400 total movements (half arrivals = ~650–700/day). 576 is within 15% of actual!',
     interviewerTrap: 'Saying "each terminal has 2 runways" (T1/T2/T3 share the airport’s 4 runways!). Using "4 shared runways at ~15 movements/hr peak, 50% arrivals" is even cleaner.',
     variations: [
-      { question: 'How many domestic departures leave Delhi daily?', hint: 'See Vol 2 Problem #19: ~75% of ~600 departures = ~450 domestic departures/day.' }
+      { question: 'How many domestic departures leave Delhi daily?', hint: 'Refined Breakdown: ~75% of ~600 departures = ~450 domestic departures/day.' }
     ],
     guidedPractice: {
       correctApproach: 'Bottom-Up (Supply-Side)',
@@ -2100,16 +2019,13 @@ window.GM_DATA.problems.push(
     id: 'vol1-sarvana-bhavana',
     title: 'Monthly Revenue of a Saravana Bhavan Outlet',
     prompt: 'Estimate the monthly revenue of a single Saravana Bhavan restaurant outlet.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 47–48 (Book p. 43–44)',
-    company: 'Nation with NaMo',
     difficulty: 3,
     archetype: 'Revenue & Cost',
     approachType: 'Bottom-Up (Supply-Side)',
     templateId: 'tpl-outlet',
     tags: ['Restaurant', 'QSR', 'Occupancy', 'Weighted Ticket'],
     clarifyingQuestions: [
-      { q: 'Dine-in only, or include takeaway/Zomato/Swiggy delivery?', a: 'Focus on Dine-in capacity first (optionally add 20–30% delivery uplift).', why: 'Matches book framework cleanly.' },
+      { q: 'Dine-in only, or include takeaway/Zomato/Swiggy delivery?', a: 'Focus on Dine-in capacity first (optionally add 20–30% delivery uplift).', why: 'Matches the standard outlet capacity framework cleanly.' },
       { q: 'Standard city outlet size (e.g. Connaught Place / Chennai)?', a: 'Busy urban outlet serving ~120 seats/customers per hour at 100% capacity.', why: 'South Indian tiffin outlets turn tables fast (~30 min/meal)!' }
     ],
     strategyOverview: 'Restaurant Supply-Side Capacity model! 11 operating hours/day (10 AM–11 PM — note 10 AM–11 PM is 13 hrs, or 11 hrs net active). Split Weekdays (22 days) into Peak (4 hrs @ 100% occupancy) and Non-Peak (7 hrs @ 50% occupancy). Weekends (8 days) see 1.5x weekday daily average (900 × 1.5 = 1,350/day). Compute Weighted Average Order Value across Coffee (30% @ ₹100), Dosa (50% @ ₹200), Special Dosa (20% @ ₹300) = ₹190/customer → Total Revenue!',
@@ -2179,9 +2095,6 @@ window.GM_DATA.problems.push(
     id: 'vol1-quick-commerce',
     title: 'Market Size of Quick Commerce in India (Users)',
     prompt: 'Estimate the market size (active user base / GMV) of Quick Commerce (Blinkit, Zepto, Instamart) in India.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 50 (Book p. 46)',
-    company: 'RedSeer',
     difficulty: 2,
     archetype: 'Market Sizing',
     approachType: 'Top-Down (Demand-Side)',
@@ -2191,11 +2104,11 @@ window.GM_DATA.problems.push(
       { q: 'Are we estimating active users or annual Gross Order Value (₹)?', a: 'Active/potential user base first (then multiply by orders/month × AOV for revenue!).', why: 'Matches RedSeer user sizing.' },
       { q: 'Include Tier 2/3 towns or Metro + Tier 1 cities only?', a: 'Metro + Tier 1 cities primarily (where 10-min dark stores exist).', why: 'Quick commerce unit economics currently require dense Tier-1/Metro clusters.' }
     ],
-    strategyOverview: 'Top-Down Geographic + Age Funnel! Start with India Urban Population (~30% of 1.4B = 420M — note Vol 1 printed 1.4B at top and then correctly used 420M’s slices below!). Segment Urban into Metros (10% of Urban or ~40M — book uses 40M), Tier 1 (50% = 220M), Tier 2/3 (40% = 160M, excluded for dark stores). Within Metro & Tier 1, apply Age Segmentation (0–30: 40%, 30–50: 30%, 50+: 30%) and realistic Adoption rates (90%/70%/20% in Metro; 70%/50%/0% in Tier 1).',
+    strategyOverview: 'Top-Down Geographic + Age Funnel! Start with India Urban Population (~30% of 1.4B = 420M — note Baseline printed 1.4B at top and then correctly used 420M’s slices below!). Segment Urban into Metros (10% of Urban or ~40M — The baseline uses 40M), Tier 1 (50% = 220M), Tier 2/3 (40% = 160M, excluded for dark stores). Within Metro & Tier 1, apply Age Segmentation (0–30: 40%, 30–50: 30%, 50+: 30%) and realistic Adoption rates (90%/70%/20% in Metro; 70%/50%/0% in Tier 1).',
     formula: 'Users = ∑ [Eligible City Tier Pop × Age Share % × Q-Comm Adoption %]',
     assumptions: [
       { label: 'India Urban Pop ≈ 420M (30% of 1.4B); Rural (70%) has zero 10-min dark stores', rationale: 'Dark stores need ~3,000+ dense households within a 2–3 km radius.' },
-      { label: 'Metro (40M: 0–30 = 16M, 30–50 = 12M, 50+ = 12M) & Tier 1 (220M: 0–30 = 80M, 30–50 = 60M, 50+ = 80M)', rationale: 'Matches Vol 1 numerical branches (14.4M + 8.4M + 2.4M = 25.2M Metro; 56M + 30M = 86M Tier 1).' },
+      { label: 'Metro (40M: 0–30 = 16M, 30–50 = 12M, 50+ = 12M) & Tier 1 (220M: 0–30 = 80M, 30–50 = 60M, 50+ = 80M)', rationale: 'Matches the tier numerical branches (14.4M + 8.4M + 2.4M = 25.2M Metro; 56M + 30M = 86M Tier 1).' },
       { label: 'Note: Converting Users → Households (÷4) + Affordability filter gives ~25–30M ordering households!', rationale: 'Crucial distinction for GMV calculation!' }
     ],
     tree: {
@@ -2216,13 +2129,13 @@ window.GM_DATA.problems.push(
             { label: '0–30 (80M × 70%) + 30–50 (60M × 50%) + 50+ (0%)', valueText: '56M + 30M', highlight: true }
           ]
         },
-        { label: 'Total Addressable Q-Comm Users (Book)', valueText: '111.2 Million (TAM)', highlight: true }
+        { label: 'Total Addressable Q-Comm Users (Baseline)', valueText: '111.2 Million (TAM)', highlight: true }
       ]
     },
     finalAnswer: '~111.2M TAM individuals (~25–35M active ordering households; ~₹40,000–60,000 Cr GMV)',
     acceptableRange: { min: 25, max: 130, unit: 'Million users', display: '25M (active HH) – 120M (individual TAM)' },
     sanityCheck: 'India’s quick commerce market (Blinkit + Zepto + Swiggy Instamart + BB Now) hit ~$5–7 Billion GMV (~₹45,000–60,000 Cr) with ~25–30 Million monthly transacting households! If 111M individuals represent ~3.5 people/household, 111M ÷ 3.5 ≈ 31M households! Dead-on.',
-    interviewerTrap: 'Vol 1 forgot to divide by Household Size (or filter Income/Children 0–15!) before applying 90% adoption—an 8-year-old doesn’t order groceries on Blinkit! Always add a 15+ or Household filter for clean realism.',
+    interviewerTrap: 'Baseline forgot to divide by Household Size (or filter Income/Children 0–15!) before applying 90% adoption—an 8-year-old doesn’t order groceries on Blinkit! Always add a 15+ or Household filter for clean realism.',
     variations: [
       { question: 'Estimate Blinkit’s annual GMV in India.', hint: '30M households × ~3 orders/month × 12 × ₹600 AOV × ~45% Blinkit share ≈ ~₹29,000 Cr.' },
       { question: 'How many dark stores does Zepto need in Bengaluru?', hint: 'Bengaluru area ~700 sq km ÷ ~12 sq km per 2-km radius dark store ≈ ~60–100 dark stores (more in dense pockets).' }
@@ -2262,22 +2175,19 @@ window.GM_DATA.problems.push(
     id: 'vol1-digital-ad-market',
     title: 'Size of Non-Traditional (Digital) Advertising Market in India',
     prompt: 'Estimate the size (ad impressions or revenue) of the advertising market on platforms other than traditional media (TV/Print/Outdoor) in India.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 51 (Book p. 47)',
-    company: 'RedSeer',
     difficulty: 4,
     archetype: 'Market Sizing',
     approachType: 'Top-Down (Demand-Side)',
     templateId: 'tpl-fmcg',
     tags: ['AdTech', 'Digital Media', 'Impressions', 'RedSeer'],
     clarifyingQuestions: [
-      { q: 'Measure in total daily/annual Ad Impressions OR ₹ Ad Revenue?', a: 'Clarify! Book computes Daily Ad Impressions (~25,225 Billion? Wait—let’s check units!), whereas revenue requires CPM (~₹50–150 per 1,000 impressions).', why: 'Unit errors explode here if you don’t separate impressions vs ₹!' },
+      { q: 'Measure in total daily/annual Ad Impressions OR ₹ Ad Revenue?', a: 'Clarify! Baseline computes Daily Ad Impressions (~25,225 Billion? Wait—let’s check units!), whereas revenue requires CPM (~₹50–150 per 1,000 impressions).', why: 'Unit errors explode here if you don’t separate impressions vs ₹!' },
       { q: 'Which digital platforms are covered?', a: 'Social Media (Meta/YouTube), OTT, Mobile Apps, and E-commerce (Amazon/Flipkart ads).', why: 'Covers full digital ad ecosystem.' }
     ],
     strategyOverview: 'Digital Impression → CPM Monetization model! Start with India Internet Users (~750M–1.05B) → Active daily users across OTT, Social Media, Apps, and E-commerce → Avg Hours Spent per Day on ad-supported platforms (~2–3 hrs/day total across platforms!) × Ads Encountered per Hour (e.g., ~25–30 ads/hr) × 365 days × Blended CPM (₹50–100 per 1,000 impressions) = Annual Digital Ad Market Revenue!',
     formula: 'Annual Ad Revenue = Active Digital Users × Daily Ad-Supported Hours × Ads/Hr × 365 × (CPM ÷ 1,000)',
     assumptions: [
-      { label: 'Active Internet Users = 750M–882M (Book: 1.4B × 75% internet × ~84% active)', rationale: 'Note: In Vol 1 PDF, adding individual platform hours (11 hrs/day?!) and calling 252B impressions "Billions" gave 25,225.2 Billion! Let’s be realistic: people spend ~2.5–3 hrs/day on ad-supported apps total!' },
+      { label: 'Active Internet Users = 750M–882M (Baseline: 1.4B × 75% internet × ~84% active)', rationale: 'Pitfall: adding overlapping platform hours (11 hrs/day?!) and calling 252B impressions "Billions" gave 25,225.2 Billion! Let’s be realistic: people spend ~2.5–3 hrs/day on ad-supported apps total!' },
       { label: 'Daily Time on Ad-Supported Digital Platforms ≈ 2.5 hours/day; ~20 ads/hour = 50 ads/day', rationale: 'Instagram Reels, YouTube pre-roll/mid-roll, OTT AVOD, and Amazon sponsored listings.' },
       { label: 'Blended CPM (Cost per 1,000 impressions) ≈ ₹40–60 (including low-cost display & high-cost video/search)', rationale: 'India digital CPMs average ~$0.50–$1.00 = ₹40–80.' }
     ],
@@ -2291,14 +2201,14 @@ window.GM_DATA.problems.push(
           label: 'Total Daily Impressions = 37.5 Billion/day (~13.7 Trillion/yr)',
           valueText: '13.7T impressions/yr',
           children: [
-            { label: '× Blended CPM ₹50 per 1,000 impressions', valueText: '~₹68,500 Crore/Yr (Book: 252B/day impr.)', highlight: true }
+            { label: '× Blended CPM ₹50 per 1,000 impressions', valueText: '~₹68,500 Crore/Yr (Baseline: 252B/day impr.)', highlight: true }
           ]
         }
       ]
     },
     finalAnswer: '~₹60,000 – ₹80,000 Crore/Year (~37B–252B daily ad impressions)',
     acceptableRange: { min: 35000, max: 120000, unit: '₹ Crore/year', display: '₹35,000 Cr – ₹1,20,000 Cr/yr' },
-    sanityCheck: 'India’s total digital advertising market (Google + Meta + Amazon + OTT) is roughly ₹50,000–65,000 Crore/year! Multiplying impressions by realistic ₹40–50 CPM lands right on the money. Remember in Vol 1 PDF: 882M × 11 hrs × 26 ads = 252 Billion/day (the PDF wrote "25,225.2 Billion" by misplacing a decimal!).',
+    sanityCheck: 'India’s total digital advertising market (Google + Meta + Amazon + OTT) is roughly ₹50,000–65,000 Crore/year! Multiplying impressions by realistic ₹40–50 CPM lands right on the money. Remember in Baseline draft: 882M × 11 hrs × 26 ads = 252 Billion/day (a naive draft might write "25,225.2 Billion" by misplacing a decimal!).',
     interviewerTrap: 'Double-counting time spent across platforms (nobody spends 11 hours/day actively watching ads!) OR forgetting to convert Impressions into ₹ Revenue via CPM (Cost per Mille).',
     variations: [
       { question: 'Estimate YouTube’s ad revenue in India.', hint: '~450M monthly YouTube users × 45 min/day × ~6 video ads/hr × 365 × ₹120 CPM ≈ ~₹10,000–15,000 Cr.' }
@@ -2337,33 +2247,30 @@ window.GM_DATA.problems.push(
     id: 'vol1-animation-vfx',
     title: 'Size of Animation & VFX Market in India (Viewer Reach / Value)',
     prompt: 'Estimate the size of the Animation and VFX market in India.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 52 (Book p. 48)',
-    company: 'RedSeer',
     difficulty: 4,
     archetype: 'Market Sizing',
     approachType: 'Hybrid (Demand + Supply)',
     templateId: 'tpl-outlet',
     tags: ['Media & VFX', 'Studio Capacity', 'B2B / Consumer', 'RedSeer'],
     clarifyingQuestions: [
-      { q: 'Are we sizing India’s VFX/Animation STUDIO production revenue (B2B domestic + exports), or viewer consumption?', a: 'Clarify! Book calculates total consumer content views (~4.18B content units); in an interview, also offer Supply-Side Studio Production Revenue (studios × artists × billing)!', why: 'B2B VFX studios earn revenue per project/artist-hour, not per viewer!' },
+      { q: 'Are we sizing India’s VFX/Animation STUDIO production revenue (B2B domestic + exports), or viewer consumption?', a: 'Clarify! Baseline calculates total consumer content views (~4.18B content units); in an interview, also offer Supply-Side Studio Production Revenue (studios × artists × billing)!', why: 'B2B VFX studios earn revenue per project/artist-hour, not per viewer!' },
       { q: 'Include Movies, TV shows, Cartoons, and Gaming?', a: 'Yes, all animated/VFX-heavy media.', why: 'Covers full entertainment spectrum.' }
     ],
-    strategyOverview: 'Compare both lenses: (1) Book Demand/Reach view: Segment Urban/Rural population by Age (5–15, 15–40, 45+) across Movies, TV Shows, and Cartoons → total ~4.18B viewing instances. (2) Supply-Side B2B Studio Revenue view (stronger for business interviews!): ~300 Bollywood + ~1,500 Regional movies + TV/OTT + Gaming/Global Outsourcing → VFX budget per title (~₹5–20 Cr for tentpoles, ₹1 Cr for mid, ₹20L for low) OR ~50,000 VFX artists × ₹25–30L annual revenue/artist = ~₹12,500–15,000 Crore!',
+    strategyOverview: 'Compare both lenses: (1) Demand/Reach view: Segment Urban/Rural population by Age (5–15, 15–40, 45+) across Movies, TV Shows, and Cartoons → total ~4.18B viewing instances. (2) Supply-Side B2B Studio Revenue view (stronger for business interviews!): ~300 Bollywood + ~1,500 Regional movies + TV/OTT + Gaming/Global Outsourcing → VFX budget per title (~₹5–20 Cr for tentpoles, ₹1 Cr for mid, ₹20L for low) OR ~50,000 VFX artists × ₹25–30L annual revenue/artist = ~₹12,500–15,000 Crore!',
     formula: 'B2B Studio Rev = (Titles Produced × Avg VFX/Animation Spend) + International Outsourcing (or Artists × Rev/Artist)',
     assumptions: [
-      { label: 'Book Viewership Tree: Age 5–15 (cartoons heavy), 15–40 (movies heavy), 45+ (TV/movies) across Urban/Rural = 4.18B content touchpoints', rationale: 'Shows high cross-demographic exposure to VFX/animation.' },
+      { label: 'Viewership Tree: Age 5–15 (cartoons heavy), 15–40 (movies heavy), 45+ (TV/movies) across Urban/Rural = 4.18B content touchpoints', rationale: 'Shows high cross-demographic exposure to VFX/animation.' },
       { label: 'B2B Revenue Check: ~50,000–60,000 Indian VFX/Animation artists × ~₹20–25L annual studio billing per artist', rationale: 'India is a massive global VFX outsourcing hub (DNEG, Technicolor, Prime Focus).' }
     ],
     tree: {
       label: 'India Animation / VFX Market',
-      valueText: '4.18B views (Book) | ~₹12K–15K Cr B2B',
+      valueText: '4.18B views (Baseline) | ~₹12K–15K Cr B2B',
       children: [
-        { label: 'Demand Reach (Book): 5–15 (1.4B) + 15–40 (1.4B) + 45+ (1.38B)', valueText: '4.18 Billion Views' },
+        { label: 'Demand Reach (Baseline): 5–15 (1.4B) + 15–40 (1.4B) + 45+ (1.38B)', valueText: '4.18 Billion Views' },
         { label: 'Supply-Side B2B (50K Artists × ₹25L billing/yr)', valueText: '~₹12,500 Crore/Yr', highlight: true }
       ]
     },
-    finalAnswer: '~₹10,000 – ₹15,000 Crore/year (B2B Industry Revenue) | 4.18B viewer touchpoints (Book)',
+    finalAnswer: '~₹10,000 – ₹15,000 Crore/year (B2B Industry Revenue) | 4.18B viewer touchpoints (Baseline)',
     acceptableRange: { min: 6000, max: 25000, unit: '₹ Crore/year', display: '₹6,000 Cr – ₹25,000 Cr/yr' },
     sanityCheck: 'FICCI-EY India M&E reports place India’s Animation & VFX industry around ₹11,000–13,000 Crore! Estimating ~50,000 artists × ₹22–25L billing hits ₹11,000–12,500 Cr immediately.',
     interviewerTrap: 'Estimating B2B industry size using consumer eyeballs WITHOUT translating views into studio billing/ad/ticket share! Always pivot B2B markets to Production Titles × Budget OR Workforce × Revenue/Employee.',
@@ -2400,20 +2307,17 @@ window.GM_DATA.problems.push(
   {
     id: 'vol1-paint-airbus',
     title: 'Volume of Paint Required to Paint an Airbus A320 (620)',
-    prompt: 'Estimate the volume of paint (in liters) required to paint an Airbus A320 (listed as 620 in book) aircraft.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 54 (Book p. 50)',
-    company: 'Trinity Life Sciences',
+    prompt: 'Estimate the volume of paint (in liters) required to paint an Airbus A320 commercial aircraft.',
     difficulty: 4,
     archetype: 'Volume & Geometry',
     approachType: 'Geometry & Proxy',
     templateId: 'tpl-geometry',
-    tags: ['Geometry', 'Aviation', 'Cylinder Approximation', 'Trinity'],
+    tags: ['Geometry', 'Aviation', 'Cylinder Approximation'],
     clarifyingQuestions: [
       { q: 'Are we painting the entire exterior livery (primer + base + clear coat)?', a: 'Yes, exterior fuselage, wings, and tail, typically 3 coats.', why: '3 layers multiplies paint volume 3x!' },
       { q: 'Single-aisle narrowbody (A320, ~180 seats) or widebody (A350/B777)?', a: 'Standard narrowbody (~20–30 rows of seats, ~110–120 ft long).', why: 'Sets fuselage length and diameter.' }
     ],
-    strategyOverview: 'Build the aircraft from Human-Scale Dimensions! 20 rows Economy (×3 ft = 60 ft) + 5 rows Business (×5 ft = 25 ft) + Cockpit (10 ft) + Kitchen/Galley (10–15 ft) = ~110 ft total length. Cabin height = 6 ft person + 2 ft overhead bin + 2 ft cargo belly = ~10 ft diameter (radius r = 5 ft; book uses diameter ≈ 10 ft, note book mislabeled height 80/central 6). Cylindrical fuselage area = π × D × L ≈ 3.14 × 10 × 110 ≈ 3,454 sq ft! Double that to include Wings + Tail (≈ 3,454 sq ft) → 6,908 sq ft total. At 5L per 500 sq ft (1L/100 sq ft), 1 coat = 69L → × 3 coats = ~207 Liters!',
+    strategyOverview: 'Build the aircraft from Human-Scale Dimensions! 20 rows Economy (×3 ft = 60 ft) + 5 rows Business (×5 ft = 25 ft) + Cockpit (10 ft) + Kitchen/Galley (10–15 ft) = ~110 ft total length. Cabin height = 6 ft person + 2 ft overhead bin + 2 ft cargo belly = ~10 ft diameter (radius r = 5 ft; The baseline uses diameter ≈ 10 ft, note baseline mislabeled height 80/central 6). Cylindrical fuselage area = π × D × L ≈ 3.14 × 10 × 110 ≈ 3,454 sq ft! Double that to include Wings + Tail (≈ 3,454 sq ft) → 6,908 sq ft total. At 5L per 500 sq ft (1L/100 sq ft), 1 coat = 69L → × 3 coats = ~207 Liters!',
     formula: 'Volume = [(π × D × L) × 2 (for Wings+Tail)] ÷ Coverage (sq ft/L) × No. of Coats',
     assumptions: [
       { label: 'Length = 60ft (20 Econ rows×3ft) + 25ft (5 Biz×5ft) + 10ft Cockpit + 15ft Galley = 110 ft', rationale: 'Clever human-scale estimation using seat pitch!' },
@@ -2478,14 +2382,11 @@ window.GM_DATA.problems.push(
     id: 'vol1-coffee-shop-milk',
     title: 'Milk Required by Each Coffee Shop in Connaught Place',
     prompt: 'Estimate the amount of milk (in liters) required by a single coffee shop in Connaught Place (Delhi) per day.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 55–57 (Book p. 51–53) & Vol 2 p. 51',
-    company: 'Trinity Life Sciences',
     difficulty: 3,
     archetype: 'Supply & Capacity',
     approachType: 'Bottom-Up (Supply-Side)',
     templateId: 'tpl-outlet',
-    tags: ['F&B', 'Coffee Shop', 'Machine Bottleneck', 'Trinity'],
+    tags: ['F&B', 'Coffee Shop', 'Machine Bottleneck'],
     clarifyingQuestions: [
       { q: 'What size of coffee shop—a single-espresso-machine boutique café or a massive Starbucks?', a: 'Standard single-barista/single-group cafe open 8 AM–10 PM (14 hrs).', why: '1 espresso machine sets a crisp prep-time bottleneck (~7 mins/order).' },
       { q: 'Does the cafe also use milk for shakes/desserts or strictly coffee beverages?', a: 'Coffee beverages primarily (Black, Latte/Cappuccino, Regular Milk Coffee).', why: 'Allows clean menu-mix weighted calculation.' }
@@ -2495,7 +2396,7 @@ window.GM_DATA.problems.push(
     assumptions: [
       { label: '14 operational hours (840 mins); Avg prep/order time = 7 mins per coffee', rationale: 'Single barista/machine workflow.' },
       { label: 'Weekday occ: 70% / 50% / 80% → 82 coffees/day (×5 = 410) | Weekend: 60% / 80% / 90% → 94 coffees/day (×2 = 188)', rationale: 'Weighted average = (410 + 188) ÷ 7 = 85.4 coffees/day.' },
-      { label: 'Milk per Cup: 20% Black (0 ml), 50% Latte/Cappuccino (75 ml in book, ~150–180 ml realistically), 30% Regular (250 ml)', rationale: 'Weighted milk = 0 + 37.5 + 75 = 112.5 ml/coffee × 85 = 9.56 L/day (+ ~10% wastage ≈ 10.5 L).' }
+      { label: 'Milk per Cup: 20% Black (0 ml), 50% Latte/Cappuccino (75 ml in baseline math, ~150–180 ml realistically), 30% Regular (250 ml)', rationale: 'Weighted milk = 0 + 37.5 + 75 = 112.5 ml/coffee × 85 = 9.56 L/day (+ ~10% wastage ≈ 10.5 L).' }
     ],
     tree: {
       label: 'Coffee Shop Daily Throughput (8 AM–10 PM)',
@@ -2515,7 +2416,7 @@ window.GM_DATA.problems.push(
     finalAnswer: '~9.6 – 15 Liters/Day per coffee shop',
     acceptableRange: { min: 8, max: 35, unit: 'Liters/day', display: '8 – 35 Liters/day (higher for busy 2-barista Starbucks)' },
     sanityCheck: '85–100 coffees/day at ₹200 avg price = ~₹18,000–20,000 daily coffee revenue (~₹5.5–6L/month, plus food/pastries ≈ ₹10L/month), easily sustaining a Connaught Place café! Also ~10–15 Liters of milk (including ~10% foam/wastage) is right on the nose for an independent cafe.',
-    interviewerTrap: 'Notice a typo in Vol 2 p. 56 diagram: it printed a "÷" icon instead of "×" between Order % and 85 coffees, though the final 3,187 ml & 6,375 ml math was correct multiplication! Also remember a real cafe adds ~10% wastage/steaming froth buffer AND a cafe like Starbucks serves ~250–300 cups/day using 2 espresso heads (~30–40L milk/day).',
+    interviewerTrap: 'Common trap: drafts sometimes printed a "÷" icon instead of "×" between Order % and 85 coffees, though the final 3,187 ml & 6,375 ml math was correct multiplication! Also remember a real cafe adds ~10% wastage/steaming froth buffer AND a cafe like Starbucks serves ~250–300 cups/day using 2 espresso heads (~30–40L milk/day).',
     variations: [
       { question: 'How much total milk is consumed by ALL coffee shops in Connaught Place?', hint: '~30–40 coffee shops in Inner/Outer Circle CP × 12–15 L/day ≈ ~400–550 Liters/day.' },
       { question: 'How many coffee beans (in kg) does that shop need monthly?', hint: '85 coffees/day × 30 days × 18g double shot ≈ ~46 kg/month.' }
@@ -2553,9 +2454,6 @@ window.GM_DATA.problems.push(
     id: 'vol1-pens-india',
     title: 'Number of Pens Bought in a Day in India',
     prompt: 'Estimate the number of pens bought in a single day in India.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 58 (Book p. 54)',
-    company: 'Trinity Life Sciences',
     difficulty: 2,
     archetype: 'Market Sizing',
     approachType: 'Top-Down (Demand-Side)',
@@ -2570,7 +2468,7 @@ window.GM_DATA.problems.push(
     assumptions: [
       { label: '0–5 excluded (10%); 6–18 (20% = 280M), 19–60 (50% = 700M), 60+ (20% = 280M)', rationale: 'Sums cleanly: 10+20+50+20 = 100%.' },
       { label: 'Active Pen Buyers: Youth 80% (224M), Adults 70% (490M), Seniors 40% (112M)', rationale: 'Matches ~78–80% literacy among young/adults.' },
-      { label: 'Pens/Month: Students = 4/mo (homework/exams/loss!), Adults = 2/mo, Seniors = 0.5/mo', rationale: 'Note: In digital era, adults may buy ~0.5–1/mo and students ~2–3/mo; book uses 4/2/0.5.' }
+      { label: 'Pens/Month: Students = 4/mo (homework/exams/loss!), Adults = 2/mo, Seniors = 0.5/mo', rationale: 'Note: In digital era, adults may buy ~0.5–1/mo and students ~2–3/mo; The baseline uses 4/2/0.5.' }
     ],
     tree: {
       label: 'India Population (1.4B)',
@@ -2583,7 +2481,7 @@ window.GM_DATA.problems.push(
         { label: '1.932 Billion/Month ÷ 30 Days', valueText: '~6.44 Crore (64.4M) Pens/Day', highlight: true }
       ]
     },
-    finalAnswer: '~3 Crore – 6.4 Crore Pens/Day (Book: 64.4 Million/day)',
+    finalAnswer: '~3 Crore – 6.4 Crore Pens/Day (Baseline: 64.4 Million/day)',
     acceptableRange: { min: 15, max: 80, unit: 'Million pens/day', display: '15M – 80M pens/day' },
     sanityCheck: '64M/day × 365 ≈ ~23 Billion pens/year (~16 pens/person/year). In reality, India’s organized pen industry produces ~8–12 Billion pens/year (~2.5–3.5 Crore pens/day)! Adjusting adult usage to 1 pen/month (reflecting smartphone notes & laptops) brings the estimate right down to ~3.5 Crore/day—matching industry production!',
     interviewerTrap: 'Forgetting to exclude ages 0–5 (toddlers!) or ignoring illiteracy (~20–25% of adults). Also remember white-collar workers type far more than write today—adjusting adult rate to 0.5–1/mo shows real-world awareness.',
@@ -2625,14 +2523,11 @@ window.GM_DATA.problems.push(
     id: 'vol1-spotify-premium',
     title: 'Number of Spotify Premium Subscribers in India',
     prompt: 'Estimate the number of paid Spotify Premium subscribers in India.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 59 (Book p. 55) & Vol 2 p. 56',
-    company: 'Trinity Life Sciences',
     difficulty: 4,
     archetype: 'Market Sizing',
     approachType: 'Top-Down (Demand-Side)',
     templateId: 'tpl-fmcg',
-    tags: ['Freemium App', 'Streaming', 'PM Classic', 'Trinity'],
+    tags: ['Freemium App', 'Streaming', 'PM Classic'],
     clarifyingQuestions: [
       { q: 'Paying Spotify Premium users ONLY, or all Monthly Active Users (including free ad-supported)?', a: 'Paying Premium subscribers only (Student, Individual, Family, Duo plans).', why: 'Paid conversion in India is famously low (~3–8% of MAUs) because free tier + YouTube exist!' },
       { q: 'Include bundled telecom freebies (if any) or direct paying users?', a: 'Direct paying subscribers.', why: 'Reflects true willingness to pay.' }
@@ -2643,7 +2538,7 @@ window.GM_DATA.problems.push(
       { label: 'Total Internet Connectivity Pool = 435M (via Urban/Rural × Income × Internet%)', rationale: 'Note: In real 2024–26 India, internet users are ~700–800M, though ~435M active digital entertainment users is very reasonable!' },
       { label: 'Music Streamers by Age: 0–14 (50%), 15–24 (90%), 25–34 (85%), 35–44 (60%), 45+ (40%)', rationale: 'Youth stream audio heavily.' },
       { label: 'Spotify Share among Music Streamers = 30%', rationale: 'Competes with YouTube Music, JioSaavn, Gaana, Wynk, Apple Music.' },
-      { label: 'Paid Premium Conversion (Book): 5% (0–14), 40% (15–24 & 25–34), 20% (35–44), 10% (45+) → ~20M Paid Subscribers', rationale: 'Wait—Sanity Check! In India, 40% paid conversion on a freemium app is VERY high (global Spotify paid conversion is ~40%, but India is ~5–10%!). Always mention India’s lower willingness to pay (~5–10% paid → ~3–8M paid users)!' }
+      { label: 'Paid Premium Conversion (Baseline): 5% (0–14), 40% (15–24 & 25–34), 20% (35–44), 10% (45+) → ~20M Paid Subscribers', rationale: 'Wait—Sanity Check! In India, 40% paid conversion on a freemium app is VERY high (global Spotify paid conversion is ~40%, but India is ~5–10%!). Always mention India’s lower willingness to pay (~5–10% paid → ~3–8M paid users)!' }
     ],
     tree: {
       label: 'India Pop (1.4B) → Internet Users (435M)',
@@ -2654,16 +2549,16 @@ window.GM_DATA.problems.push(
           label: 'Spotify Users (30% Market Share)',
           valueText: '~80M Spotify MAUs',
           children: [
-            { label: 'Book Paid Rate (5–40% by age)', valueText: '19.96M Subscribers (Book)' },
+            { label: 'High Paid Rate (5–40% by age)', valueText: '19.96M Subscribers (Baseline)' },
             { label: 'Realistic India Paid Rate (5–8% of 80M)', valueText: '~4–7M Paid Subscribers', highlight: true }
           ]
         }
       ]
     },
-    finalAnswer: '~4M – 20M Paid Subscribers (Book: 19.96M; Industry realistic: ~5–8M)',
+    finalAnswer: '~4M – 20M Paid Subscribers (Baseline: 19.96M; Industry realistic: ~5–8M)',
     acceptableRange: { min: 3, max: 22, unit: 'Million subscribers', display: '3M – 22M subscribers' },
     sanityCheck: 'CRITICAL SANITY CHECK: Globally Spotify has ~600M MAUs and ~240M Premium (~40% paid). In India, Spotify reports ~60–80M MAUs, and because ₹119/mo faces tough competition from free YouTube/JioSaavn, India’s paid conversion is closer to ~5–10% (~4–8M subscribers), NOT 40%! Catching that emerging-market willingness-to-pay nuance is pure PM/Consulting gold.',
-    interviewerTrap: 'Notice Vol 1 & Vol 2 age buckets in this tree add up to 26+18+16+24+26 = 110% (tiny PDF sum error!). Always make sure your age buckets sum to exactly 100%, AND don’t apply US/EU 40% paid SaaS conversion rates blindly to India!',
+    interviewerTrap: 'Ensure age buckets never add up to 26+18+16+24+26 = 110% (sum check!). Always make sure your age buckets sum to exactly 100%, AND don’t apply US/EU 40% paid SaaS conversion rates blindly to India!',
     variations: [
       { question: 'Estimate Spotify’s annual subscription revenue in India.', hint: '6M subscribers × ₹1,000/yr blended (Student ₹59/mo, Individual ₹119/mo, Family ₹179/mo) ≈ ~₹600 Crore/yr.' },
       { question: 'Estimate Netflix paying subscribers in India.', hint: 'Similar funnel, higher price barrier (~₹199–649/mo) → ~8–12M paid accounts.' }
@@ -2702,9 +2597,6 @@ window.GM_DATA.problems.push(
     id: 'vol1-theory-maharashtra-plates',
     title: 'Number of License Plates in the State of Maharashtra',
     prompt: 'Estimate the total number of vehicle license plates currently in the state of Maharashtra.',
-    source: '180DC SRCC Vol 1',
-    pdfRef: 'Guesstimates-Book-Volume-1-6.pdf — p. 8 (Theory Demand-Side Example)',
-    company: '180DC SRCC',
     difficulty: 2,
     archetype: 'Market Sizing',
     approachType: 'Top-Down (Demand-Side)',

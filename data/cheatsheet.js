@@ -5,15 +5,15 @@ window.GM_DATA.cheatsheet = {
     {
       id: 'demographics',
       title: '1. Population & Demographics',
-      subtitle: 'Core anchors from SRCC Vol 1, Vol 2 & IITG Guess-It-Matters',
+      subtitle: 'Essential demographic, economic, and geographic anchors for India & global cases',
       items: [
         { label: 'World Population', value: '8.0 – 8.3 Billion', note: '800–830 Crore (use 8B for clean math)' },
-        { label: 'India Population', value: '1.40 – 1.47 Billion', note: '140 Crore (standard benchmark across all books)' },
+        { label: 'India Population', value: '1.40 – 1.47 Billion', note: '140 Crore (standard interview benchmark)' },
         { label: 'USA / UK / Canada', value: 'USA: 330M | UK: 68M | Canada: 40M', note: 'USA households = ~13.2 Cr (avg size 2.5)' },
         { label: 'Gender Split', value: '50% Male / 50% Female', note: '1:1 ratio (Rural skews slightly ~55/45 in workforce)' },
         { label: 'Life Expectancy', value: '70 Years (India)', note: 'Urban ~72.4 yrs | Rural ~67.7 yrs' },
         { label: 'Birth & Death Rate', value: 'Birth: 16/1000 | Death: 7/1000', note: '~0.9%–1% annual net population growth' },
-        { label: 'Age Distribution (India)', value: '0–14: 25% | 15–25: 20% | 26–59: 40% | 60+: 15%', note: 'Vol 1 variant: 0–15 (30%), 15–35 (40%), 35–60 (25%), 60+ (5%)' },
+        { label: 'Age Distribution (India)', value: '0–14: 25% | 15–25: 20% | 26–59: 40% | 60+: 15%', note: 'Alternative fast split: 0–15 (30%), 15–35 (40%), 35–60 (25%), 60+ (5%)' },
         { label: 'Marital Status & Diet', value: 'Married: 45% / Unmarried: 55%', note: 'Veg: 40% / Non-Veg: 60% (useful for food cases)' },
         { label: 'Religion Split (India)', value: 'Hindu 80% | Muslim 15% | Christian 2% | Others 3%', note: 'Important for festival/cultural consumption cases' }
       ]

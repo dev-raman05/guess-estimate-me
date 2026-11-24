@@ -18,9 +18,8 @@
     progressiveMode: false,
     filters: {
       search: '',
-      source: 'All',
-      company: 'All',
       archetype: 'All',
+      approach: 'All',
       difficulty: 'All',
       status: 'All'
     },
@@ -159,13 +158,17 @@
     return PROBLEMS.find(p => p.id === id) || PROBLEMS[0];
   }
 
+  function cleanTags(tags) {
+    return (tags || []).filter(t => !/^(?:IITG|180DC|SRCC|Trinity\b)/i.test(String(t || '')));
+  }
+
   function diffDots(level) {
     const cls = level >= 5 ? 'expert' : level >= 4 ? 'hard' : '';
     let html = '<span class="diff-dots" title="Difficulty ' + level + '/5">';
     for (let i = 1; i <= 5; i++) {
       html += `<span class="diff-dot ${i <= level ? 'on ' + cls : ''}"></span>`;
     }
-    html += ` <span style="font-size:11px;color:var(--text-muted);margin-left:3px;">L${level}</span></span>`;
+    html += ` <span style="font-size:0.86rem;color:var(--text-muted);margin-left:2px;">L${level}</span></span>`;
     return html;
   }
 
@@ -218,9 +221,13 @@
 
   function applyTheme() {
     if (state.theme !== 'light' && state.theme !== 'dark') state.theme = 'dark';
+    const isCompact = state.fontScale === 'compact';
+    const isComfortable = state.fontScale === 'comfortable';
     document.body.classList.toggle('light-theme', state.theme === 'light');
-    document.body.classList.toggle('font-compact', state.fontScale === 'compact');
-    document.body.classList.toggle('font-comfortable', state.fontScale === 'comfortable');
+    document.documentElement.classList.toggle('font-compact', isCompact);
+    document.documentElement.classList.toggle('font-comfortable', isComfortable);
+    document.body.classList.toggle('font-compact', isCompact);
+    document.body.classList.toggle('font-comfortable', isComfortable);
 
     document.querySelectorAll('[data-set-theme]').forEach(el => {
       el.classList.toggle('active', el.dataset.setTheme === state.theme);
@@ -287,17 +294,17 @@
             <div>
               <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
                 <span class="stage-num">${stage.stageNum}</span>
-                <strong style="font-size:16px;">${esc(stage.title)}</strong>
+                <strong style="font-size:1.12rem;">${esc(stage.title)}</strong>
                 <span class="pill ${allDone ? 'pill-green' : 'pill-blue'}">${doneInStage}/${stage.tasks.length} done</span>
                 <span class="pill">⏱️ ~${esc(stage.duration)}</span>
               </div>
-              <p style="margin:8px 0 0;color:var(--text-muted);font-size:13.5px;">${esc(stage.goal)}</p>
+              <p style="margin:6px 0 0;color:var(--text-muted);font-size:0.96rem;">${esc(stage.goal)}</p>
             </div>
             <button class="btn btn-sm ${allDone ? '' : 'btn-primary'}" data-jump-view="${stage.actionView}" data-jump-tab="${stage.actionTab || ''}">
               Open Module →
             </button>
           </div>
-          <div style="display:flex;flex-direction:column;gap:6px;">
+          <div style="display:flex;flex-direction:column;gap:5px;">
             ${stage.tasks.map(t => {
               const checked = !!state.roadmapDone[t.id];
               return `
@@ -315,17 +322,17 @@
     return `
       <div class="hero-banner">
         <div>
-          <span class="pill pill-green" style="margin-bottom:8px;">🚀 Built for 0-Experience Beginners · Fast-Track Prep</span>
+          <span class="pill pill-green" style="margin-bottom:6px;">🚀 Built for 0-Experience Beginners · Fast-Track Prep</span>
           <h1>Ace Any Consulting &amp; PM Guesstimate Interview</h1>
-          <p>Compiled from <strong>180DC SRCC (Vol 1 &amp; 2)</strong>, <strong>IIT Guwahati Guess-It-Matters</strong>, and top <strong>MBB / Product Management</strong> interviews—with ${PROBLEMS.length} visual issue trees, live sensitivity sliders, guided step-by-step practice, flashcards, and timed mock simulations.</p>
+          <p>Master structured market sizing &amp; estimation through <strong>${PROBLEMS.length} interactive cases</strong>, visual MECE issue trees, live sensitivity sliders, step-by-step guided coaching, flashcards, and timed mock simulations.</p>
         </div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <button class="btn btn-primary" data-jump-view="academy" data-jump-tab="algorithm">Start Here: 6-Step Approach →</button>
           <button class="btn btn-secondary" data-practice-id="${esc(nextRec.id)}">🎯 Practice Recommended (L${nextRec.difficulty})</button>
         </div>
       </div>
 
-      <div class="grid-4" style="margin-bottom:22px;">
+      <div class="grid-4" style="margin-bottom:14px;">
         <div class="stat-card">
           <div class="stat-label">Interview Readiness</div>
           <div class="stat-value" style="color:var(--accent-bright);">${p.readiness}%</div>
@@ -333,17 +340,17 @@
         </div>
         <div class="stat-card">
           <div class="stat-label">Problems Mastered</div>
-          <div class="stat-value">${p.masteredCount} <span style="font-size:15px;color:var(--text-dim);">/ ${PROBLEMS.length}</span></div>
+          <div class="stat-value">${p.masteredCount} <span style="font-size:1rem;color:var(--text-dim);">/ ${PROBLEMS.length}</span></div>
           <div class="stat-sub">${p.bookmarkedCount} bookmarked for revision</div>
         </div>
         <div class="stat-card">
           <div class="stat-label">Benchmarks Memorized</div>
-          <div class="stat-value">${p.cardsMastered} <span style="font-size:15px;color:var(--text-dim);">/ ${p.totalCards}</span></div>
+          <div class="stat-value">${p.cardsMastered} <span style="font-size:1rem;color:var(--text-dim);">/ ${p.totalCards}</span></div>
           <div class="stat-sub">Best 60s Math Drill: ${state.bestDrillScore} pts</div>
         </div>
         <div class="stat-card">
           <div class="stat-label">Next Recommended Problem</div>
-          <div style="font-weight:700;font-size:14px;margin:6px 0;">${esc(nextRec.title)}</div>
+          <div style="font-weight:700;font-size:1rem;margin:4px 0;">${esc(nextRec.title)}</div>
           <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
             ${diffDots(nextRec.difficulty)}
             <button class="btn btn-sm" data-open-problem="${esc(nextRec.id)}" style="margin-left:auto;">Open</button>
@@ -351,7 +358,7 @@
         </div>
       </div>
 
-      <h2 style="font-size:18px;margin:0 0 12px;">⚡ Your 2.5-Hour Steep-Curve Crash Course</h2>
+      <h2 style="font-size:1.22rem;margin:0 0 9px;">⚡ Your 2.5-Hour Steep-Curve Crash Course</h2>
       ${stagesHtml}
     `;
   }
@@ -377,28 +384,28 @@
     let body = '';
     if (tab === 'algorithm') {
       body = `
-        <div class="card-flat" style="margin-bottom:16px;border-left:4px solid var(--accent);">
+        <div class="card-flat" style="margin-bottom:11px;border-left:3px solid var(--accent);">
           <strong>Beginner Golden Rule:</strong> Interviewers NEVER expect you to know the exact statistical answer. They grade <strong>4 things</strong>: (1) Asking crisp scope questions, (2) Building a MECE tree before doing math, (3) Defending assumptions with a 1-line "because...", and (4) Performing a 15-second sanity check out loud.
         </div>
-        <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="display:flex;flex-direction:column;gap:10px;">
           ${(CURRICULUM.sixSteps || []).map(s => `
             <div class="card">
-              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
-                <div style="display:flex;align-items:center;gap:10px;min-width:0;flex:1 1 240px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:7px;">
+                <div style="display:flex;align-items:center;gap:8px;min-width:0;flex:1 1 220px;">
                   <span class="stage-num">${s.stepNum}</span>
                   <div style="min-width:0;">
-                    <h3 style="margin:0;font-size:16.5px;">${esc(s.name)}</h3>
-                    <div style="font-size:12.5px;color:var(--text-muted);">${esc(s.tagline)}</div>
+                    <h3 style="margin:0;font-size:1.12rem;">${esc(s.name)}</h3>
+                    <div style="font-size:0.92rem;color:var(--text-muted);">${esc(s.tagline)}</div>
                   </div>
                 </div>
                 <span class="pill pill-blue">⏱️ Target Time: ${esc(s.timeBudget)}</span>
               </div>
-              <p style="font-size:13.5px;margin:0 0 10px;"><strong>Why Interviewers Care:</strong> ${esc(s.whyInterviewersCare)}</p>
-              <ul style="margin:0 0 12px;padding-left:20px;font-size:13.5px;color:var(--text-muted);">
-                ${s.checklist.map(c => `<li style="margin-bottom:4px;">${esc(c)}</li>`).join('')}
+              <p style="font-size:0.96rem;margin:0 0 8px;"><strong>Why Interviewers Care:</strong> ${esc(s.whyInterviewersCare)}</p>
+              <ul style="margin:0 0 9px;padding-left:18px;font-size:0.96rem;color:var(--text-muted);">
+                ${s.checklist.map(c => `<li style="margin-bottom:3px;">${esc(c)}</li>`).join('')}
               </ul>
-              <div style="margin-bottom:12px;">
-                <div style="font-size:12px;font-weight:700;color:var(--accent-bright);margin-bottom:5px;text-transform:uppercase;">💬 Word-for-Word Interview Script</div>
+              <div style="margin-bottom:9px;">
+                <div style="font-size:0.86rem;font-weight:700;color:var(--accent-bright);margin-bottom:4px;text-transform:uppercase;">💬 Word-for-Word Interview Script</div>
                 <div class="script-box">${esc(s.wordForWordScript)}</div>
               </div>
               <div class="compare-grid">
@@ -421,21 +428,21 @@
       const scCorrect = (wiz.scenarios || []).filter(s => state.scenarioAnswers[s.id] === s.correctIndex).length;
 
       body = `
-        <div class="card" style="margin-bottom:20px;">
-          <h3 style="margin:0 0 6px;">🧭 Interactive Approach Decision Wizard</h3>
-          <p style="margin:0 0 14px;font-size:13.5px;color:var(--text-muted);">Stuck on how to start a prompt? Answer 2 quick questions to pick the exact right methodology:</p>
-          <div class="grid-2" style="margin-bottom:14px;">
+        <div class="card" style="margin-bottom:13px;">
+          <h3 style="margin:0 0 4px;font-size:1.1rem;">🧭 Interactive Approach Decision Wizard</h3>
+          <p style="margin:0 0 10px;font-size:0.96rem;color:var(--text-muted);">Stuck on how to start a prompt? Answer 2 quick questions to pick the exact right methodology:</p>
+          <div class="grid-2" style="margin-bottom:10px;">
             <div class="section-block">
-              <strong style="font-size:13px;">Q1. What kind of thing are you estimating?</strong>
-              <div style="display:flex;flex-direction:column;gap:6px;margin-top:8px;">
+              <strong style="font-size:0.96rem;">Q1. What kind of thing are you estimating?</strong>
+              <div style="display:flex;flex-direction:column;gap:5px;margin-top:6px;">
                 <button class="btn btn-sm btn-block-left ${wizardAnswers.q1 === 'consumer' ? 'btn-primary' : ''}" data-wiz-q="q1" data-wiz-v="consumer">Consumable / App / Food / Service / Revenue</button>
                 <button class="btn btn-sm btn-block-left ${wizardAnswers.q1 === 'durable' ? 'btn-primary' : ''}" data-wiz-q="q1" data-wiz-v="durable">Durable Asset (Car, Fridge, AC, Phone, Tyre)</button>
                 <button class="btn btn-sm btn-block-left ${wizardAnswers.q1 === 'geometry' ? 'btn-primary' : ''}" data-wiz-q="q1" data-wiz-v="geometry">Physical Space / Volume / Length / Probability</button>
               </div>
             </div>
             <div class="section-block">
-              <strong style="font-size:13px;">Q2. Is there a clear physical bottleneck (seats, lanes, runways, booths, single shop)?</strong>
-              <div style="display:flex;flex-direction:column;gap:6px;margin-top:8px;">
+              <strong style="font-size:0.96rem;">Q2. Is there a clear physical bottleneck (seats, lanes, runways, booths, single shop)?</strong>
+              <div style="display:flex;flex-direction:column;gap:5px;margin-top:6px;">
                 <button class="btn btn-sm btn-block-left ${wizardAnswers.q2 === 'yes' ? 'btn-primary' : ''}" data-wiz-q="q2" data-wiz-v="yes">YES — Single Outlet, Airport, Toll, Cinema, Staff</button>
                 <button class="btn btn-sm btn-block-left ${wizardAnswers.q2 === 'no' ? 'btn-primary' : ''}" data-wiz-q="q2" data-wiz-v="no">NO — City/National Population Demand</button>
               </div>
@@ -443,34 +450,34 @@
           </div>
           ${rec ? `
             <div class="good-box">
-              <div style="font-size:12px;text-transform:uppercase;font-weight:700;">Recommended Strategy</div>
-              <h4 style="margin:4px 0;font-size:16px;">${esc(rec.name)} <span class="pill pill-green">${esc(rec.badge)}</span></h4>
-              <p style="margin:4px 0 8px;">${esc(rec.whenToUse)}</p>
+              <div style="font-size:0.86rem;text-transform:uppercase;font-weight:700;">Recommended Strategy</div>
+              <h4 style="margin:3px 0;font-size:1.12rem;">${esc(rec.name)} <span class="pill pill-green">${esc(rec.badge)}</span></h4>
+              <p style="margin:3px 0 6px;">${esc(rec.whenToUse)}</p>
               <div class="formula-banner">${esc(rec.coreFormula)}</div>
-              <p style="margin:8px 0 0;font-size:12.5px;"><strong>⚠️ Watch out for:</strong> ${esc(rec.watchOutFor)}</p>
+              <p style="margin:6px 0 0;font-size:0.93rem;"><strong>⚠️ Watch out for:</strong> ${esc(rec.watchOutFor)}</p>
             </div>
           ` : '<div class="tip-box">Select options above to see your recommended approach &amp; formula.</div>'}
         </div>
 
-        <div class="grid-2" style="margin-bottom:22px;">
+        <div class="grid-2" style="margin-bottom:14px;">
           ${(wiz.approaches || []).map(a => `
             <div class="card-flat">
-              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px;">
-                <strong>${esc(a.name)}</strong>
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:5px;">
+                <strong style="font-size:1.02rem;">${esc(a.name)}</strong>
                 <span class="pill pill-blue">${esc(a.badge)}</span>
               </div>
-              <p style="font-size:13px;color:var(--text-muted);margin:0 0 8px;">${esc(a.whenToUse)}</p>
-              <div style="font-size:12px;margin-bottom:8px;"><strong>Signal keywords:</strong> ${a.signalWords.map(w => `<span class="pill" style="margin:2px;">${esc(w)}</span>`).join('')}</div>
-              <div class="formula-banner" style="font-size:11.5px;">${esc(a.coreFormula)}</div>
+              <p style="font-size:0.95rem;color:var(--text-muted);margin:0 0 6px;">${esc(a.whenToUse)}</p>
+              <div style="font-size:0.9rem;margin-bottom:6px;"><strong>Signal keywords:</strong> ${a.signalWords.map(w => `<span class="pill" style="margin:1.5px;">${esc(w)}</span>`).join('')}</div>
+              <div class="formula-banner" style="font-size:0.9rem;">${esc(a.coreFormula)}</div>
             </div>
           `).join('')}
         </div>
 
         <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
             <div>
-              <h3 style="margin:0;">⚡ "Spot the Right Approach" — 12 Mini-Drills</h3>
-              <p style="margin:4px 0 0;font-size:13px;color:var(--text-muted);">Train your 10-second pattern recognition before touching any numbers.</p>
+              <h3 style="margin:0;font-size:1.08rem;">⚡ "Spot the Right Approach" — 12 Mini-Drills</h3>
+              <p style="margin:3px 0 0;font-size:0.94rem;color:var(--text-muted);">Train your 10-second pattern recognition before touching any numbers.</p>
             </div>
             <span class="pill pill-green">Score: ${scCorrect}/${(wiz.scenarios || []).length} (${scDone} attempted)</span>
           </div>
@@ -480,7 +487,7 @@
               const hasChosen = chosen !== undefined;
               return `
                 <div class="section-block">
-                  <div style="font-weight:700;font-size:13.5px;margin-bottom:8px;">${idx + 1}. ${esc(sc.question)}</div>
+                  <div style="font-weight:700;font-size:0.98rem;margin-bottom:6px;">${idx + 1}. ${esc(sc.question)}</div>
                   <div>
                     ${sc.options.map((opt, oi) => {
                       let cls = 'quiz-opt';
@@ -488,10 +495,10 @@
                         if (oi === sc.correctIndex) cls += ' correct';
                         else if (oi === chosen) cls += ' wrong';
                       }
-                      return `<button class="${cls}" style="padding:8px 10px;font-size:12.5px;" data-sc-id="${sc.id}" data-sc-opt="${oi}">${esc(opt)}</button>`;
+                      return `<button class="${cls}" data-sc-id="${sc.id}" data-sc-opt="${oi}">${esc(opt)}</button>`;
                     }).join('')}
                   </div>
-                  ${hasChosen ? `<div style="font-size:12.5px;color:var(--text-muted);margin-top:6px;">💡 ${esc(sc.explanation)}</div>` : ''}
+                  ${hasChosen ? `<div style="font-size:0.92rem;color:var(--text-muted);margin-top:5px;">💡 ${esc(sc.explanation)}</div>` : ''}
                 </div>
               `;
             }).join('')}
@@ -503,20 +510,20 @@
         <div class="grid-2">
           ${(CURRICULUM.masterTemplates || []).map(t => `
             <div class="card">
-              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:6px;">
                 <span class="pill pill-purple">Archetype #${t.num} · ${esc(t.category)}</span>
               </div>
-              <h3 style="margin:0 0 8px;font-size:16.5px;">${esc(t.name)}</h3>
-              <div class="formula-banner" style="margin-bottom:10px;font-size:12px;">${esc(t.formula)}</div>
-              <p style="font-size:13px;margin:0 0 10px;"><strong>When to use:</strong> ${esc(t.whenToUse)}</p>
-              <div style="font-size:12.5px;color:var(--text-muted);margin-bottom:10px;">
+              <h3 style="margin:0 0 6px;font-size:1.12rem;">${esc(t.name)}</h3>
+              <div class="formula-banner" style="margin-bottom:8px;">${esc(t.formula)}</div>
+              <p style="font-size:0.96rem;margin:0 0 8px;"><strong>When to use:</strong> ${esc(t.whenToUse)}</p>
+              <div style="font-size:0.94rem;color:var(--text-muted);margin-bottom:8px;">
                 <strong>Standard Tree Anatomy:</strong>
-                <ul style="margin:4px 0 0;padding-left:18px;">
+                <ul style="margin:3px 0 0;padding-left:16px;">
                   ${t.anatomy.map(a => `<li>${esc(a)}</li>`).join('')}
                 </ul>
               </div>
-              <div class="good-box" style="margin-bottom:12px;font-size:12.5px;"><strong>🔥 Insider Tip:</strong> ${esc(t.proTip)}</div>
-              <div style="display:flex;flex-wrap:wrap;gap:6px;">
+              <div class="good-box" style="margin-bottom:9px;font-size:0.93rem;"><strong>🔥 Insider Tip:</strong> ${esc(t.proTip)}</div>
+              <div style="display:flex;flex-wrap:wrap;gap:5px;">
                 ${t.exampleIds.map(eid => {
                   const ep = getProblem(eid);
                   return ep ? `<button class="btn btn-sm" data-open-problem="${esc(ep.id)}">📖 ${esc(ep.title.slice(0, 32))}${ep.title.length > 32 ? '…' : ''}</button>` : '';
@@ -529,36 +536,36 @@
     } else {
       const m = CURRICULUM.mentalMathAndSecrets || {};
       body = `
-        <h3 style="margin:0 0 12px;">🧮 Consulting Mental Math &amp; Estimation Shortcuts</h3>
-        <div class="grid-2" style="margin-bottom:22px;">
+        <h3 style="margin:0 0 8px;font-size:1.08rem;">🧮 Consulting Mental Math &amp; Estimation Shortcuts</h3>
+        <div class="grid-2" style="margin-bottom:14px;">
           ${(m.mathTricks || []).map(tr => `
             <div class="card-flat">
-              <strong style="font-size:14.5px;">${esc(tr.title)}</strong>
-              <div class="formula-banner" style="margin:8px 0;font-size:12px;">${esc(tr.formula)}</div>
-              <p style="font-size:13px;color:var(--text-muted);margin:0 0 6px;">${esc(tr.explanation)}</p>
-              <div style="font-size:12.5px;color:var(--accent-bright);"><strong>Example:</strong> ${esc(tr.example)}</div>
+              <strong style="font-size:1.04rem;">${esc(tr.title)}</strong>
+              <div class="formula-banner" style="margin:6px 0;">${esc(tr.formula)}</div>
+              <p style="font-size:0.95rem;color:var(--text-muted);margin:0 0 5px;">${esc(tr.explanation)}</p>
+              <div style="font-size:0.92rem;color:var(--accent-bright);"><strong>Example:</strong> ${esc(tr.example)}</div>
             </div>
           `).join('')}
         </div>
 
-        <h3 style="margin:0 0 12px;">🏢 What Different Firms Actually Grade For</h3>
-        <div class="grid-2" style="margin-bottom:22px;">
+        <h3 style="margin:0 0 8px;font-size:1.08rem;">🏢 What Different Firms Actually Grade For</h3>
+        <div class="grid-2" style="margin-bottom:14px;">
           ${(m.interviewerSecrets || []).map(sec => `
-            <div class="card-flat" style="display:flex;flex-direction:column;gap:6px;">
-              <strong style="font-size:14.5px;color:var(--accent-2);">${esc(sec.firm)}</strong>
-              <div style="font-size:12.5px;"><strong>Style:</strong> ${esc(sec.style)}</div>
-              <p style="font-size:13px;color:var(--text-muted);margin:0;">${esc(sec.whatTheyLookFor)}</p>
+            <div class="card-flat" style="display:flex;flex-direction:column;gap:5px;">
+              <strong style="font-size:1.04rem;color:var(--accent-2);">${esc(sec.firm)}</strong>
+              <div style="font-size:0.93rem;"><strong>Style:</strong> ${esc(sec.style)}</div>
+              <p style="font-size:0.95rem;color:var(--text-muted);margin:0;">${esc(sec.whatTheyLookFor)}</p>
               <div class="tip-box tip-box-green" style="margin-top:auto;">💡 ${esc(sec.proTip)}</div>
             </div>
           `).join('')}
         </div>
 
-        <h3 style="margin:0 0 12px;">🚨 Top 7 Fatal Mistakes That Cost Offers</h3>
+        <h3 style="margin:0 0 8px;font-size:1.08rem;">🚨 Top 7 Fatal Mistakes That Cost Offers</h3>
         <div class="card">
           ${(m.fatalMistakes || []).map(fm => `
-            <div class="cs-item" style="flex-direction:column;align-items:flex-start;gap:4px;">
-              <strong style="color:var(--danger);font-size:13.5px;">${esc(fm.mistake)}</strong>
-              <span style="font-size:13px;color:var(--text-muted);">✅ <strong>Fix:</strong> ${esc(fm.fix)}</span>
+            <div class="cs-item" style="flex-direction:column;align-items:flex-start;gap:3px;">
+              <strong style="color:var(--danger);font-size:0.98rem;">${esc(fm.mistake)}</strong>
+              <span style="font-size:0.94rem;color:var(--text-muted);">✅ <strong>Fix:</strong> ${esc(fm.fix)}</span>
             </div>
           `).join('')}
         </div>
@@ -573,15 +580,14 @@
     const f = state.filters;
     const q = f.search.trim().toLowerCase();
     return PROBLEMS.filter(p => {
-      if (f.source !== 'All' && p.source !== f.source) return false;
-      if (f.company !== 'All' && p.company !== f.company) return false;
       if (f.archetype !== 'All' && p.archetype !== f.archetype) return false;
+      if (f.approach !== 'All' && p.approachType !== f.approach) return false;
       if (f.difficulty !== 'All' && String(p.difficulty) !== String(f.difficulty)) return false;
       if (f.status === 'Mastered' && !state.masteredIds[p.id]) return false;
       if (f.status === 'Unread' && state.masteredIds[p.id]) return false;
       if (f.status === 'Bookmarked' && !state.bookmarkedIds[p.id]) return false;
       if (q) {
-        const hay = `${p.title} ${p.prompt} ${p.company} ${p.archetype} ${p.source} ${(p.tags || []).join(' ')}`.toLowerCase();
+        const hay = `${p.title} ${p.prompt} ${p.archetype} ${p.approachType} ${cleanTags(p.tags).join(' ')}`.toLowerCase();
         if (!hay.includes(q)) return false;
       }
       return true;
@@ -898,19 +904,17 @@
 
     return `
       <div class="problem-detail-panel" id="detail-panel" data-prob-id="${esc(prob.id)}">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;">
-          <div style="min-width:0;flex:1 1 260px;">
-            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;">
-              <span class="pill pill-blue">${esc(prob.company)}</span>
-              <span class="pill">${esc(prob.source)}</span>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;">
+          <div style="min-width:0;flex:1 1 240px;">
+            <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:6px;">
               <span class="pill pill-purple">${esc(prob.archetype)}</span>
               <span class="pill pill-green">${esc(prob.approachType)}</span>
+              ${cleanTags(prob.tags).slice(0, 2).map(t => `<span class="pill">${esc(t)}</span>`).join('')}
               ${diffDots(prob.difficulty)}
             </div>
-            <h2 style="margin:0 0 6px;font-size:21px;letter-spacing:-0.01em;">${esc(prob.title)}</h2>
-            <div style="font-size:12px;color:var(--text-dim);">📄 Source ref: ${esc(prob.pdfRef)}</div>
+            <h2 style="margin:0 0 2px;font-size:1.35rem;letter-spacing:-0.015em;">${esc(prob.title)}</h2>
           </div>
-          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
             <button class="btn btn-sm ${isMastered ? 'btn-primary' : ''}" data-toggle-master="${esc(prob.id)}">
               ${isMastered ? '✓ Mastered' : '○ Mark Mastered'}
             </button>
@@ -922,12 +926,12 @@
           </div>
         </div>
 
-        <div class="hero-banner" style="margin:0;padding:16px 18px;">
-          <div style="min-width:0;flex:1 1 260px;">
-            <div style="font-size:11px;text-transform:uppercase;font-weight:700;color:var(--accent-bright);">Interviewer Prompt</div>
-            <div style="font-size:16px;font-weight:700;margin-top:3px;">“${esc(prob.prompt)}”</div>
+        <div class="hero-banner" style="margin:0;padding:11px 13px;">
+          <div style="min-width:0;flex:1 1 240px;">
+            <div style="font-size:0.84rem;text-transform:uppercase;font-weight:700;color:var(--accent-bright);">Interviewer Prompt</div>
+            <div style="font-size:1.1rem;font-weight:700;margin-top:2px;">“${esc(prob.prompt)}”</div>
           </div>
-          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
+          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;">
             <button class="btn btn-sm ${state.progressiveMode ? 'btn-warn' : ''}" id="toggle-progressive-btn">
               ${state.progressiveMode ? '🔒 Study Mode: Step-by-Step' : '👁️ Full Solution Visible'}
             </button>
@@ -939,10 +943,10 @@
         <div class="section-block">
           <h3>Step 1: Clarifying Questions &amp; Scope</h3>
           ${(prob.clarifyingQuestions || []).map(cq => `
-            <div style="margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--border);">
-              <div style="font-weight:600;font-size:13.5px;">❓ You ask: "${esc(cq.q)}"</div>
-              <div style="font-size:13px;color:var(--accent-bright);margin-top:2px;">💬 Interviewer: ${esc(cq.a)}</div>
-              <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Why it matters: ${esc(cq.why)}</div>
+            <div style="margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid var(--border);">
+              <div style="font-weight:600;font-size:0.98rem;">❓ You ask: "${esc(cq.q)}"</div>
+              <div style="font-size:0.95rem;color:var(--accent-bright);margin-top:2px;">💬 Interviewer: ${esc(cq.a)}</div>
+              <div style="font-size:0.9rem;color:var(--text-muted);margin-top:2px;">Why it matters: ${esc(cq.why)}</div>
             </div>
           `).join('')}
         </div>
@@ -959,11 +963,11 @@
         ${stepLimit >= 3 ? `
         <div class="section-block">
           <h3>Step 3: Defensible Assumptions</h3>
-          <ul style="margin:0;padding-left:18px;font-size:13.5px;">
+          <ul style="margin:0;padding-left:16px;font-size:0.97rem;">
             ${(prob.assumptions || []).map(a => `
-              <li style="margin-bottom:6px;">
+              <li style="margin-bottom:5px;">
                 <strong>${esc(a.label)}</strong>
-                <div style="color:var(--text-muted);font-size:12.5px;">Rationale: ${esc(a.rationale)}</div>
+                <div style="color:var(--text-muted);font-size:0.92rem;">Rationale: ${esc(a.rationale)}</div>
               </li>
             `).join('')}
           </ul>
@@ -976,16 +980,16 @@
           <div class="issue-tree-wrap">
             ${renderTreeNode(prob.tree)}
           </div>
-          <div class="good-box" style="margin-top:10px;">
+          <div class="good-box" style="margin-top:8px;">
             <strong>🎯 Reference Answer:</strong> ${esc(prob.finalAnswer)}
-            <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Acceptable Interview Ballpark: ${esc(prob.acceptableRange ? prob.acceptableRange.display : '')}</div>
+            <div style="font-size:0.9rem;color:var(--text-muted);margin-top:2px;">Acceptable Interview Ballpark: ${esc(prob.acceptableRange ? prob.acceptableRange.display : '')}</div>
           </div>
         </div>
 
         ${prob.interactiveModel ? `
         <div class="section-block" style="border-color:rgba(56,189,248,0.35);">
           <h3>🎛️ Interactive "What-If" Sensitivity Tweaker</h3>
-          <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px;">Formula: <code>${esc(prob.interactiveModel.computeFormulaText)}</code> — Drag sliders to see which assumptions swing the result most!</div>
+          <div style="font-size:0.9rem;color:var(--text-muted);margin-bottom:5px;">Formula: <code>${esc(prob.interactiveModel.computeFormulaText)}</code> — Drag sliders to see which assumptions swing the result most!</div>
           <div class="tweaker-grid">
             ${prob.interactiveModel.variables.map(v => `
               <div class="slider-box">
@@ -1000,11 +1004,11 @@
           </div>
           <div class="live-result-bar" id="live-model-output">
             <div>
-              <div style="font-size:11px;text-transform:uppercase;font-weight:700;color:var(--accent-bright);">Live Simulated Estimate</div>
-              <div style="font-size:22px;font-weight:800;" id="live-model-formatted">${esc(initialModelOut.formatted)}</div>
+              <div style="font-size:0.84rem;text-transform:uppercase;font-weight:700;color:var(--accent-bright);">Live Simulated Estimate</div>
+              <div style="font-size:1.45rem;font-weight:800;" id="live-model-formatted">${esc(initialModelOut.formatted)}</div>
             </div>
-            <div style="display:flex;gap:14px;flex-wrap:wrap;" id="live-model-breakdown">
-              ${initialModelOut.breakdown.map(b => `<div><div style="font-size:11px;color:var(--text-muted);">${esc(b.label)}</div><strong>${esc(b.val)}</strong></div>`).join('')}
+            <div style="display:flex;gap:12px;flex-wrap:wrap;" id="live-model-breakdown">
+              ${initialModelOut.breakdown.map(b => `<div><div style="font-size:0.84rem;color:var(--text-muted);">${esc(b.label)}</div><strong>${esc(b.val)}</strong></div>`).join('')}
             </div>
           </div>
         </div>` : ''}` : ''}
@@ -1013,7 +1017,7 @@
         ${stepLimit >= 5 ? `
         <div class="section-block">
           <h3>Step 5: Sanity Check &amp; Validation</h3>
-          <p style="margin:0 0 10px;font-size:13.5px;">✅ ${esc(prob.sanityCheck)}</p>
+          <p style="margin:0 0 8px;font-size:0.97rem;">✅ ${esc(prob.sanityCheck)}</p>
           <div class="bad-box">
             <strong>⚠️ Common Interviewer Trap:</strong> ${esc(prob.interviewerTrap)}
           </div>
@@ -1024,9 +1028,9 @@
         <div class="section-block">
           <h3>Step 6: Curveball Variations to Practice</h3>
           ${(prob.variations || []).map(vr => `
-            <div style="margin-bottom:8px;font-size:13.5px;">
+            <div style="margin-bottom:6px;font-size:0.97rem;">
               <strong>🔄 ${esc(vr.question)}</strong>
-              <div style="color:var(--text-muted);font-size:12.5px;">Hint: ${esc(vr.hint)}</div>
+              <div style="color:var(--text-muted);font-size:0.92rem;">Hint: ${esc(vr.hint)}</div>
             </div>
           `).join('')}
         </div>` : ''}
@@ -1035,26 +1039,28 @@
   }
 
   function renderLibraryListHtml(filtered, activeProb) {
-    return filtered.map(p => `
+    return filtered.map(p => {
+      const subTag = cleanTags(p.tags)[0];
+      return `
       <div class="problem-list-item ${activeProb && activeProb.id === p.id ? 'selected' : ''}" data-select-prob="${esc(p.id)}">
-        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
-          <span class="pill" style="font-size:10.5px;">${esc(p.company)}</span>
-          <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:5px;">
+          <span class="pill pill-purple" style="font-size:0.82rem;">${esc(p.archetype)}</span>
+          <div style="display:flex;gap:4px;align-items:center;flex-wrap:wrap;">
             ${state.bookmarkedIds[p.id] ? '<span>★</span>' : ''}
-            ${state.masteredIds[p.id] ? '<span class="pill pill-green" style="font-size:10px;">✓</span>' : ''}
+            ${state.masteredIds[p.id] ? '<span class="pill pill-green" style="font-size:0.8rem;">✓</span>' : ''}
             ${diffDots(p.difficulty)}
           </div>
         </div>
         <h4>${esc(p.title)}</h4>
-        <div style="font-size:11.5px;color:var(--text-dim);">${esc(p.archetype)} · ${esc(p.source)}</div>
+        <div style="font-size:0.86rem;color:var(--text-dim);">${esc(p.approachType)}${subTag ? ' · ' + esc(subTag) : ''}</div>
       </div>
-    `).join('') || '<div class="card-flat">No matching problems. Click Reset Filters.</div>';
+    `;
+    }).join('') || '<div class="card-flat">No matching problems. Click Reset Filters.</div>';
   }
 
   function renderLibrary() {
-    const sources = ['All', ...new Set(PROBLEMS.map(p => p.source))];
-    const companies = ['All', ...new Set(PROBLEMS.map(p => p.company))].sort((a, b) => a === 'All' ? -1 : b === 'All' ? 1 : a.localeCompare(b));
     const archetypes = ['All', ...new Set(PROBLEMS.map(p => p.archetype))];
+    const approaches = ['All', ...new Set(PROBLEMS.map(p => p.approachType))];
 
     const filtered = getFilteredProblems();
     if (!filtered.some(p => p.id === state.selectedProblemId) && filtered.length) {
@@ -1066,22 +1072,18 @@
       <div class="page-header">
         <div>
           <h1>Problem Library</h1>
-          <p>Filter ${PROBLEMS.length} solved consulting &amp; PM guesstimates by source, firm, archetype, or difficulty.</p>
+          <p>Filter ${PROBLEMS.length} solved market sizing &amp; estimation cases by category, approach, or difficulty.</p>
         </div>
       </div>
       <div class="filter-bar">
-        <input type="text" class="input" id="lib-search" placeholder="Filter by title, tags, firm..." value="${esc(state.filters.search)}" aria-label="Search problems" />
-        <select class="select" id="lib-source" aria-label="Filter by source">
-          <option value="All" ${state.filters.source === 'All' ? 'selected' : ''}>Source: All</option>
-          ${sources.filter(s => s !== 'All').map(s => `<option value="${esc(s)}" ${state.filters.source === s ? 'selected' : ''}>${esc(s)}</option>`).join('')}
-        </select>
-        <select class="select" id="lib-company" aria-label="Filter by company">
-          <option value="All" ${state.filters.company === 'All' ? 'selected' : ''}>Firm: All</option>
-          ${companies.filter(c => c !== 'All').map(c => `<option value="${esc(c)}" ${state.filters.company === c ? 'selected' : ''}>${esc(c)}</option>`).join('')}
-        </select>
-        <select class="select" id="lib-archetype" aria-label="Filter by archetype">
-          <option value="All" ${state.filters.archetype === 'All' ? 'selected' : ''}>Type: All</option>
+        <input type="text" class="input" id="lib-search" placeholder="Filter by topic, category, keyword..." value="${esc(state.filters.search)}" aria-label="Search problems" />
+        <select class="select" id="lib-archetype" aria-label="Filter by category">
+          <option value="All" ${state.filters.archetype === 'All' ? 'selected' : ''}>Category: All</option>
           ${archetypes.filter(a => a !== 'All').map(a => `<option value="${esc(a)}" ${state.filters.archetype === a ? 'selected' : ''}>${esc(a)}</option>`).join('')}
+        </select>
+        <select class="select" id="lib-approach" aria-label="Filter by approach">
+          <option value="All" ${state.filters.approach === 'All' ? 'selected' : ''}>Approach: All</option>
+          ${approaches.filter(a => a !== 'All').map(a => `<option value="${esc(a)}" ${state.filters.approach === a ? 'selected' : ''}>${esc(a)}</option>`).join('')}
         </select>
         <select class="select" id="lib-diff" aria-label="Filter by difficulty">
           <option value="All" ${state.filters.difficulty === 'All' ? 'selected' : ''}>Level: All</option>
@@ -1093,8 +1095,8 @@
         </select>
       </div>
 
-      <div style="margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-        <span id="lib-count-text" style="font-size:13px;color:var(--text-muted);">Showing <strong>${filtered.length}</strong> of ${PROBLEMS.length} solved guesstimates</span>
+      <div style="margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+        <span id="lib-count-text" style="font-size:0.94rem;color:var(--text-muted);">Showing <strong>${filtered.length}</strong> of ${PROBLEMS.length} solved guesstimates</span>
         <button class="btn btn-sm" id="clear-filters-btn">Reset Filters</button>
       </div>
 
@@ -1122,14 +1124,14 @@
           <p>Walk through clarifying scope, approach, MECE structure, math, and sanity checks step-by-step.</p>
         </div>
       </div>
-      <div class="card-flat" style="margin-bottom:12px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;">
-        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex:1 1 260px;min-width:0;">
+      <div class="card-flat" style="margin-bottom:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;flex:1 1 240px;min-width:0;">
           <strong>Active Practice Problem:</strong>
-          <select class="select" id="guided-prob-select" style="width:100%;max-width:440px;min-width:0;">
-            ${PROBLEMS.map(p => `<option value="${esc(p.id)}" ${p.id === prob.id ? 'selected' : ''}>[L${p.difficulty}] ${esc(p.title)} (${esc(p.company)})</option>`).join('')}
+          <select class="select" id="guided-prob-select" style="width:100%;max-width:410px;min-width:0;">
+            ${PROBLEMS.map(p => `<option value="${esc(p.id)}" ${p.id === prob.id ? 'selected' : ''}>[L${p.difficulty}] ${esc(p.title)} · ${esc(p.archetype)}</option>`).join('')}
           </select>
         </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
           <button class="btn btn-sm" id="guided-random-easy">🎲 Easy (L1–2)</button>
           <button class="btn btn-sm" id="guided-random-med">🎲 Med (L3)</button>
           <button class="btn btn-sm" id="guided-random-hard">🎲 Hard (L4–5)</button>
@@ -1138,7 +1140,7 @@
     `;
 
     const progressStepper = `
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;">
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
         ${['1. Clarify', '2. Approach', '3. MECE Tree', '4. Compute & Estimate', '5. Sanity Check & Debrief'].map((lbl, idx) => `
           <button class="tab-btn ${g.step === idx + 1 ? 'active' : ''}" data-guided-step="${idx + 1}">${lbl}</button>
         `).join('')}
@@ -1149,25 +1151,25 @@
     if (g.step === 1) {
       stepContent = `
         <div class="card">
-          <div class="pill pill-blue" style="margin-bottom:8px;">Step 1 of 5 · Clarify Scope</div>
-          <h3 style="margin:0 0 8px;">Prompt: “${esc(prob.prompt)}”</h3>
-          <p style="font-size:13.5px;color:var(--text-muted);">Before touching any numbers, think about 2–3 clarifying questions you MUST ask the interviewer. Click each question below to simulate asking it:</p>
+          <div class="pill pill-blue" style="margin-bottom:6px;">Step 1 of 5 · Clarify Scope</div>
+          <h3 style="margin:0 0 6px;font-size:1.1rem;">Prompt: “${esc(prob.prompt)}”</h3>
+          <p style="font-size:0.96rem;color:var(--text-muted);margin:0 0 10px;">Before touching any numbers, think about 2–3 clarifying questions you MUST ask the interviewer. Click each question below to simulate asking it:</p>
           ${(prob.clarifyingQuestions || []).map((cq, idx) => {
             const open = !!g.clarifyRevealed[idx];
             return `
-              <div class="section-block" style="margin-bottom:10px;">
-                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
-                  <strong style="flex:1 1 220px;min-width:0;">❓ "${esc(cq.q)}"</strong>
+              <div class="section-block" style="margin-bottom:8px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+                  <strong style="flex:1 1 200px;min-width:0;font-size:0.96rem;">❓ "${esc(cq.q)}"</strong>
                   <button class="btn btn-sm ${open ? '' : 'btn-primary'}" data-clarify-idx="${idx}">${open ? 'Asked ✓' : 'Ask Interviewer'}</button>
                 </div>
                 ${open ? `
-                  <div style="margin-top:8px;font-size:13px;color:var(--accent-bright);">💬 Interviewer: ${esc(cq.a)}</div>
-                  <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Why this matters: ${esc(cq.why)}</div>
+                  <div style="margin-top:6px;font-size:0.95rem;color:var(--accent-bright);">💬 Interviewer: ${esc(cq.a)}</div>
+                  <div style="font-size:0.9rem;color:var(--text-muted);margin-top:2px;">Why this matters: ${esc(cq.why)}</div>
                 ` : ''}
               </div>
             `;
           }).join('')}
-          <div style="margin-top:14px;text-align:right;">
+          <div style="margin-top:10px;text-align:right;">
             <button class="btn btn-primary" data-guided-step="2">Next: Choose Approach →</button>
           </div>
         </div>
@@ -1176,9 +1178,9 @@
       const targetApp = prob.guidedPractice ? prob.guidedPractice.correctApproach : prob.approachType;
       stepContent = `
         <div class="card">
-          <div class="pill pill-blue" style="margin-bottom:8px;">Step 2 of 5 · Choose Strategic Approach</div>
-          <h3 style="margin:0 0 8px;">Which primary approach fits “${esc(prob.title)}”?</h3>
-          <p style="font-size:13.5px;color:var(--text-muted);">Hint: Ask yourself whether this is a consumer mass funnel, a physical capacity bottleneck, a multi-year durable asset, or a spatial/geometry question.</p>
+          <div class="pill pill-blue" style="margin-bottom:6px;">Step 2 of 5 · Choose Strategic Approach</div>
+          <h3 style="margin:0 0 6px;font-size:1.1rem;">Which primary approach fits “${esc(prob.title)}”?</h3>
+          <p style="font-size:0.96rem;color:var(--text-muted);margin:0 0 10px;">Hint: Ask yourself whether this is a consumer mass funnel, a physical capacity bottleneck, a multi-year durable asset, or a spatial/geometry question.</p>
           <div>
             ${approaches.map(ap => {
               let cls = 'quiz-opt';
@@ -1190,12 +1192,12 @@
             }).join('')}
           </div>
           ${g.selectedApproach ? `
-            <div class="${g.selectedApproach === targetApp ? 'good-box' : 'bad-box'}" style="margin-top:10px;">
+            <div class="${g.selectedApproach === targetApp ? 'good-box' : 'bad-box'}" style="margin-top:8px;">
               <strong>${g.selectedApproach === targetApp ? '✅ Spot on!' : '💡 Recommended Approach: ' + esc(targetApp)}</strong>
-              <div style="margin-top:6px;">${renderStrategyPointsHtml(prob.strategyOverview)}</div>
+              <div style="margin-top:5px;">${renderStrategyPointsHtml(prob.strategyOverview)}</div>
             </div>
           ` : ''}
-          <div style="margin-top:14px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <div style="margin-top:10px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
             <button class="btn" data-guided-step="1">← Back</button>
             <button class="btn btn-primary" data-guided-step="3">Next: Build MECE Tree →</button>
           </div>
@@ -1205,8 +1207,8 @@
       const opts = (prob.guidedPractice && prob.guidedPractice.funnelOptions) || [];
       stepContent = `
         <div class="card">
-          <div class="pill pill-blue" style="margin-bottom:8px;">Step 3 of 5 · Select the MECE Structure</div>
-          <h3 style="margin:0 0 8px;">Choose the cleanest MECE equation / segmentation tree:</h3>
+          <div class="pill pill-blue" style="margin-bottom:6px;">Step 3 of 5 · Select the MECE Structure</div>
+          <h3 style="margin:0 0 6px;font-size:1.1rem;">Choose the cleanest MECE equation / segmentation tree:</h3>
           <div>
             ${opts.map((o, idx) => {
               let cls = 'quiz-opt';
@@ -1218,12 +1220,12 @@
             }).join('')}
           </div>
           ${g.selectedFunnelIdx !== null && opts[g.selectedFunnelIdx] ? `
-            <div class="${opts[g.selectedFunnelIdx].correct ? 'good-box' : 'bad-box'}" style="margin-top:10px;">
+            <div class="${opts[g.selectedFunnelIdx].correct ? 'good-box' : 'bad-box'}" style="margin-top:8px;">
               ${esc(opts[g.selectedFunnelIdx].feedback)}
-              ${renderFormulaPointsHtml(prob.formula, 'margin-top:8px;')}
+              ${renderFormulaPointsHtml(prob.formula, 'margin-top:6px;')}
             </div>
           ` : ''}
-          <div style="margin-top:14px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <div style="margin-top:10px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
             <button class="btn" data-guided-step="2">← Back</button>
             <button class="btn btn-primary" data-guided-step="4">Next: Calculate Your Estimate →</button>
           </div>
@@ -1233,44 +1235,44 @@
       const range = prob.acceptableRange || { min: 0, max: 0, unit: '', display: '' };
       stepContent = `
         <div class="card">
-          <div class="pill pill-blue" style="margin-bottom:8px;">Step 4 of 5 · Estimate &amp; Compute</div>
-          <h3 style="margin:0 0 6px;">Plug in your own assumptions and calculate!</h3>
-          ${renderFormulaPointsHtml(prob.formula, 'margin-bottom:12px;')}
+          <div class="pill pill-blue" style="margin-bottom:6px;">Step 4 of 5 · Estimate &amp; Compute</div>
+          <h3 style="margin:0 0 6px;font-size:1.1rem;">Plug in your own assumptions and calculate!</h3>
+          ${renderFormulaPointsHtml(prob.formula, 'margin-bottom:10px;')}
 
-          <div class="grid-2" style="margin-bottom:14px;">
+          <div class="grid-2" style="margin-bottom:10px;">
             <div class="section-block">
-              <strong style="font-size:13px;">🧮 Quick Scratchpad Calculator</strong>
-              <p style="font-size:12px;color:var(--text-muted);margin:4px 0 8px;">Type any expression (e.g. <code>140 * 0.35 * 0.4 * 500</code>):</p>
-              <div style="display:flex;gap:8px;">
+              <strong style="font-size:0.96rem;">🧮 Quick Scratchpad Calculator</strong>
+              <p style="font-size:0.9rem;color:var(--text-muted);margin:3px 0 6px;">Type any expression (e.g. <code>140 * 0.35 * 0.4 * 500</code>):</p>
+              <div style="display:flex;gap:6px;">
                 <input type="text" class="input" id="guided-calc-expr" placeholder="e.g. 30 * 0.8 * 0.65 * 3" value="${esc(g.calcInput)}" />
                 <button class="btn btn-secondary btn-sm" id="guided-calc-run">=</button>
               </div>
-              <div style="margin-top:8px;font-family:var(--mono);font-size:14px;color:var(--accent-bright);overflow-wrap:anywhere;word-break:break-word;" id="guided-calc-out">
+              <div style="margin-top:6px;font-family:var(--mono);font-size:1.02rem;color:var(--accent-bright);overflow-wrap:anywhere;word-break:break-word;" id="guided-calc-out">
                 ${g.calcResult ? `Result: ${esc(g.calcResult)}` : ''}
               </div>
             </div>
 
             <div class="section-block">
-              <strong style="font-size:13px;">🎯 Submit Your Estimate (${esc(range.unit || 'units')})</strong>
-              <p style="font-size:12px;color:var(--text-muted);margin:4px 0 8px;">Target unit: <strong>${esc(range.unit)}</strong> (Target range hidden until you submit!)</p>
-              <div style="display:flex;gap:8px;">
+              <strong style="font-size:0.96rem;">🎯 Submit Your Estimate (${esc(range.unit || 'units')})</strong>
+              <p style="font-size:0.9rem;color:var(--text-muted);margin:3px 0 6px;">Target unit: <strong>${esc(range.unit)}</strong> (Target range hidden until you submit!)</p>
+              <div style="display:flex;gap:6px;">
                 <input type="number" step="any" class="input" id="guided-est-val" placeholder="Enter number in ${esc(range.unit)}" value="${esc(g.userEstimate)}" />
                 <button class="btn btn-primary btn-sm" id="guided-check-est">Check</button>
               </div>
               <div id="guided-grade-out">
-                ${g.gradeResult ? `<div class="${g.gradeResult.ok ? 'good-box' : 'bad-box'}" style="margin-top:8px;font-size:12.5px;">${esc(g.gradeResult.msg)}</div>` : ''}
+                ${g.gradeResult ? `<div class="${g.gradeResult.ok ? 'good-box' : 'bad-box'}" style="margin-top:6px;font-size:0.94rem;">${esc(g.gradeResult.msg)}</div>` : ''}
               </div>
             </div>
           </div>
 
           <details class="section-block">
-            <summary style="cursor:pointer;font-weight:700;font-size:13px;">💡 Stuck on assumptions? Click to peek at Reference Benchmarks</summary>
-            <ul style="margin:8px 0 0;padding-left:18px;font-size:13px;">
+            <summary style="cursor:pointer;font-weight:700;font-size:0.96rem;">💡 Stuck on assumptions? Click to peek at Reference Benchmarks</summary>
+            <ul style="margin:6px 0 0;padding-left:16px;font-size:0.95rem;">
               ${(prob.assumptions || []).map(a => `<li><strong>${esc(a.label)}</strong> — ${esc(a.rationale)}</li>`).join('')}
             </ul>
           </details>
 
-          <div style="margin-top:14px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <div style="margin-top:10px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
             <button class="btn" data-guided-step="3">← Back</button>
             <button class="btn btn-primary" data-guided-step="5">Next: Sanity Check &amp; Debrief →</button>
           </div>
@@ -1280,26 +1282,26 @@
       const isMastered = !!state.masteredIds[prob.id];
       stepContent = `
         <div class="card">
-          <div class="pill pill-green" style="margin-bottom:8px;">Step 5 of 5 · Sanity Check &amp; Full Debrief</div>
-          <h3 style="margin:0 0 10px;">Final Verification &amp; Comparison</h3>
-          <div class="section-block" style="margin-bottom:12px;">
-            <strong style="font-size:13px;">Write your 15-second Sanity Check (how would you verify your number?):</strong>
-            <textarea class="input" id="guided-sanity-txt" rows="2" style="margin-top:6px;" placeholder="e.g. Divided across 35 Cr households, that equals ₹100/month which feels reasonable...">${esc(g.sanityInput)}</textarea>
+          <div class="pill pill-green" style="margin-bottom:6px;">Step 5 of 5 · Sanity Check &amp; Full Debrief</div>
+          <h3 style="margin:0 0 8px;font-size:1.1rem;">Final Verification &amp; Comparison</h3>
+          <div class="section-block" style="margin-bottom:9px;">
+            <strong style="font-size:0.96rem;">Write your 15-second Sanity Check (how would you verify your number?):</strong>
+            <textarea class="input" id="guided-sanity-txt" rows="2" style="margin-top:5px;" placeholder="e.g. Divided across 35 Cr households, that equals ₹100/month which feels reasonable...">${esc(g.sanityInput)}</textarea>
           </div>
-          <div class="good-box" style="margin-bottom:12px;">
+          <div class="good-box" style="margin-bottom:9px;">
             <strong>✅ Reference Answer:</strong> ${esc(prob.finalAnswer)}<br/>
             <strong>🔍 Reference Sanity Check:</strong> ${esc(prob.sanityCheck)}
           </div>
-          <div class="bad-box" style="margin-bottom:14px;">
+          <div class="bad-box" style="margin-bottom:10px;">
             <strong>⚠️ Watch Out For:</strong> ${esc(prob.interviewerTrap)}
           </div>
-          <div class="section-block" style="margin-bottom:14px;">
+          <div class="section-block" style="margin-bottom:10px;">
             <h3>Reference Visual Issue Tree</h3>
             <div class="issue-tree-wrap">${renderTreeNode(prob.tree)}</div>
           </div>
-          <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+          <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
             <button class="btn" data-guided-step="4">← Back</button>
-            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
               <button class="btn ${isMastered ? 'btn-primary' : 'btn-secondary'}" data-toggle-master="${esc(prob.id)}">
                 ${isMastered ? '✓ Mastered!' : '✓ Mark Problem Mastered'}
               </button>
@@ -1393,17 +1395,17 @@
           <p>Simulate live interview pacing, clarify scope with the interviewer, and calculate your tree.</p>
         </div>
       </div>
-      <div class="card" style="margin-bottom:14px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;">
-          <div style="min-width:0;flex:1 1 280px;">
-            <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:6px;">
+      <div class="card" style="margin-bottom:11px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+          <div style="min-width:0;flex:1 1 260px;">
+            <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin-bottom:5px;">
               <span class="pill pill-purple">Mock Interview Simulator</span>
-              <span class="pill pill-blue">${esc(prob.company)} · ${diffDots(prob.difficulty)}</span>
+              <span class="pill pill-blue">${esc(prob.archetype)} · ${diffDots(prob.difficulty)}</span>
               <span class="pill pill-warn" id="mock-phase-badge">${esc(phaseLabel)}</span>
             </div>
-            <h2 style="margin:0;font-size:19px;">“${esc(prob.prompt)}”</h2>
+            <h2 style="margin:0;font-size:1.25rem;">“${esc(prob.prompt)}”</h2>
           </div>
-          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
             <span class="timer-pill" id="mock-timer-display" style="${mockState.timeLeft <= 60 ? 'color:var(--danger);border-color:var(--danger);' : ''}">${mins}:${secs}</span>
             <button class="btn btn-primary btn-sm" id="mock-start-pause">${mockState.running ? '⏸ Pause' : '▶ Start Timer'}</button>
             <button class="btn btn-sm" id="mock-reset-timer">↺ Reset (${state.mockDurationMins || 10}m)</button>
@@ -1415,16 +1417,16 @@
       <div class="grid-2" style="align-items:start;">
         <!-- Left: Live Interactive Issue-Tree & Calculator Workbench -->
         <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
-            <h3 style="margin:0;font-size:16px;">🌳 Your Live Issue-Tree Scratchpad</h3>
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:8px;">
+            <h3 style="margin:0;font-size:1.1rem;">🌳 Your Live Issue-Tree Scratchpad</h3>
             <button class="btn btn-sm btn-primary" id="wb-add-node">+ Add Step</button>
           </div>
-          <p style="font-size:12.5px;color:var(--text-muted);margin:0 0 12px;">Build your funnel top-to-bottom. Each step transforms the running value automatically!</p>
+          <p style="font-size:0.93rem;color:var(--text-muted);margin:0 0 9px;">Build your funnel top-to-bottom. Each step transforms the running value automatically!</p>
 
           <div id="wb-nodes-container">
             ${computedNodes.map((n, idx) => `
               <div class="wb-node-row" data-wb-idx="${idx}">
-                <span style="font-size:11px;font-weight:700;color:var(--text-dim);width:18px;">#${idx + 1}</span>
+                <span style="font-size:0.86rem;font-weight:700;color:var(--text-dim);width:18px;">#${idx + 1}</span>
                 <input type="text" class="wb-label" data-wb-idx="${idx}" value="${esc(n.label)}" placeholder="Step name" />
                 <select class="wb-op" data-wb-idx="${idx}" ${idx === 0 ? 'disabled' : ''}>
                   <option value="base" ${n.op === 'base' ? 'selected' : ''}>Base =</option>
@@ -1436,66 +1438,66 @@
                 </select>
                 <input type="number" step="any" class="wb-val" data-wb-idx="${idx}" value="${esc(n.val)}" />
                 <span class="tree-node-val" data-wb-sub="${idx}" title="Running subtotal">= ${formatIndian(n.computed)}</span>
-                ${idx > 0 ? `<button class="btn btn-sm btn-danger wb-del" data-wb-idx="${idx}" style="padding:4px 8px;">✕</button>` : ''}
+                ${idx > 0 ? `<button class="btn btn-sm btn-danger wb-del" data-wb-idx="${idx}" style="padding:3px 7px;">✕</button>` : ''}
               </div>
             `).join('')}
           </div>
 
-          <div class="live-result-bar" style="margin-top:14px;">
+          <div class="live-result-bar" style="margin-top:10px;">
             <div>
-              <div style="font-size:11px;text-transform:uppercase;font-weight:700;color:var(--accent-bright);">Your Workbench Estimate</div>
-              <div style="font-size:21px;font-weight:800;" id="wb-final-val">${formatIndian(finalComputed)}</div>
+              <div style="font-size:0.84rem;text-transform:uppercase;font-weight:700;color:var(--accent-bright);">Your Workbench Estimate</div>
+              <div style="font-size:1.38rem;font-weight:800;" id="wb-final-val">${formatIndian(finalComputed)}</div>
             </div>
             <button class="btn btn-sm btn-primary" id="mock-complete-btn">✓ Complete Mock</button>
           </div>
 
-          <div class="section-block" style="margin-top:14px;">
-            <strong style="font-size:13px;">🎤 Auto-Generated 30-Sec Pyramid Synthesis Pitch</strong>
-            <div class="script-box" style="margin-top:8px;font-size:12.5px;" id="wb-pitch-box">${formatMockPitchHtml(computedNodes, finalComputed)}</div>
-            <input type="text" class="input" id="mock-sanity-input" style="margin-top:8px;" placeholder="Add your sanity check sentence to include in the pitch..." value="${esc(mockState.sanityNote)}" />
+          <div class="section-block" style="margin-top:10px;">
+            <strong style="font-size:0.96rem;">🎤 Auto-Generated 30-Sec Pyramid Synthesis Pitch</strong>
+            <div class="script-box" style="margin-top:6px;font-size:0.94rem;" id="wb-pitch-box">${formatMockPitchHtml(computedNodes, finalComputed)}</div>
+            <input type="text" class="input" id="mock-sanity-input" style="margin-top:6px;" placeholder="Add your sanity check sentence to include in the pitch..." value="${esc(mockState.sanityNote)}" />
           </div>
         </div>
 
         <!-- Right: Simulated Interviewer Panel -->
         <div class="card">
-          <h3 style="margin:0 0 10px;font-size:16px;">🧑‍💼 Simulated Interviewer Persona</h3>
-          <p style="font-size:12.5px;color:var(--text-muted);margin:0 0 12px;">Click questions below to ask the interviewer for scope clarifications, or trigger a curveball twist mid-case!</p>
+          <h3 style="margin:0 0 6px;font-size:1.1rem;">🧑‍💼 Simulated Interviewer Persona</h3>
+          <p style="font-size:0.93rem;color:var(--text-muted);margin:0 0 9px;">Click questions below to ask the interviewer for scope clarifications, or trigger a curveball twist mid-case!</p>
 
-          <div class="section-block" style="margin-bottom:12px;">
-            <strong style="font-size:13px;">1. Ask Clarifying Questions</strong>
-            <div style="margin-top:8px;display:flex;flex-direction:column;gap:6px;">
+          <div class="section-block" style="margin-bottom:9px;">
+            <strong style="font-size:0.96rem;">1. Ask Clarifying Questions</strong>
+            <div style="margin-top:6px;display:flex;flex-direction:column;gap:5px;">
               ${(prob.clarifyingQuestions || []).map((cq, idx) => `
                 <div>
                   <button class="btn btn-sm btn-block-left" data-mock-clarify="${idx}">
                     ❓ ${esc(cq.q)}
                   </button>
-                  ${mockState.clarifiedIdx[idx] ? `<div style="font-size:12.5px;color:var(--accent-bright);padding:4px 8px;">💬 "${esc(cq.a)}"</div>` : ''}
+                  ${mockState.clarifiedIdx[idx] ? `<div style="font-size:0.93rem;color:var(--accent-bright);padding:3px 7px;">💬 "${esc(cq.a)}"</div>` : ''}
                 </div>
               `).join('')}
             </div>
           </div>
 
-          <div class="section-block" style="margin-bottom:12px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-              <strong style="font-size:13px;">2. Mid-Case Curveball Twist</strong>
+          <div class="section-block" style="margin-bottom:9px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
+              <strong style="font-size:0.96rem;">2. Mid-Case Curveball Twist</strong>
               <button class="btn btn-sm btn-warn" id="mock-curveball-btn">${mockState.showVariation ? 'Hide Curveball' : '⚡ Throw Curveball'}</button>
             </div>
             ${mockState.showVariation ? `
-              <div class="bad-box" style="margin-top:8px;font-size:13px;">
+              <div class="bad-box" style="margin-top:6px;font-size:0.95rem;">
                 <strong>Interviewer interrupts:</strong> "${esc((prob.variations && prob.variations[0]) ? prob.variations[0].question : 'How would your estimate change in a Tier-2 city?')}"
-                <div style="margin-top:4px;font-size:12px;color:var(--text-muted);">Hint: ${esc((prob.variations && prob.variations[0]) ? prob.variations[0].hint : 'Adjust purchasing power & penetration downward.')}</div>
+                <div style="margin-top:3px;font-size:0.9rem;color:var(--text-muted);">Hint: ${esc((prob.variations && prob.variations[0]) ? prob.variations[0].hint : 'Adjust purchasing power & penetration downward.')}</div>
               </div>
             ` : ''}
           </div>
 
           <div class="section-block">
-            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-              <strong style="font-size:13px;">3. Compare Against Reference Solution</strong>
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
+              <strong style="font-size:0.96rem;">3. Compare Against Reference Solution</strong>
               <button class="btn btn-sm" id="mock-reveal-sol-btn">${mockState.showSolutionRef ? 'Hide Reference' : '👁️ Reveal Answer & Tree'}</button>
             </div>
             ${mockState.showSolutionRef ? `
-              <div style="margin-top:10px;">
-                <div class="good-box" style="margin-bottom:8px;">
+              <div style="margin-top:8px;">
+                <div class="good-box" style="margin-bottom:6px;">
                   <strong>Reference Answer:</strong> ${esc(prob.finalAnswer)}<br/>
                   <strong>Sanity Check:</strong> ${esc(prob.sanityCheck)}
                 </div>
@@ -1515,8 +1517,8 @@
       if (!items.length) return '';
       return `
         <div class="card">
-          <h3 style="margin:0 0 2px;font-size:16px;">${esc(sec.title)}</h3>
-          <div style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">${esc(sec.subtitle)}</div>
+          <h3 style="margin:0 0 2px;font-size:1.1rem;">${esc(sec.title)}</h3>
+          <div style="font-size:0.9rem;color:var(--text-muted);margin-bottom:8px;">${esc(sec.subtitle)}</div>
           ${items.map(it => `
             <div class="cs-item">
               <div>
@@ -1562,8 +1564,8 @@
     let body = '';
     if (tab === 'cheatsheet') {
       body = `
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;" class="no-print">
-          <input type="text" class="input" id="cs-search" style="width:100%;max-width:360px;flex:1 1 200px;min-width:0;" placeholder="Filter benchmarks (e.g. Mumbai, UPI, household, gallon)..." value="${esc(cheatSearch)}" />
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;" class="no-print">
+          <input type="text" class="input" id="cs-search" style="width:100%;max-width:340px;flex:1 1 200px;min-width:0;" placeholder="Filter benchmarks (e.g. Mumbai, UPI, household, gallon)..." value="${esc(cheatSearch)}" />
           <button class="btn btn-secondary btn-sm" onclick="window.print()">🖨️ Print Cheat Sheet</button>
         </div>
         <div class="grid-2" id="cs-grid-container">
@@ -1584,12 +1586,12 @@
 
       body = `
         <div class="flashcard-stage">
-          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
-            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-              <select class="select" id="fc-cat" style="width:160px;max-width:100%;">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+            <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap;">
+              <select class="select" id="fc-cat" style="width:145px;max-width:100%;">
                 ${cats.map(c => `<option ${flashState.category === c ? 'selected' : ''}>${esc(c)}</option>`).join('')}
               </select>
-              <label style="font-size:13px;display:flex;align-items:center;gap:5px;cursor:pointer;">
+              <label style="font-size:0.95rem;display:flex;align-items:center;gap:5px;cursor:pointer;">
                 <input type="checkbox" id="fc-only-review" ${flashState.onlyReview ? 'checked' : ''} /> Needs Review Only
               </label>
             </div>
@@ -1604,17 +1606,17 @@
               </div>
               <div class="flashcard-body">
                 ${!flashState.flipped ? `
-                  <h2 style="margin:0;font-size:21px;max-width:520px;width:100%;">${esc(card.front)}</h2>
-                  <div style="margin-top:8px;font-size:12.5px;color:var(--text-dim);">Click anywhere on card to flip</div>
+                  <h2 style="margin:0;font-size:1.36rem;max-width:480px;width:100%;">${esc(card.front)}</h2>
+                  <div style="margin-top:6px;font-size:0.93rem;color:var(--text-dim);">Click anywhere on card to flip</div>
                 ` : `
-                  <div style="font-size:22px;font-weight:800;color:var(--accent-bright);white-space:pre-line;max-width:100%;">${esc(card.back)}</div>
-                  <div class="tip-box" style="max-width:520px;text-align:left;">💡 ${esc(card.tip)}</div>
+                  <div style="font-size:1.42rem;font-weight:800;color:var(--accent-bright);white-space:pre-line;max-width:100%;">${esc(card.back)}</div>
+                  <div class="tip-box" style="max-width:480px;text-align:left;">💡 ${esc(card.tip)}</div>
                 `}
               </div>
             </div>
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:10px;flex-wrap:wrap;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;gap:8px;flex-wrap:wrap;">
               <button class="btn" id="fc-prev">← Previous</button>
-              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <div style="display:flex;gap:6px;flex-wrap:wrap;">
                 <button class="btn btn-warn" id="fc-mark-review">🔁 Need Review</button>
                 <button class="btn btn-primary" id="fc-mark-mastered">✓ Got It!</button>
               </div>
@@ -1629,29 +1631,29 @@
       body = `
         <div class="flashcard-stage">
           <div class="card" id="drill-card-box">
-            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
               <div>
-                <h3 style="margin:0;">⚡ 60-Second Rapid-Fire Consulting Drill</h3>
-                <div style="font-size:12.5px;color:var(--text-muted);">Test your India anchors, unit conversions, and rapid mental math.</div>
+                <h3 style="margin:0;font-size:1.1rem;">⚡ 60-Second Rapid-Fire Consulting Drill</h3>
+                <div style="font-size:0.93rem;color:var(--text-muted);">Test your India anchors, unit conversions, and rapid mental math.</div>
               </div>
               <span class="pill pill-purple" id="drill-best-pill">Best Score: ${state.bestDrillScore} pts</span>
             </div>
 
             ${!drillState.active ? `
-              <div style="text-align:center;padding:18px 10px;">
+              <div style="text-align:center;padding:14px 8px;">
                 ${drillState.completed ? `
-                  <div class="good-box" style="margin-bottom:14px;">
-                    <h2 style="margin:0 0 6px;">⏱️ Time’s Up! Final Score: ${drillState.score} pts ${drillState.beatBest ? '🏆 New Best!' : ''}</h2>
+                  <div class="good-box" style="margin-bottom:10px;">
+                    <h2 style="margin:0 0 4px;font-size:1.25rem;">⏱️ Time’s Up! Final Score: ${drillState.score} pts ${drillState.beatBest ? '🏆 New Best!' : ''}</h2>
                     <div>Answered ${drillState.answered} (${drillState.correctCount} correct · ${accPct}% accuracy) · Best Streak: ${drillState.bestStreak}</div>
                   </div>
                 ` : ''}
-                <button class="btn btn-primary" id="start-drill-btn" style="font-size:14.5px;padding:10px 22px;">▶ ${drillState.completed ? 'Play Again (60s)' : 'Start 60-Second Drill'}</button>
-                <p style="margin:10px auto 0;max-width:440px;font-size:11.5px;color:var(--text-muted);">Complete the full 60s to save your Best Score. Quitting or leaving early resets the drill without saving. Tip: Use keys 1–4 for speed!</p>
+                <button class="btn btn-primary" id="start-drill-btn" style="font-size:1.05rem;padding:8px 18px;">▶ ${drillState.completed ? 'Play Again (60s)' : 'Start 60-Second Drill'}</button>
+                <p style="margin:8px auto 0;max-width:420px;font-size:0.88rem;color:var(--text-muted);">Complete the full 60s to save your Best Score. Quitting or leaving early resets the drill without saving. Tip: Use keys 1–4 for speed!</p>
               </div>
             ` : `
-              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:10px;">
                 <span class="timer-pill" id="drill-timer-pill" style="${drillState.timeLeft <= 10 ? 'color:var(--danger);border-color:var(--danger);' : ''}">⏱️ ${drillState.timeLeft}s</span>
-                <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+                <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap;">
                   <span class="pill pill-green" id="drill-score-pill">Score: ${drillState.score}</span>
                   <span class="pill pill-warn" id="drill-streak-pill">Streak: ${drillState.streak}🔥</span>
                   <span class="pill" id="drill-count-pill">Q: ${drillState.answered}</span>
@@ -1660,7 +1662,7 @@
               </div>
               ${qObj ? `
                 <div class="section-block">
-                  <div id="drill-question-text" style="font-size:15px;font-weight:700;margin-bottom:8px;">${esc(qObj.q)}</div>
+                  <div id="drill-question-text" style="font-size:1.06rem;font-weight:700;margin-bottom:7px;">${esc(qObj.q)}</div>
                   <div class="drill-feedback-slot" id="drill-feedback-slot">Pick an option or press keys 1–4</div>
                   <div class="drill-options-grid" id="drill-options-grid">
                     ${renderDrillOptionsHtml(qObj)}
@@ -1799,7 +1801,7 @@
             const fEl = document.getElementById('live-model-formatted');
             const bEl = document.getElementById('live-model-breakdown');
             if (fEl) fEl.textContent = res.formatted;
-            if (bEl) bEl.innerHTML = res.breakdown.map(b => `<div><div style="font-size:11px;color:var(--text-muted);">${esc(b.label)}</div><strong>${esc(b.val)}</strong></div>`).join('');
+            if (bEl) bEl.innerHTML = res.breakdown.map(b => `<div><div style="font-size:0.84rem;color:var(--text-muted);">${esc(b.label)}</div><strong>${esc(b.val)}</strong></div>`).join('');
           };
           sliders.forEach(sl => sl.addEventListener('input', updateSliders));
         }
@@ -1818,15 +1820,15 @@
       }
 
       const topbar = document.querySelector('.topbar');
-      const stickyTop = (topbar ? Math.ceil(topbar.getBoundingClientRect().height) : 50) + 12;
+      const stickyTop = (topbar ? Math.ceil(topbar.getBoundingClientRect().height) : 44) + 10;
       listPanel.style.setProperty('--lib-sticky-top', `${stickyTop}px`);
 
-      const viewportCap = Math.max(240, window.innerHeight - stickyTop - 16);
+      const viewportCap = Math.max(220, window.innerHeight - stickyTop - 14);
       const rightH = Math.ceil(detailWrap.getBoundingClientRect().height);
       const hasItems = !!listPanel.querySelector('.problem-list-item');
       if (rightH > 0) {
         const targetMax = hasItems
-          ? (rightH < 220 ? Math.min(viewportCap, Math.max(120, rightH)) : Math.max(220, Math.min(viewportCap, rightH)))
+          ? (rightH < 180 ? Math.min(viewportCap, Math.max(120, rightH)) : Math.max(180, Math.min(viewportCap, rightH)))
           : Math.min(viewportCap, Math.max(80, rightH));
         listPanel.style.maxHeight = `${targetMax}px`;
       } else {
@@ -1954,9 +1956,8 @@
       }
     };
     bindFilter('lib-search', 'search');
-    bindFilter('lib-source', 'source');
-    bindFilter('lib-company', 'company');
     bindFilter('lib-archetype', 'archetype');
+    bindFilter('lib-approach', 'approach');
     bindFilter('lib-diff', 'difficulty');
     bindFilter('lib-status', 'status');
 
@@ -1968,9 +1969,8 @@
         if (gs) gs.value = '';
         const ls = document.getElementById('lib-search');
         if (ls) ls.value = '';
-        const src = document.getElementById('lib-source'); if (src) src.value = 'All';
-        const cmp = document.getElementById('lib-company'); if (cmp) cmp.value = 'All';
         const arc = document.getElementById('lib-archetype'); if (arc) arc.value = 'All';
+        const appEl = document.getElementById('lib-approach'); if (appEl) appEl.value = 'All';
         const dif = document.getElementById('lib-diff'); if (dif) dif.value = 'All';
         const stt = document.getElementById('lib-status'); if (stt) stt.value = 'All';
         saveState();
@@ -2094,7 +2094,7 @@
         const gradeOut = document.getElementById('guided-grade-out');
         if (gradeOut) {
           const gr = state.guided.gradeResult;
-          gradeOut.innerHTML = gr ? `<div class="${gr.ok ? 'good-box' : 'bad-box'}" style="margin-top:8px;font-size:12.5px;">${esc(gr.msg)}</div>` : '';
+          gradeOut.innerHTML = gr ? `<div class="${gr.ok ? 'good-box' : 'bad-box'}" style="margin-top:8px;font-size:1.05rem;">${esc(gr.msg)}</div>` : '';
         }
       };
       checkEstBtn.addEventListener('click', checkEstimate);

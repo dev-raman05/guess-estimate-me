@@ -6,14 +6,11 @@ window.GM_DATA.problems.push(
     id: 'vol2-refrigerator-india',
     title: 'Market Size of the Indian Refrigerator Industry',
     prompt: 'Estimate the annual market size (units & revenue) of the Indian refrigerator industry.',
-    source: '180DC SRCC Vol 2',
-    pdfRef: 'Guesstimate-Book-Volume-2-3.pdf — p. 15 (Book p. 12)',
-    company: 'BCG',
     difficulty: 2,
     archetype: 'Market Sizing',
     approachType: 'Replacement & Stock-Flow',
     templateId: 'tpl-durable',
-    tags: ['Appliances', 'Durable Goods', 'Replacement Cycle', 'BCG'],
+    tags: ['Appliances', 'Durable Goods', 'Replacement Cycle'],
     clarifyingQuestions: [
       { q: 'Residential household refrigerators only, or commercial/industrial deep freezers too?', a: 'Residential household refrigerators only (~85–90% of unit volume).', why: 'Ties cleanly to household count.' },
       { q: 'Are we estimating annual unit sales or annual ₹ revenue?', a: 'Annual unit sales and revenue.', why: 'Durable goods require lifespan division!' }
@@ -23,7 +20,7 @@ window.GM_DATA.problems.push(
     assumptions: [
       { label: 'India Pop = 1.4B; Avg Family Size = 4 → 350M Households', rationale: '1 fridge per owning household.' },
       { label: 'Tier Segmentation: Tier 1 (20% @ 80% pen = 56M), Tier 2 (50% @ 60% = 105M), Tier 3/Rural (30% @ 30% = 31.5M)', rationale: 'Total installed base = 192.5M refrigerators (~55% household penetration).' },
-      { label: 'Lifespan = 7 years (replacement ≈ 27.5M/yr) | Avg Price = ₹25,000', rationale: 'Note: Vol 2 PDF printed "₹68,750 Million" (₹6,875 Cr), whereas 27.5M × ₹25,000 = ₹6,87,500 Million = ₹68,750 Crore! Catching that 10x decimal slip is super helpful!' }
+      { label: 'Lifespan = 7 years (replacement ≈ 27.5M/yr) | Avg Price = ₹25,000', rationale: 'Unit check: avoid writing "₹68,750 Million" (₹6,875 Cr), whereas 27.5M × ₹25,000 = ₹6,87,500 Million = ₹68,750 Crore! Catching that 10x decimal slip is super helpful!' }
     ],
     tree: {
       label: 'India Households (1.4B ÷ 4 = 350M)',
@@ -36,14 +33,14 @@ window.GM_DATA.problems.push(
           label: 'Total Stock = 192.5M ÷ 7 Yr Lifespan',
           valueText: '27.5M Units/Yr',
           children: [
-            { label: '× ₹25,000 Avg Price', valueText: '₹68,750 Crore/Yr (Book typo: ₹68,750M)', highlight: true }
+            { label: '× ₹25,000 Avg Price', valueText: '₹68,750 Crore/Yr (Unit check: ₹68,750M)', highlight: true }
           ]
         }
       ]
     },
     finalAnswer: '~1.5 – 2.75 Crore Units/year (~₹35,000 – ₹68,750 Crore/year)',
     acceptableRange: { min: 25000, max: 80000, unit: '₹ Crore/year', display: '₹25,000 Cr – ₹80,000 Cr/yr' },
-    sanityCheck: 'Real Indian refrigerator industry sells ~1.5–1.8 Crore units/year (~₹35,000–45,000 Cr) because real India household fridge penetration is ~38–40% (13–14 Cr units ÷ 9–10 yr lifespan ≈ 1.4 Cr replacement + ~30L first-time buyers)! In the book, 27.5M × ₹25,000 = ₹68,750 Crore (687.5B), NOT ₹68,750 Million (68.7B). Always multiply Millions × Thousands carefully!',
+    sanityCheck: 'Real Indian refrigerator industry sells ~1.5–1.8 Crore units/year (~₹35,000–45,000 Cr) because real India household fridge penetration is ~38–40% (13–14 Cr units ÷ 9–10 yr lifespan ≈ 1.4 Cr replacement + ~30L first-time buyers)! In the unadjusted baseline, 27.5M × ₹25,000 = ₹68,750 Crore (687.5B), NOT ₹68,750 Million (68.7B). Always multiply Millions × Thousands carefully!',
     interviewerTrap: 'Multiplying 27.5 Million × ₹25,000 and accidentally writing "68,750 Million" instead of "687,500 Million (₹68,750 Crore)"! Shortcut: 27.5M × 25K = 27.5 × 25 × 10⁹ = 687.5 Billion!',
     variations: [
       { question: 'What if we add first-time refrigerator buyers from unpenetrated Tier-2/3 homes?', hint: '157.5M unpenetrated households × ~3% annual new adoption ≈ +4.7M extra units/yr!' },
@@ -84,14 +81,11 @@ window.GM_DATA.problems.push(
     id: 'vol2-wheat-india',
     title: 'Consumption of Wheat in India Per Month',
     prompt: 'Estimate the total consumption of wheat (in kg / tonnes) in India per month.',
-    source: '180DC SRCC Vol 2',
-    pdfRef: 'Guesstimate-Book-Volume-2-3.pdf — p. 16 (Book p. 13)',
-    company: 'BCG',
     difficulty: 3,
     archetype: 'Usage & Behavioral',
     approachType: 'Top-Down (Demand-Side)',
     templateId: 'tpl-fmcg',
-    tags: ['Agriculture', 'Food Staples', 'Regional Split', 'BCG'],
+    tags: ['Agriculture', 'Food Staples', 'Regional Split'],
     clarifyingQuestions: [
       { q: 'Are we estimating direct human household/restaurant food consumption (atta/roti/bread), or livestock feed too?', a: 'Human consumption primarily (roti/chapati as primary proxy).', why: 'Roti accounts for ~85% of human wheat consumption in India.' },
       { q: 'Do we factor in regional dietary differences (North vs South/East)?', a: 'Yes! Critical in India since South/East eat rice-heavy diets while North/West eat wheat-heavy diets.', why: 'Shows genuine cultural/regional awareness.' }
@@ -155,19 +149,16 @@ window.GM_DATA.problems.push(
     id: 'vol2-weight-loss-drugs',
     title: 'Number of Weight Loss Drugs Sold by a Pharma Co. in India',
     prompt: 'Estimate the annual number of patients/units of a prescription weight-loss drug (like GLP-1 / Ozempic / Wegovy) sold by a pharma company with no direct competitors in India.',
-    source: '180DC SRCC Vol 2',
-    pdfRef: 'Guesstimate-Book-Volume-2-3.pdf — p. 18 (Book p. 15)',
-    company: 'Kearney',
     difficulty: 4,
     archetype: 'Market Sizing',
     approachType: 'Top-Down (Demand-Side)',
     templateId: 'tpl-fmcg',
-    tags: ['Healthcare / Pharma', 'Patient Funnel', 'Kearney', 'Prevalence'],
+    tags: ['Healthcare / Pharma', 'Patient Funnel', 'Prevalence'],
     clarifyingQuestions: [
       { q: 'Is this a prescription-only drug for clinically diagnosed obesity (not OTC cosmetic slimming teas)?', a: 'Yes, doctor-prescribed only for medically diagnosed obesity.', why: 'Requires medical diagnosis + doctor access filter!' },
-      { q: 'Are we estimating the number of patients/courses or total individual doses/pens?', a: 'Unique annual patient treatments (book stops at ~16.1M patient base; mention monthly doses × 12 if asked for packs!).', why: 'Always distinguish patients vs monthly refills!' }
+      { q: 'Are we estimating the number of patients/courses or total individual doses/pens?', a: 'Unique annual patient treatments (The baseline stops at ~16.1M patient base; mention monthly doses × 12 if asked for packs!).', why: 'Always distinguish patients vs monthly refills!' }
     ],
-    strategyOverview: 'Classic Healthcare Epidemiology Funnel (Kearney / Trinity staple!): Total Pop (1.4B) → Urban (40% = 560M) vs Rural (60% = 840M) → Income Segmentation → Obesity Prevalence % (higher in urban affluent: 20%/15%/5% vs rural 10%/5%/1%) → Medical Diagnosis & Eligibility % (40–60%) → Affordability % (90%/70%/50% urban; near 0% rural due to healthcare infra + high drug price!) → Expected Adoption % (80%/60%/40%).',
+    strategyOverview: 'Classic Healthcare Epidemiology Funnel: Total Pop (1.4B) → Urban (40% = 560M) vs Rural (60% = 840M) → Income Segmentation → Obesity Prevalence % (higher in urban affluent: 20%/15%/5% vs rural 10%/5%/1%) → Medical Diagnosis & Eligibility % (40–60%) → Affordability % (90%/70%/50% urban; near 0% rural due to healthcare infra + high drug price!) → Expected Adoption % (80%/60%/40%).',
     formula: 'Patients = ∑ [Geo/Income Pop × Obesity Prevalence % × Medical Eligibility % × Affordability % × Adoption %]',
     assumptions: [
       { label: 'Urban (40% = 560M): Upper 56M, Mid 336M, Lower 168M | Rural (60% = 840M) effectively 0 final adoption due to infra/cost', rationale: 'Expensive GLP-1 injectables require cold chain, specialists, and ₹10,000–20,000/month out-of-pocket.' },
@@ -181,10 +172,10 @@ window.GM_DATA.problems.push(
         { label: 'Urban Upper (56M → 20% obese → 60% elig → 90% afford → 80% adopt)', valueText: '4.83M patients' },
         { label: 'Urban Middle (336M → 15% obese → 50% elig → 70% afford → 60% adopt)', valueText: '10.58M patients', highlight: true },
         { label: 'Urban Lower (168M → 5% → 40% → 50% → 40%)', valueText: '0.67M patients' },
-        { label: 'Total Target Patients (Book)', valueText: '16.09 Million Patients', highlight: true }
+        { label: 'Total Target Patients (Baseline)', valueText: '16.09 Million Patients', highlight: true }
       ]
     },
-    finalAnswer: '~2M – 16M Patients (Book: 16.09M; note high ₹10K/mo cost limits middle-class affordability to ~10–15% = ~2–3M patients)',
+    finalAnswer: '~2M – 16M Patients (Baseline: 16.09M; note high ₹10K/mo cost limits middle-class affordability to ~10–15% = ~2–3M patients)',
     acceptableRange: { min: 1.5, max: 20, unit: 'Million patients', display: '1.5M – 20M patients' },
     sanityCheck: 'Always sanity check Affordability in pharma cases! If a patented weight-loss drug costs ₹12,000/month (₹1.44 Lakh/year), 70% of India’s Middle Income (336M) CANNOT afford ₹1.44L/year out-of-pocket—only top ~5–10% of urban middle class can! Mentioning that brings 16M down to a hyper-realistic ~2.5–3.5M patients (still a massive ₹35,000+ Cr market)!',
     interviewerTrap: 'Using high affordability (70%) and adoption (60%) for an expensive unsubsidized drug in India where insurance doesn’t cover weight-loss drugs!',
@@ -225,9 +216,6 @@ window.GM_DATA.problems.push(
     id: 'vol2-candles-assam-diwali',
     title: 'Number of Candles Sold in Assam During Diwali',
     prompt: 'Estimate the number of candles sold in Assam during the Diwali festival.',
-    source: '180DC SRCC Vol 2',
-    pdfRef: 'Guesstimate-Book-Volume-2-3.pdf — p. 20 (Book p. 17)',
-    company: 'Accenture',
     difficulty: 2,
     archetype: 'Market Sizing',
     approachType: 'Top-Down (Demand-Side)',
@@ -260,7 +248,7 @@ window.GM_DATA.problems.push(
         { label: 'Total Candles Sold', valueText: '14.26 Crore (142.6M) Candles', highlight: true }
       ]
     },
-    finalAnswer: '~5 Crore – 14.3 Crore Candles (Book: 14.26 Cr)',
+    finalAnswer: '~5 Crore – 14.3 Crore Candles (Baseline: 14.26 Cr)',
     acceptableRange: { min: 30, max: 160, unit: 'Million candles', display: '3 Crore – 16 Crore candles' },
     sanityCheck: '5.25M households lighting ~10–25 candles total across the 3-day Diwali festival = ~5 to 13 Crore candles! (Also note rural poor households might buy 1 small ₹10 pack instead of 6 packs, so ~6–10 Cr is super balanced.)',
     interviewerTrap: 'Applying 100% of Assam’s 35M population without checking Assam’s demographic religious split (~60% Hindu), OR calculating per individual instead of per HOUSEHOLD!',
@@ -300,9 +288,6 @@ window.GM_DATA.problems.push(
     id: 'vol2-pizzas-delhi',
     title: 'Number of Pizzas Sold in Delhi Per Month',
     prompt: 'Estimate the number of pizzas sold in Delhi per month.',
-    source: '180DC SRCC Vol 2',
-    pdfRef: 'Guesstimate-Book-Volume-2-3.pdf — p. 21 (Book p. 18)',
-    company: 'Accenture',
     difficulty: 2,
     archetype: 'Market Sizing',
     approachType: 'Top-Down (Demand-Side)',
@@ -340,12 +325,12 @@ window.GM_DATA.problems.push(
             { label: '18–60 (3.6M × 100% × 1.5/mo)', valueText: '5.4M' }
           ]
         },
-        { label: 'Total Monthly Pizzas (Book)', valueText: '1.62 Crore (16.2M) Pizzas/Mo', highlight: true }
+        { label: 'Total Monthly Pizzas (Baseline)', valueText: '1.62 Crore (16.2M) Pizzas/Mo', highlight: true }
       ]
     },
     finalAnswer: '~60 Lakh – 1.62 Crore Pizzas/Month (Supply-adjusted ~50–80 Lakh whole pizzas)',
     acceptableRange: { min: 4, max: 18, unit: 'Million pizzas/month', display: '4M – 18M pizzas/month' },
-    sanityCheck: 'Let’s do a quick Supply Cross-Check! Jubilant FoodWorks (Domino’s India, ~65–70% organized share) has ~2,000 stores across India, with ~200–250 stores in Delhi NCR selling ~400–500 pizzas/store/day = ~25–30 Lakh Domino’s pizzas/month → + Pizza Hut/local cafes = ~50–65 Lakh whole pizzas/month! Notice why Book got 16.2M: it assumed 1 whole pizza per individual rather than ~2 people sharing 1 medium pizza! Mentioning sharing brings you within 10% of real corporate earnings data!',
+    sanityCheck: 'Let’s do a quick Supply Cross-Check! Jubilant FoodWorks (Domino’s India, ~65–70% organized share) has ~2,000 stores across India, with ~200–250 stores in Delhi NCR selling ~400–500 pizzas/store/day = ~25–30 Lakh Domino’s pizzas/month → + Pizza Hut/local cafes = ~50–65 Lakh whole pizzas/month! Notice why The baseline got 16.2M: it assumed 1 whole pizza per individual rather than ~2 people sharing 1 medium pizza! Mentioning sharing brings you within 10% of real corporate earnings data!',
     interviewerTrap: 'Counting 1.0–1.5 whole pizzas per PERSON per month when families/friends typically share a medium/large pizza (dividing by ~2 sharing factor)!',
     variations: [
       { question: 'How many Domino’s outlets are there in Delhi NCR?', hint: 'Total monthly Domino’s pizzas (~25–30L) ÷ (400 pizzas/day × 30 = 12,000/mo) ≈ ~210–250 stores!' }
@@ -384,9 +369,6 @@ window.GM_DATA.problems.push(
     id: 'vol2-used-tyres-delhi',
     title: 'Number of Used Tyres Currently in Delhi',
     prompt: 'Estimate the number of used 4-wheeler tyres currently on vehicles in Delhi.',
-    source: '180DC SRCC Vol 2',
-    pdfRef: 'Guesstimates-Book-Volume-2-3.pdf — p. 23 (Book p. 21)',
-    company: 'Accenture',
     difficulty: 3,
     archetype: 'Market Sizing',
     approachType: 'Replacement & Stock-Flow',
@@ -396,7 +378,7 @@ window.GM_DATA.problems.push(
       { q: 'Does "used tyres" mean tyres currently fitted on active cars (4 running + 1 spare = 5), or discarded scrap tyres in landfills?', a: 'Tyres currently in use on 4-wheelers in Delhi (5 per car).', why: 'Always verify whether "used" means "in-use" vs "scrapped/second-hand"!' },
       { q: 'Personal passenger cars only, or buses/trucks/2-wheelers too?', a: 'Personal 4-wheelers (note commercial vehicles add ~10–15%).', why: 'Ties cleanly to household car ownership.' }
     ],
-    strategyOverview: 'Stock Model (NO lifespan division since it asks for tyres currently in use!). Delhi NCR Pop (3.5 Crore) → Urban (30% in Book — or 90% if NCT! Note Book used 30% Urban / 70% Rural NCR with 4 vs 5 HH size, let’s track clearly!) → Convert to Households → 4-Wheeler Usage % → Income Group Cars/HH → Total Cars (~30.5 Lakh) × 5 tyres/car (4 wheels + 1 spare) = ~1.52 Crore tyres!',
+    strategyOverview: 'Stock Model (NO lifespan division since it asks for tyres currently in use!). Delhi NCR Pop (3.5 Crore) → Urban (30% in baseline — or 90% if NCT! Note Baseline used 30% Urban / 70% Rural NCR with 4 vs 5 HH size, let’s track clearly!) → Convert to Households → 4-Wheeler Usage % → Income Group Cars/HH → Total Cars (~30.5 Lakh) × 5 tyres/car (4 wheels + 1 spare) = ~1.52 Crore tyres!',
     formula: 'Used Tyres = ∑ (Households by Geo & Income × Car Ownership × Cars/HH) × 5 Tyres',
     assumptions: [
       { label: 'Delhi NCR Pop = 3.5 Cr; Urban family size = 4, Rural = 5', rationale: 'Households own cars, not individuals.' },
@@ -453,9 +435,6 @@ window.GM_DATA.problems.push(
     id: 'vol2-instagram-new-users',
     title: 'Number of Users Who Joined Instagram Globally Last Year',
     prompt: 'Estimate the number of new users who joined Instagram globally in the last year.',
-    source: '180DC SRCC Vol 2',
-    pdfRef: 'Guesstimate-Book-Volume-2-3.pdf — p. 24 (Book p. 22)',
-    company: 'Accenture',
     difficulty: 4,
     archetype: 'Market Sizing',
     approachType: 'Top-Down (Demand-Side)',
@@ -469,7 +448,7 @@ window.GM_DATA.problems.push(
     formula: 'New Users = Global Smartphone Users × ∑ (Age% × IG Usage% × New Joiner Rate%)',
     assumptions: [
       { label: 'Global Smartphone Pool = 3.95 Billion (via Developed 20% / Developing 60% / Under-dev 20% urban-rural phone splits)', rationale: 'Matches global ~4B–4.5B smartphone users (~5B minus China exclusion adjusts neatly to ~3.95B!).' },
-      { label: 'Instagram Penetration among Smartphone Users: 18–25 (70% = 415M), 25–40 (45% = 533M), 40–60 (20% = 158M), 60+ (5% = 20M)', rationale: 'Note: Book excluded 0–18, though 13–17 teens actually join heavily (~100M+ new teen accounts/yr)!' },
+      { label: 'Instagram Penetration among Smartphone Users: 18–25 (70% = 415M), 25–40 (45% = 533M), 40–60 (20% = 158M), 60+ (5% = 20M)', rationale: 'Note: Baseline excluded 0–18, though 13–17 teens actually join heavily (~100M+ new teen accounts/yr)!' },
       { label: 'Annual New Joiner Rate: 18–25 (33% = 136.9M), 25–40 (8% = 42.7M), 40–60 (8% = 12.6M), 60+ (8% = 1.6M)', rationale: 'Total = 193.8M (~194 Million new users last year!).' }
     ],
     tree: {
@@ -483,7 +462,7 @@ window.GM_DATA.problems.push(
         { label: 'Total New Users Joined Last Year', valueText: '~193.8 Million Users', highlight: true }
       ]
     },
-    finalAnswer: '~150 – 200 Million New Users/Year (Book: 193.85M)',
+    finalAnswer: '~150 – 200 Million New Users/Year (Baseline: 193.85M)',
     acceptableRange: { min: 80, max: 280, unit: 'Million users/yr', display: '80M – 280M new users/year' },
     sanityCheck: 'Instagram sits around ~2 Billion MAUs growing ~7–10% annually in emerging markets (India, LatAm, SE Asia) = ~140–200 Million net/gross new users per year! Plus 13–17 year-old cohorts turn 13 every year (~130M kids globally turn 13/yr!). Dead-on!',
     interviewerTrap: 'Forgetting to exclude China (1.4B people blocked from Meta!) OR forgetting that IG’s biggest annual inflow of "new" users is teenagers turning 13–18 rather than 40-year-olds!',
@@ -522,9 +501,6 @@ window.GM_DATA.problems.push(
     id: 'vol2-skincare-india',
     title: 'Market Size of the Skin Care Industry in India',
     prompt: 'Estimate the annual market size (revenue) of the organized skin care industry in India.',
-    source: '180DC SRCC Vol 2',
-    pdfRef: 'Guesstimate-Book-Volume-2-3.pdf — p. 26 (Book p. 23)',
-    company: 'Kepler Cannon',
     difficulty: 3,
     archetype: 'Market Sizing',
     approachType: 'Top-Down (Demand-Side)',
@@ -538,7 +514,7 @@ window.GM_DATA.problems.push(
     formula: 'Market Size = Urban Non-BPL Pop × ∑ (Gender% × Adoption%) × (12 ÷ Replacement Months) × Avg Price',
     assumptions: [
       { label: 'Urban Pop = 35% (490M); Exclude BPL (~15% = 74M) → 416M Urban Middle/Upper', rationale: 'Skincare is an individual personal-care purchase.' },
-      { label: 'Adoption: 70% of Females (146M) + 30% of Males (62M) = 208M Skincare Users', rationale: 'Notice in Vol 2 PDF, 15% of 490M = 73.5M BPL + 40% Lower-Mid + 30% Upper-Mid + 15% Upper (PDF wrote 20/30/30/20 summing to 100%, though 7.4+19.6+14.7+7.4 = 49.1 Cr!).' },
+      { label: 'Adoption: 70% of Females (146M) + 30% of Males (62M) = 208M Skincare Users', rationale: 'Note segment rounding: 15% of 490M = 73.5M BPL + 40% Lower-Mid + 30% Upper-Mid + 15% Upper (draft wrote 20/30/30/20 summing to 100%, though 7.4+19.6+14.7+7.4 = 49.1 Cr!).' },
       { label: 'Purchase Frequency: Every 3 months (4x/year) @ ₹350 avg product price (or multiple SKUs for affluent)', rationale: '20.8 Cr × 4 × ₹350 = ₹29,120 Crore (~$3.5B).' }
     ],
     tree: {
@@ -596,14 +572,11 @@ window.GM_DATA.problems.push(
     id: 'vol2-cinema-revenue',
     title: 'Weekly Revenue of an Average Urban Indian Cinema',
     prompt: 'Estimate the weekly revenue of an average urban multiplex cinema in India.',
-    source: '180DC SRCC Vol 2',
-    pdfRef: 'Guesstimate-Book-Volume-2-3.pdf — p. 28 (Book p. 25)',
-    company: 'FTI Consulting',
     difficulty: 3,
     archetype: 'Revenue & Cost',
     approachType: 'Bottom-Up (Supply-Side)',
     templateId: 'tpl-outlet',
-    tags: ['Entertainment', 'Multiplex', 'Ticket + F&B', 'FTI Consulting'],
+    tags: ['Entertainment', 'Multiplex', 'Ticket + F&B'],
     clarifyingQuestions: [
       { q: 'Are we looking at a typical 4-screen multiplex (like PVR/INOX) in a Tier-1 city?', a: 'Yes, a 4-screen urban multiplex (~200 seats per screen).', why: 'Sets capacity cleanly.' },
       { q: 'Include Food & Beverages (popcorn/cola) and advertising, or tickets + F&B?', a: 'Tickets + Food & Beverages (note F&B is huge profit driver for PVR!).', why: 'F&B typically adds ~25–35% on top of ticket sales!' }
@@ -612,8 +585,8 @@ window.GM_DATA.problems.push(
     formula: 'Weekly Rev = ∑ [Tickets Available × Occupancy % × Ticket Price] + [Total Viewers × F&B Attach % × F&B Spend]',
     assumptions: [
       { label: '4 Screens × 200 Seats = 800 Seats; 4 Shows/Day (2 Non-Peak + 2 Peak) = 1,600 tickets/slot/day', rationale: 'Morning & noon are off-peak; evening & night are peak.' },
-      { label: 'Weekdays (5d): Non-Peak (5×1,600 = 8K @ 30% × ₹200 = ₹4.8L? Note Book used 1-day ×4=1,92,000? Let’s check!)', rationale: 'WHOA! Catch the Vol 2 PDF math glitch! Look at p. 28: 3200 tickets/day = 1600 non-peak + 1600 peak. Book computed ONLY ONE weekday (1600 × 30% × ₹200 = ₹96k? No, 1600 × 2? Wait: 3200/2 = 1600 × 30% = 480 × 200 = 96,000; why did Book print 1,92,000? Because 3200 was ALL 4 shows, so 1600×2=3200? And it forgot to multiply Weekdays ×5 and Weekends ×2, or counted only 2 days?! Let’s compute the TRUE 7-day weekly math clearly!).' },
-      { label: 'TRUE 7-Day Ticket Math: 1,600 seats/slot × [5 WD × (30%×₹200 + 60%×₹300) + 2 WE × (40%×₹250 + 80%×₹350)] = ₹19.2L + ₹12.16L = ₹31.36L/week (if 200 seats × 4 screens = 800 seats)! Wait—Book used 3,200 tickets PER SHOW-PAIR (which equals 4 screens × 200 seats × 4 shows = 3,200/day, × 7 days = 22,400 weekly tickets)!', rationale: 'At ~50% avg weekly occupancy (~11,000 viewers/week) × ₹280 avg ticket = ~₹31 Lakh/week tickets + ~₹10 Lakh F&B (30% × ₹300) = ~₹41 Lakh/week!' }
+      { label: 'Weekdays (5d): Non-Peak (5×1,600 = 8K @ 30% × ₹200 = ₹4.8L? Note Baseline used 1-day ×4=1,92,000? Let’s check!)', rationale: 'Check the weekly multiplier carefully! Trace the math carefully: 3200 tickets/day = 1600 non-peak + 1600 peak. The baseline computed ONLY ONE weekday (1600 × 30% × ₹200 = ₹96k? No, 1600 × 2? Wait: 3200/2 = 1600 × 30% = 480 × 200 = 96,000; why did Baseline print 1,92,000? Because 3200 was ALL 4 shows, so 1600×2=3200? And it forgot to multiply Weekdays ×5 and Weekends ×2, or counted only 2 days?! Let’s compute the TRUE 7-day weekly math clearly!).' },
+      { label: 'TRUE 7-Day Ticket Math: 1,600 seats/slot × [5 WD × (30%×₹200 + 60%×₹300) + 2 WE × (40%×₹250 + 80%×₹350)] = ₹19.2L + ₹12.16L = ₹31.36L/week (if 200 seats × 4 screens = 800 seats)! Baseline uses 3,200 tickets PER SHOW-PAIR (which equals 4 screens × 200 seats × 4 shows = 3,200/day, × 7 days = 22,400 weekly tickets)!', rationale: 'At ~50% avg weekly occupancy (~11,000 viewers/week) × ₹280 avg ticket = ~₹31 Lakh/week tickets + ~₹10 Lakh F&B (30% × ₹300) = ~₹41 Lakh/week!' }
     ],
     tree: {
       label: '4-Screen Multiplex (800 Seats × 4 Shows/Day = 3,200/day)',
@@ -623,14 +596,14 @@ window.GM_DATA.problems.push(
         { label: 'Weekends (2d × 3,200 = 6,400 slots × 60% avg occ = 3,840 pax × ₹317)', valueText: '~₹12.2 Lakh' },
         {
           label: 'Total ~11,040 Weekly Viewers → Tickets (₹31.4L) + F&B (~₹10L)',
-          valueText: '~₹41 Lakh/Wk (Book: ₹64.64L)',
+          valueText: '~₹41 Lakh/Wk (Baseline: ₹64.64L)',
           highlight: true
         }
       ]
     },
     finalAnswer: '~₹35 Lakh – ₹65 Lakh/Week (~₹1.5 – ₹2.5 Crore/Month)',
     acceptableRange: { min: 25, max: 80, unit: '₹ Lakh/week', display: '₹25 Lakh – ₹80 Lakh/week' },
-    sanityCheck: 'PVR INOX reports ~₹10–12 Crore annual revenue per 4–5 screen property = ~₹20–25 Lakh/week on average nationwide (and ~₹40–60 Lakh/week for busy Tier-1 urban multiplexes)! Watch out for Vol 2 PDF’s weird doubling (1,92,000 + 5,76,000 + 3,20,000 + 8,96,000 = 19.84L? Actually 19.84L × ~3? No, Vol 2 printed ₹62.72L!). Always verify `Total Weekly Seats = Screens × Seats × Shows × 7` so you never double-count!',
+    sanityCheck: 'PVR INOX reports ~₹10–12 Crore annual revenue per 4–5 screen property = ~₹20–25 Lakh/week on average nationwide (and ~₹40–60 Lakh/week for busy Tier-1 urban multiplexes)! Watch out for accidental multi-day doubling (1,92,000 + 5,76,000 + 3,20,000 + 8,96,000 = 19.84L? Actually 19.84L × ~3? No, Baseline printed ₹62.72L!). Always verify `Total Weekly Seats = Screens × Seats × Shows × 7` so you never double-count!',
     interviewerTrap: 'Forgetting F&B (which contributes ~25–35% of multiplex revenue and ~60% of profit!) OR miscalculating `5 Weekdays + 2 Weekends` occupancy multipliers.',
     variations: [
       { question: 'How much profit does this cinema make weekly after distributor share?', hint: 'Movie distributors take ~45–50% of Net Ticket Revenue, while cinema keeps ~75% margin on F&B!' }
@@ -671,14 +644,11 @@ window.GM_DATA.problems.push(
     id: 'vol2-bowling-alley-food',
     title: 'Weekly Food Revenue of a Bowling Alley in Delhi',
     prompt: 'Estimate the weekly food & beverage revenue of a bowling alley in Delhi.',
-    source: '180DC SRCC Vol 2',
-    pdfRef: 'Guesstimates-Book-Volume-2-3.pdf — p. 30 (Book p. 27)',
-    company: 'Indus Insights',
     difficulty: 3,
     archetype: 'Revenue & Cost',
     approachType: 'Bottom-Up (Supply-Side)',
     templateId: 'tpl-outlet',
-    tags: ['Entertainment', 'F&B Attach', 'Capacity', 'Indus Insights'],
+    tags: ['Entertainment', 'F&B Attach', 'Capacity'],
     clarifyingQuestions: [
       { q: 'Food & beverage revenue ONLY (excluding bowling game lane fees)?', a: 'Yes, food/beverage revenue only.', why: 'Focuses strictly on F&B attach rate of bowlers.' },
       { q: 'Small neighborhood alley (5 lanes) or large arcade/mall bowling center (10–12 lanes)?', a: 'Small/mid 5-lane alley open ~8–10 hours/day.', why: 'Sets lane capacity cleanly.' }
@@ -686,8 +656,8 @@ window.GM_DATA.problems.push(
     strategyOverview: 'Two-step Outlet Capacity + F&B Conversion! Step 1 (Footfall): 5 lanes × 2–4 bowlers/lane/hr × 8–10 hrs/day → apply Weekday (60%) vs Weekend (80%) occupancy across 5 WD + 2 WE = ~368–600 bowlers/week! Step 2 (Food Conversion): Split customers into Upper (50%, 75% order food) and Middle (50%, 50% order food) → ~62.5% overall attach rate × ₹250–350 avg spend/person = Weekly Food Revenue!',
     formula: 'Weekly Food Rev = [Lanes × Pax/Lane/Hr × Hrs × (5×WD% + 2×WE%)] × Food Attach% × Spend/Person',
     assumptions: [
-      { label: '5 Lanes × 2 bowlers/lane/hr = 10/hr × 8 effective hrs = 80/day (note Book wrote 10 hrs in text, 8 hrs in box; and typically groups of 3–4 bowl together!)', rationale: 'Groups of 3–4 friends actually bowl 1 game/hour (~15–20 players/hr at full capacity!).' },
-      { label: 'Weekday (5d @ 60% = 240 pax) + Weekend (2d @ 80% = 128 pax) = 368 bowlers/wk (Book)', rationale: 'Note: In Vol 2 PDF Income box, it split 368 into 50% Mid (184) and mistakenly printed 75% Upper (276) summing to 460 instead of 184! Always verify 50%+50%=100%!' },
+      { label: '5 Lanes × 2 bowlers/lane/hr = 10/hr × 8 effective hrs = 80/day (note The baseline wrote 10 hrs in text, 8 hrs in box; and typically groups of 3–4 bowl together!)', rationale: 'Groups of 3–4 friends actually bowl 1 game/hour (~15–20 players/hr at full capacity!).' },
+      { label: 'Weekday (5d @ 60% = 240 pax) + Weekend (2d @ 80% = 128 pax) = 368 bowlers/wk (Baseline)', rationale: 'Pitfall: avoid splitting 368 into 50% Mid (184) and mistakenly printed 75% Upper (276) summing to 460 instead of 184! Always verify 50%+50%=100%!' },
       { label: 'Attach Rate: ~60% buy food @ ₹250–350/person → ~₹75,000/week (or ~₹1–1.2L/week with 3-person groups)', rationale: 'Captive leisure audience buys fries, pizza, mocktails.' }
     ],
     tree: {
@@ -702,7 +672,7 @@ window.GM_DATA.problems.push(
     finalAnswer: '~₹60,000 – ₹1,20,000 / Week (~₹2.5 – ₹5 Lakh / Month just from food)',
     acceptableRange: { min: 40000, max: 180000, unit: '₹/week', display: '₹40,000 – ₹1,80,000/week' },
     sanityCheck: 'At ₹350/game, 368 bowlers generate ~₹1.3L/week from bowling + ~₹75K/week from F&B = ~₹2L/week (~₹8–9L/month total). For a small 5-lane alley, ~35% of revenue coming from high-margin snacks/drinks is right on industry benchmarks!',
-    interviewerTrap: 'Catching the Vol 2 PDF bug where 50% Middle + 75% Upper totaled 125% (turning 368 people into 460 people)! Always keep MECE percentages summing to 100%!',
+    interviewerTrap: 'Catching the classic MECE bug where 50% Middle + 75% Upper totaled 125% (turning 368 people into 460 people)! Always keep MECE percentages summing to 100%!',
     variations: [
       { question: 'What is the total monthly revenue (Games + Arcade + Food) of a 10-lane Smaaash/Timezone?', hint: 'Scale 5→10 lanes + 4 players/lane/hr + arcade games ≈ ~₹30–40 Lakh/month.' }
     ],
@@ -742,9 +712,6 @@ window.GM_DATA.problems.push(
     id: 'vol2-burgers-delhi',
     title: 'Number of Burgers Consumed Per Day in Delhi',
     prompt: 'Estimate the number of burgers consumed per day in Delhi.',
-    source: '180DC SRCC Vol 2',
-    pdfRef: 'Guesstimate-Book-Volume-2-3.pdf — p. 39 (Book p. 36)',
-    company: 'Nation with NaMo',
     difficulty: 2,
     archetype: 'Market Sizing',
     approachType: 'Top-Down (Demand-Side)',
@@ -810,11 +777,8 @@ window.GM_DATA.problems.push(
   },
   {
     id: 'vol2-srcc-netflix-hours',
-    title: 'Daily Netflix Viewing Hours of SRCC Students',
-    prompt: 'Estimate the total daily Netflix viewing hours of all students at SRCC (or a 4,000-student college).',
-    source: '180DC SRCC Vol 2',
-    pdfRef: 'Guesstimate-Book-Volume-2-3.pdf — p. 40 (Book p. 37)',
-    company: 'Nation with NaMo',
+    title: 'Daily Netflix Viewing Hours at a University College',
+    prompt: 'Estimate the total daily Netflix viewing hours across all students at a 4,000-student university college.',
     difficulty: 1,
     archetype: 'Usage & Behavioral',
     approachType: 'Top-Down (Demand-Side)',
@@ -827,12 +791,12 @@ window.GM_DATA.problems.push(
     strategyOverview: 'Super clean Beginner Funnel! Start with Total Students (4,000) → Segment by Income (High 20% = 800, Middle 50% = 2,000, Low 30% = 1,200) → Netflix Access/Penetration (100%, 50%, 10% → 1,920 students with access) → Daily Active User % (25% watch on a given day = 480 active viewers) × Avg Daily Watch Time (1–1.5 hrs) = 480–720 hours/day!',
     formula: 'Daily Hours = Total Students × ∑ (Income% × Access%) × Daily Active Rate % × Avg Watch Time (hrs)',
     assumptions: [
-      { label: 'Total SRCC Students = 4,000 (UG + PG)', rationale: 'Standard large DU college.' },
+      { label: 'Total College Students = 4,000 (UG + PG)', rationale: 'Standard large DU college.' },
       { label: 'Income Penetration: High (20% × 100% = 800), Mid (50% × 50% = 1,000), Low (30% × 10% = 120) = 1,920 users (~48%)', rationale: 'Shared ₹649 4-screen plans make access widespread among middle/upper students.' },
       { label: 'Daily Active Users (DAU/MAU) = 25% (~480 students watching today) × 1 hour/day = 480 hours/day', rationale: 'Students juggle YouTube, Instagram, Prime Video, and classes—not all 1,920 watch Netflix daily!' }
     ],
     tree: {
-      label: 'Total SRCC Students (4,000)',
+      label: 'Total College Students (4,000)',
       valueText: '4,000 students',
       children: [
         { label: 'High (800 × 100%) + Mid (2,000 × 50%) + Low (1,200 × 10%)', valueText: '1,920 Netflix users' },
@@ -851,7 +815,7 @@ window.GM_DATA.problems.push(
     sanityCheck: '480–800 hours across 4,000 students = ~7–12 minutes per student per day averaged across the entire college (or ~1–1.5 hrs for the ~15% actively bingeing a series today). Super realistic!',
     interviewerTrap: 'Assuming 100% of Netflix subscribers watch Netflix EVERY single day (confusing MAU with DAU)! Differentiating Account Holders (48%) from Daily Active Watchers (25% of holders = 12% of campus) is a classic PM skill.',
     variations: [
-      { question: 'How much internet bandwidth (GB) does SRCC consume daily from Netflix?', hint: '480–800 hours × ~1–1.5 GB/hour (HD/Mobile mix) ≈ ~600–1,000 GB/day!' }
+      { question: 'How much internet bandwidth (GB) does the college consume daily from Netflix?', hint: '480–800 hours × ~1–1.5 GB/hour (HD/Mobile mix) ≈ ~600–1,000 GB/day!' }
     ],
     guidedPractice: {
       correctApproach: 'Top-Down (Demand-Side)',
@@ -886,9 +850,6 @@ window.GM_DATA.problems.push(
     id: 'vol2-domestic-flights-delhi',
     title: 'Domestic Flights Taking Off from Delhi Airport in a Day',
     prompt: 'Estimate the number of domestic passenger flights taking off from Delhi Airport in a day.',
-    source: '180DC SRCC Vol 2',
-    pdfRef: 'Guesstimate-Book-Volume-2-3.pdf — p. 41 (Book p. 38)',
-    company: 'Nation with NaMo',
     difficulty: 3,
     archetype: 'Supply & Capacity',
     approachType: 'Bottom-Up (Supply-Side)',
@@ -897,7 +858,7 @@ window.GM_DATA.problems.push(
     clarifyingQuestions: [
       { q: 'Domestic departures ONLY (excluding international departures and all landings)?', a: 'Yes, domestic takeoffs only.', why: 'Means you must multiply total runway movements by 50% (departures) AND ~75–80% (domestic share)!' }
     ],
-    strategyOverview: 'Refined Runway Bottleneck Model! Note how Vol 2 improves on Vol 1: Total runway capacity = 3–4 active runways (Book uses 3 terminals × 3 runways = 9 units at lower utilization, OR 4 runways at 100% peak / 50% mid / 25% night!). Peak (6 hrs: 6–9 AM, 6–9 PM @ 4-min gap = 15/hr × 100% = 90/runway), Mid-Peak (12 hrs @ 10-min gap = 6/hr × 50% = 36), Non-Peak (6 hrs @ 15-min gap = 4/hr × 25% = 6). Total Movements = 1,188 → 50% Departures (594) × 75% Domestic = 446 domestic departures/day!',
+    strategyOverview: 'Refined Runway Bottleneck Model! Refined multi-tier utilization approach: Total runway capacity = 3–4 active runways (Baseline uses 3 terminals × 3 runways = 9 units at lower utilization, OR 4 runways at 100% peak / 50% mid / 25% night!). Peak (6 hrs: 6–9 AM, 6–9 PM @ 4-min gap = 15/hr × 100% = 90/runway), Mid-Peak (12 hrs @ 10-min gap = 6/hr × 50% = 36), Non-Peak (6 hrs @ 15-min gap = 4/hr × 25% = 6). Total Movements = 1,188 → 50% Departures (594) × 75% Domestic = 446 domestic departures/day!',
     formula: 'Domestic Takeoffs = Operational Units × ∑ [Hours × Max Rate × Utilization %] × 50% Departures × 75% Domestic',
     assumptions: [
       { label: 'Peak (6 hrs @ 15/hr × 100%), Mid-Peak (12 hrs @ 6/hr × 50%), Non-Peak (6 hrs @ 4/hr × 25%)', rationale: 'Captures morning & evening business-travel wave vs midday & red-eye lulls.' },
@@ -958,23 +919,20 @@ window.GM_DATA.problems.push(
     id: 'vol2-college-canteens',
     title: 'Number of College Canteens Operating in Delhi',
     prompt: 'Estimate the number of college canteens operating in Delhi.',
-    source: '180DC SRCC Vol 2',
-    pdfRef: 'Guesstimate-Book-Volume-2-3.pdf — p. 44 (Book p. 41)',
-    company: 'Meesho',
     difficulty: 3,
     archetype: 'Volume & Geometry',
     approachType: 'Geometry & Proxy',
     templateId: 'tpl-geometry',
-    tags: ['Spatial / Land Area', 'Education', 'Delhi', 'Meesho'],
+    tags: ['Spatial / Land Area', 'Education', 'Delhi'],
     clarifyingQuestions: [
       { q: 'Are we estimating canteens in recognized higher-education colleges/universities (excluding K-12 schools)?', a: 'Higher education colleges & universities in Delhi.', why: 'Separates colleges from thousands of schools.' },
       { q: 'Does a big campus have multiple canteens (main canteen + Nescafe/Maggi kiosks)?', a: 'Count formal main college canteens (1–2 per campus depending on size).', why: 'Sets canteens-per-college multiplier.' }
     ],
-    strategyOverview: 'Two brilliant approaches! Approach A (Land Area Proxy — Meesho Book): Delhi Land Area = ~350,000 acres (~1,480 sq km) → ~5% dedicated to higher education campuses (Wait—check sanity! 5% of Delhi = 17,500 acres → Large 50%/70 acres = 125, Medium 30%/25 acres = 280, Small 20%/5 acres = 350 → 755 colleges → ~1,020 canteens; note book summed 250+420+350 = 1,020 though printed "670" in final green box!). Approach B (Student Demand Sanity Check!): Delhi Pop 2–3 Cr → Age 18–22 (~8% = ~20L) × ~30% college enrollment = ~6–7 Lakh college students ÷ ~1,500–2,000 avg students/college = ~300–400 colleges × ~1.5 canteens/college = ~450–600 canteens!',
+    strategyOverview: 'Two brilliant approaches! Approach A (Land Area Proxy): Delhi Land Area = ~350,000 acres (~1,480 sq km) → ~5% dedicated to higher education campuses (Wait—check sanity! 5% of Delhi = 17,500 acres → Large 50%/70 acres = 125, Medium 30%/25 acres = 280, Small 20%/5 acres = 350 → 755 colleges → ~1,020 canteens; note The baseline summed 250+420+350 = 1,020 though printed "670" in final green box!). Approach B (Student Demand Sanity Check!): Delhi Pop 2–3 Cr → Age 18–22 (~8% = ~20L) × ~30% college enrollment = ~6–7 Lakh college students ÷ ~1,500–2,000 avg students/college = ~300–400 colleges × ~1.5 canteens/college = ~450–600 canteens!',
     formula: 'Approach A: (City Acres × College Land % × Tier Share ÷ Avg Campus Acres) × Canteens/College',
     assumptions: [
       { label: 'Delhi Total Land Area = ~3,50,000 Acres (~1,484 sq km); ~2–5% for educational/college campuses', rationale: 'Notice ~1.5–2% is realistically higher-ed campuses (~5,000–7,000 acres), while ~5% includes K-12 schools too!' },
-      { label: 'Campus Tiers (Vol 2): Large (70 acres, 2 canteens), Medium (25 acres, 1.5), Small (5 acres, 1)', rationale: 'Large universities (DU North/South, JNU, IITD, Jamia, DTU) have 2+ canteens; standalone colleges have 1.' },
+      { label: 'Campus Tiers (Refined): Large (70 acres, 2 canteens), Medium (25 acres, 1.5), Small (5 acres, 1)', rationale: 'Large universities (DU North/South, JNU, IITD, Jamia, DTU) have 2+ canteens; standalone colleges have 1.' },
       { label: 'Student-Population Cross-Check: ~6 Lakh college students ÷ 1,500 avg enrollment ≈ ~400 colleges × 1.5 ≈ 600 canteens!', rationale: 'Both methods converge cleanly in the 500–700 canteen ballpark!' }
     ],
     tree: {
@@ -984,12 +942,12 @@ window.GM_DATA.problems.push(
         { label: 'Large (50% = 8,750 ac ÷ 70 ac = 125) × 2 canteens', valueText: '250 canteens' },
         { label: 'Medium (30% = 7,000 ac ÷ 25 ac = 280) × 1.5 canteens', valueText: '420 canteens', highlight: true },
         { label: 'Small (20% = 1,750 ac ÷ 5 ac = 350) × 1 canteen', valueText: '350 canteens' },
-        { label: 'Sum (250+420+350 = 1,020; Student Check ≈ 500–650)', valueText: '670 (Book) | ~600 (Pop Check)', highlight: true }
+        { label: 'Sum (250+420+350 = 1,020; Student Check ≈ 500–650)', valueText: '670 (Baseline) | ~600 (Pop Check)', highlight: true }
       ]
     },
-    finalAnswer: '~500 – 750 College Canteens in Delhi (Student check: ~600; Book: 670)',
+    finalAnswer: '~500 – 750 College Canteens in Delhi (Student check: ~600; Baseline: 670)',
     acceptableRange: { min: 300, max: 1100, unit: 'Canteens', display: '300 – 1,100 college canteens' },
-    sanityCheck: 'Delhi actually has ~200–250 major colleges/institutes (90+ DU colleges + GGSIPU + JNU + IIT + Jamia + DTU + NSUT + private coaching/institutes ~400+ campuses total). With ~1–2 canteens per campus, ~450–650 canteens is extraordinarily realistic! (Catching Vol 2’s 250+420+350 = 1,020 vs 670 addition slip—and noting 5% of Delhi’s land for colleges alone is high—shows top-1% rigor!)',
+    sanityCheck: 'Delhi actually has ~200–250 major colleges/institutes (90+ DU colleges + GGSIPU + JNU + IIT + Jamia + DTU + NSUT + private coaching/institutes ~400+ campuses total). With ~1–2 canteens per campus, ~450–650 canteens is extraordinarily realistic! (Catching the 250+420+350 = 1,020 vs 670 addition slip—and noting 5% of Delhi’s land for colleges alone is high—shows top-1% rigor!)',
     interviewerTrap: 'Using 5% of Delhi’s total land exclusively for colleges without verifying against student population (5% of 1,500 sq km = 75 sq km, which is huge—almost half of all built-up institutional land!). Always cross-check Area-Proxy answers with Population/Student Demand!',
     variations: [
       { question: 'Estimate the daily revenue of an average college canteen.', hint: '1,500 students × ~40% buying daily × ₹60 avg order = ₹36,000/day!' }
@@ -1029,9 +987,6 @@ window.GM_DATA.problems.push(
     id: 'vol2-footwear-india',
     title: 'Number of Footwear Pairs Bought in India in a Year',
     prompt: 'Estimate the total number of footwear pairs bought in India in a single year.',
-    source: '180DC SRCC Vol 2',
-    pdfRef: 'Guesstimate-Book-Volume-2-3.pdf — p. 45 (Book p. 42)',
-    company: 'Meesho',
     difficulty: 2,
     archetype: 'Market Sizing',
     approachType: 'Top-Down (Demand-Side)',
@@ -1111,9 +1066,6 @@ window.GM_DATA.problems.push(
     id: 'vol2-weddings-india',
     title: 'Number of Weddings Taking Place in India in a Year',
     prompt: 'Estimate the number of weddings taking place in India in one year.',
-    source: '180DC SRCC Vol 2',
-    pdfRef: 'Guesstimate-Book-Volume-2-3.pdf — p. 46 (Book p. 43)',
-    company: 'Meesho',
     difficulty: 2,
     archetype: 'Market Sizing',
     approachType: 'Top-Down (Demand-Side)',
@@ -1122,7 +1074,7 @@ window.GM_DATA.problems.push(
     clarifyingQuestions: [
       { q: 'Counting total weddings (events) or total individuals getting married?', a: 'Total weddings! (CRITICAL: 1 wedding = 2 people getting married, so divide by 2!).', why: 'Classic double-counting trap!' }
     ],
-    strategyOverview: 'Two brilliant demographic methods! Method A (Cohort Entry / Age-Distribution Trick — FASTEST!): India Pop = 1.4B, Life Expectancy = 70 yrs → ~2 Crore (20M) Indians turn marrying age (~24–26) every single year! At ~95% lifetime marriage rate, ~1.9 Cr individuals marry for the first time (+ ~10% remarriages ≈ ~2.1 Cr people) ÷ 2 people per wedding = ~1.05 Crore (10.5M) weddings/year! Method B (Book Geographic Age-Rate Funnel): Urban (490M) + Rural (910M) → Age 21–40 (25%) @ 5%–6% annual rate + Age 40+ (35%) @ 0.5–1% = 23.08M people marrying ÷ 2 = 11.54 Million weddings!',
+    strategyOverview: 'Two brilliant demographic methods! Method A (Cohort Entry / Age-Distribution Trick — FASTEST!): India Pop = 1.4B, Life Expectancy = 70 yrs → ~2 Crore (20M) Indians turn marrying age (~24–26) every single year! At ~95% lifetime marriage rate, ~1.9 Cr individuals marry for the first time (+ ~10% remarriages ≈ ~2.1 Cr people) ÷ 2 people per wedding = ~1.05 Crore (10.5M) weddings/year! Method B (Baseline Geographic Age-Rate Funnel): Urban (490M) + Rural (910M) → Age 21–40 (25%) @ 5%–6% annual rate + Age 40+ (35%) @ 0.5–1% = 23.08M people marrying ÷ 2 = 11.54 Million weddings!',
     formula: 'Annual Weddings = [∑ (Eligible Population × Annual Marriage Rate %)] ÷ 2',
     assumptions: [
       { label: 'Urban (490M): Age 21–40 (25% = 122.5M × 5% = 6.13M) + 40+ (35% = 171.5M × 1% = 1.72M) = 7.84M people → ÷2 = 3.92M weddings', rationale: 'Wait—check math! 5% of 21–40 cohort over 20 years = 100% married by age 40! That intuition makes 5–6% super defensible!' },
@@ -1140,7 +1092,7 @@ window.GM_DATA.problems.push(
     },
     finalAnswer: '~1 Crore – 1.2 Crore Weddings/Year (10M – 12M)',
     acceptableRange: { min: 8, max: 15, unit: 'Million weddings/yr', display: '8M – 15M weddings/year' },
-    sanityCheck: 'India officially witnesses ~1 to 1.2 Crore weddings annually (generating ~$130 Billion in wedding spend—the #1 reason interviewers love asking this!). Both the Cohort Entry check (20M turning 25 ÷ 2 = 10M) and the Book Rate tree (11.54M) land straight on the real number!',
+    sanityCheck: 'India officially witnesses ~1 to 1.2 Crore weddings annually (generating ~$130 Billion in wedding spend—the #1 reason interviewers love asking this!). Both the Cohort Entry check (20M turning 25 ÷ 2 = 10M) and the Demographic Rate tree (11.54M) land straight on the real number!',
     interviewerTrap: 'FORGETTING TO DIVIDE BY 2! Calculating 22 million brides & grooms and reporting 22 million weddings doubles the true figure!',
     variations: [
       { question: 'Estimate the annual size of India’s Wedding Industry (₹ / $).', hint: '11M weddings × segmented budget (Lower 50% @ ₹3L, Mid 40% @ ₹12L, Upper 10% @ ₹50L → avg ₹11L) ≈ ~₹12 Lakh Crore (~$140B)!' },
@@ -1182,9 +1134,6 @@ window.GM_DATA.problems.push(
     id: 'vol2-ev-2w-india',
     title: 'Number of EV 2-Wheelers to be Sold in India Next Year',
     prompt: 'Estimate the number of electric two-wheelers (EV 2Ws) expected to be sold in India next year.',
-    source: '180DC SRCC Vol 2',
-    pdfRef: 'Guesstimate-Book-Volume-2-3.pdf — p. 47 (Book p. 44)',
-    company: 'Meesho',
     difficulty: 3,
     archetype: 'Market Sizing',
     approachType: 'Replacement & Stock-Flow',
@@ -1194,10 +1143,10 @@ window.GM_DATA.problems.push(
       { q: 'Personal EV scooters/bikes only, or B2B delivery fleets (Zepto/Zomato/Yulu) too?', a: 'Personal residential EV 2-wheelers (optionally note ~10% B2B fleet uplift).', why: 'Ties to household 2W adoption.' },
       { q: 'Are we looking at NEXT year’s sales (meaning both first-time EV upgraders AND existing EV replacements)?', a: 'Yes: Annual EV Sales = New Adopters + EV Replacements!', why: 'Rapidly growing EV category is driven heavily by NEW adopters, not just replacements!' }
     ],
-    strategyOverview: 'Growth + Replacement Durable Model! Convert 1.4B population to Households (Urban 35% ÷ 3–4, Rural 65% ÷ 5) → 2W Penetration (Urban 60%, Rural 40% → ~170M 2W homes) → EV Interest by Income → ~93.66M interested pool (or better yet: Annual Total 2W Sales in India ≈ ~1.8–2.0 Crore units/year × EV Penetration Share next year ~7–10% = ~14–20 Lakh EV 2Ws!! Compare Book’s 9.97M vs 2W industry total!).',
-    formula: 'Method A (Market Share): Total Annual 2W Sales × EV Share % | Method B (Book): New Growth + (Existing EV Stock ÷ 5-yr Life)',
+    strategyOverview: 'Growth + Replacement Durable Model! Convert 1.4B population to Households (Urban 35% ÷ 3–4, Rural 65% ÷ 5) → 2W Penetration (Urban 60%, Rural 40% → ~170M 2W homes) → EV Interest by Income → ~93.66M interested pool (or better yet: Annual Total 2W Sales in India ≈ ~1.8–2.0 Crore units/year × EV Penetration Share next year ~7–10% = ~14–20 Lakh EV 2Ws!! Compare baseline 9.97M vs 2W industry total!).',
+    formula: 'Method A (Market Share): Total Annual 2W Sales × EV Share % | Method B (Baseline): New Growth + (Existing EV Stock ÷ 5-yr Life)',
     assumptions: [
-      { label: 'Book Approach: 93.66M EV-interested 2W households × 7% new growth (6.55M) + existing EV stock (~17M ÷ 5 yrs = 3.41M) = 9.97M', rationale: 'Wait—always do a 15-second Sanity Check!' },
+      { label: 'Baseline Approach: 93.66M EV-interested 2W households × 7% new growth (6.55M) + existing EV stock (~17M ÷ 5 yrs = 3.41M) = 9.97M', rationale: 'Wait—always do a 15-second Sanity Check!' },
       { label: 'SANITY CHECK: India’s ENTIRE 2-wheeler market (petrol + electric combined!) sells ~1.8–2.0 Crore (18–20M) units/year!', rationale: 'If EV 2Ws alone sold 10M next year, EVs would be >50% of all 2-wheelers in India overnight! Real EV 2W penetration in India is ~6–10% (~12–20 Lakh units/year)!' },
       { label: 'Clean Interview Formula: ~30 Cr Households × 55% 2W ownership = ~16.5 Cr 2Ws ÷ 8-yr life = ~2 Cr annual 2W sales × ~8–10% EV share = ~16–20 Lakh EV 2Ws next year!', rationale: 'Using Total Annual Category Sales × EV Penetration Share prevents accidentally making EVs 50% of the entire 2W industry!' }
     ],
@@ -1205,11 +1154,11 @@ window.GM_DATA.problems.push(
       label: 'India Total 2W Market Check (~18–20M Sold/Year)',
       valueText: '1.8–2.0 Cr Annual 2Ws',
       children: [
-        { label: 'Book Stock-Flow Model (7% growth on 93.6M pool + replacement)', valueText: '9.97M (50% share — high!)' },
+        { label: 'Stock-Flow Model (7% growth on 93.6M pool + replacement)', valueText: '9.97M (50% share — high!)' },
         { label: 'Sanity-Checked EV Share (~8–10% of 18–20M annual 2W sales)', valueText: '~1.5M – 2.0M (15–20 Lakh EVs/Yr)', highlight: true }
       ]
     },
-    finalAnswer: '~15 – 20 Lakh (1.5M – 2.0M) EV 2Ws realistically [Book model: 9.97M]',
+    finalAnswer: '~15 – 20 Lakh (1.5M – 2.0M) EV 2Ws realistically [Baseline: 9.97M]',
     acceptableRange: { min: 1.0, max: 11.0, unit: 'Million EVs/yr', display: '1.0M – 10M EV 2Ws/year' },
     sanityCheck: 'India currently sells ~18–20 Million two-wheelers per year (Hero, Honda, TVS, Bajaj, Ola, Ather). Real-world EV 2W sales hit ~1.0–1.5 Million (~6–8% penetration) growing toward ~1.8–2.2M! Showing an interviewer BOTH the household funnel AND the "Total 2W Sales × EV %" sanity check is peak consulting maturity.',
     interviewerTrap: 'Calculating a new tech category (EVs) in isolation without checking what % of TOTAL category sales (20M total 2Ws) your answer implies! Never let a niche sub-category silently exceed 50% of total sales unless justified.',
@@ -1249,9 +1198,6 @@ window.GM_DATA.problems.push(
     id: 'vol2-zepto-workers',
     title: 'Number of Workers Required to Cater 3,000 Zepto Orders',
     prompt: 'Estimate the total number of workers required in a Zepto dark store (or cluster) to fulfill 3,000 orders in a day.',
-    source: '180DC SRCC Vol 2',
-    pdfRef: 'Guesstimates-Book-Volume-2-3.pdf — p. 48 (Book p. 45)',
-    company: 'Meesho',
     difficulty: 3,
     archetype: 'Supply & Capacity',
     approachType: 'Bottom-Up (Supply-Side)',
@@ -1330,9 +1276,6 @@ window.GM_DATA.problems.push(
     id: 'vol2-cab-rides-day',
     title: 'Number of Rides a Cab Driver Takes in a Day',
     prompt: 'Estimate the average number of rides an Ola/Uber cab driver completes in a single day.',
-    source: '180DC SRCC Vol 2',
-    pdfRef: 'Guesstimates-Book-Volume-2-3.pdf — p. 49 (Book p. 46)',
-    company: 'Meesho',
     difficulty: 2,
     archetype: 'Supply & Capacity',
     approachType: 'Bottom-Up (Supply-Side)',
@@ -1346,7 +1289,7 @@ window.GM_DATA.problems.push(
     formula: 'Rides/Day = (Shift Hours × 60 × Utilization %) ÷ (Pickup + Wait + Trip + Repositioning Mins)',
     assumptions: [
       { label: 'Total Shift = 11 Hours; Effective Utilization = 80% → 8.8 hrs = 528 active minutes/day', rationale: 'Accounts for meals, fuel/CNG refill queues, and low-demand afternoon lulls.' },
-      { label: 'Ride Cycle Breakdown = 8m pickup + 2m wait + 30m trip + 5m repositioning = 45 mins/ride', rationale: 'Note: Vol 2 PDF text briefly printed "20 min / 35 min" in bullets #1–2 while its diagram used 30 min / 45 min—both give ~11–15 rides/day!' }
+      { label: 'Ride Cycle Breakdown = 8m pickup + 2m wait + 30m trip + 5m repositioning = 45 mins/ride', rationale: 'Note: Baseline draft text briefly printed "20 min / 35 min" in bullets #1–2 while its diagram used 30 min / 45 min—both give ~11–15 rides/day!' }
     ],
     tree: {
       label: 'Driver Daily Shift (11 Hrs × 80% = 528 Productive Mins)',
@@ -1398,36 +1341,33 @@ window.GM_DATA.problems.push(
     id: 'vol2-bandra-worli-cars',
     title: 'Number of Cars Crossing Bandra–Worli Sea Link Monthly',
     prompt: 'Estimate the number of cars crossing the Bandra–Worli Sea Link (Mumbai) in a month.',
-    source: '180DC SRCC Vol 2',
-    pdfRef: 'Guesstimates-Book-Volume-2-3.pdf — p. 50 (Book p. 47)',
-    company: 'Meesho',
     difficulty: 3,
     archetype: 'Supply & Capacity',
     approachType: 'Bottom-Up (Supply-Side)',
     templateId: 'tpl-bottleneck',
     tags: ['Mumbai', 'Infrastructure', 'Toll / Traffic', 'Meesho'],
     clarifyingQuestions: [
-      { q: 'Passenger cars ONLY (excluding buses, taxis/commercial if specified, or include cabs as cars)?', a: 'Include private cars + cabs (book takes 70% cars out of total vehicles; note 2W & heavy trucks are banned on Sea Link!).', why: 'Remember: 2-wheelers and autos are NOT allowed on Bandra–Worli Sea Link!' },
+      { q: 'Passenger cars ONLY (excluding buses, taxis/commercial if specified, or include cabs as cars)?', a: 'Include private cars + cabs (The baseline takes 70% cars out of total vehicles; note 2W & heavy trucks are banned on Sea Link!).', why: 'Remember: 2-wheelers and autos are NOT allowed on Bandra–Worli Sea Link!' },
       { q: 'Counting total crossings across BOTH directions (Northbound + Southbound)?', a: 'Yes, total bridge crossings (if toll booths = 8–16 across both/one-way plaza).', why: 'Clarifies directionality.' }
     ],
-    strategyOverview: 'Toll Booth Bottleneck Throughput Model! Assume toll plaza operates 24 hrs with 8–16 booths (book assumes 8 booths). Split 24 hrs into Low (10 hrs @ 1 veh/2 min = 30/hr across booths? Note: Check Vol 2 arithmetic! Book took 30/hr × 10 hrs = 300 veh TOTAL instead of 30/hr PER BOOTH × 8 booths = 2,400!! Let’s inspect the Sanity Check!).',
+    strategyOverview: 'Toll Booth Bottleneck Throughput Model! Assume toll plaza operates 24 hrs with 8–16 booths (The baseline assumes 8 booths). Split 24 hrs into Low (10 hrs @ 1 veh/2 min = 30/hr across booths? Note: Check Baseline arithmetic! Baseline took 30/hr × 10 hrs = 300 veh TOTAL instead of 30/hr PER BOOTH × 8 booths = 2,400!! Let’s inspect the Sanity Check!).',
     formula: 'Monthly Cars = Daily Vehicles (Active Booths × Hrs × Flow Rate) × (5 WD + 2×1.25 WE) × 4 Weeks × Car Share %',
     assumptions: [
       { label: '8 Toll Booths (or 8 active lanes across directions), 24 hrs/day: Low 10h, Med 6h, High 8h', rationale: 'Morning South Mumbai office rush & evening Bandra return rush.' },
-      { label: 'Rate PER BOOTH: Low (1/2 min = 30/hr), Med (1/30s = 120/hr), High (1/10s = 360/hr)', rationale: 'CRITICAL MATH CHECK: Look at Vol 2 p. 50! It wrote "8 booths" and "Every hour in ALL booths: Low 30/hr × 10 = 300, Med 120 × 6 = 720, High 360 × 8 = 2,880 → 3,900 veh/day"! Wait: 1 car every 10 seconds through ONE booth = 360 cars/hr per booth, NOT across 8 booths combined! Across 8 booths (say 4 active at peak), 4 booths × 360/hr × 8 hrs = 11,520 + off-peak = ~15,000–30,000 vehicles/day!' },
-      { label: 'Car Share: On Sea Link, ~90–95% of vehicles are 4W Cars/Cabs (2W & autos prohibited!)', rationale: 'Vol 2 book got 81,900 cars/month (~2,700/day), whereas REAL Bandra-Worli Sea Link handles ~35,000–45,000 vehicles/DAY = ~10–13 Lakh cars/month!' }
+      { label: 'Rate PER BOOTH: Low (1/2 min = 30/hr), Med (1/30s = 120/hr), High (1/10s = 360/hr)', rationale: 'CRITICAL MATH CHECK: Look carefully at the common pitfall: many drafts wrote "8 booths" and "Every hour in ALL booths: Low 30/hr × 10 = 300, Med 120 × 6 = 720, High 360 × 8 = 2,880 → 3,900 veh/day"! Wait: 1 car every 10 seconds through ONE booth = 360 cars/hr per booth, NOT across 8 booths combined! Across 8 booths (say 4 active at peak), 4 booths × 360/hr × 8 hrs = 11,520 + off-peak = ~15,000–30,000 vehicles/day!' },
+      { label: 'Car Share: On Sea Link, ~90–95% of vehicles are 4W Cars/Cabs (2W & autos prohibited!)', rationale: 'Baseline The baseline got 81,900 cars/month (~2,700/day), whereas REAL Bandra-Worli Sea Link handles ~35,000–45,000 vehicles/DAY = ~10–13 Lakh cars/month!' }
     ],
     tree: {
       label: 'Bandra–Worli Sea Link (8 Active Lanes/Booths)',
       valueText: 'Per-Booth Flow × Active Booths',
       children: [
-        { label: 'Vol 2 Book Calc (3,900/day × 7.5 eq. days/wk × 4 wks × 70%)', valueText: '81,900 Cars/Mo (~2.7K/day)' },
+        { label: 'Baseline Baseline Calc (3,900/day × 7.5 eq. days/wk × 4 wks × 70%)', valueText: '81,900 Cars/Mo (~2.7K/day)' },
         { label: 'Corrected Multi-Booth Calc (~4 active booths avg × ~40K veh/day × 30d × 90% cars)', valueText: '~10–12 Lakh Cars/Month', highlight: true }
       ]
     },
-    finalAnswer: '~8 – 13 Lakh Cars/Month (~30,000–40,000/day) [Book: 81,900/mo]',
+    finalAnswer: '~8 – 13 Lakh Cars/Month (~30,000–40,000/day) [Baseline: 81,900/mo]',
     acceptableRange: { min: 500000, max: 1800000, unit: 'Cars/month', display: '5 Lakh – 18 Lakh cars/month (real: ~10–12L/mo)' },
-    sanityCheck: 'CRITICAL SANITY CHECK: An iconic 8-lane sea bridge in Mumbai costing ₹1,600 Crore would be empty if only 2,700 cars crossed it per day (1 car every 30 seconds across an entire 8-lane highway!). In reality, ~35,000–40,000 cars cross BWSL daily (~11–12 Lakh/month). Catching the missing `× Active Booths` multiplier in the book is why sanity checks are a superpower!',
+    sanityCheck: 'CRITICAL SANITY CHECK: An iconic 8-lane sea bridge in Mumbai costing ₹1,600 Crore would be empty if only 2,700 cars crossed it per day (1 car every 30 seconds across an entire 8-lane highway!). In reality, ~35,000–40,000 cars cross BWSL daily (~11–12 Lakh/month). Catching the missing `× Active Booths` multiplier is why sanity checks are a superpower!',
     interviewerTrap: 'Computing flow rate per SINGLE toll booth (1 car every 10 sec = 360/hr) and forgetting to multiply by the number of active booths!',
     variations: [
       { question: 'Estimate daily toll revenue collected on the Bandra–Worli Sea Link.', hint: '35,000 cars/day × ₹85 one-way toll ≈ ~₹30 Lakh/day (~₹9 Crore/month)!' }
@@ -1466,9 +1406,6 @@ window.GM_DATA.problems.push(
     id: 'vol2-ac-sales-delhi',
     title: 'Annual Air Conditioner Sales in Delhi',
     prompt: 'Estimate the annual sales (units) of air conditioners in Delhi.',
-    source: '180DC SRCC Vol 2',
-    pdfRef: 'Guesstimate-Book-Volume-2-3.pdf — p. 51 (Book p. 48)',
-    company: 'Meesho',
     difficulty: 3,
     archetype: 'Market Sizing',
     approachType: 'Replacement & Stock-Flow',
@@ -1476,7 +1413,7 @@ window.GM_DATA.problems.push(
     tags: ['Appliances', 'Delhi', 'Replacement Cycle', 'Meesho'],
     clarifyingQuestions: [
       { q: 'Residential households only, or commercial offices/malls/schools too?', a: 'Residential ACs only first (mention ~20–25% commercial uplift if needed).', why: 'Ties cleanly to Delhi households.' },
-      { q: 'Include first-time buyers in addition to replacement sales?', a: 'Book models pure replacement (1.29M); adding ~3–5% first-time/new home buyers boosts accuracy!', why: 'Complete durable formula = Replacement + New Growth.' }
+      { q: 'Include first-time buyers in addition to replacement sales?', a: 'The baseline models pure replacement (1.29M); adding ~3–5% first-time/new home buyers boosts accuracy!', why: 'Complete durable formula = Replacement + New Growth.' }
     ],
     strategyOverview: 'Household Durable Replacement Model! Delhi Pop (30M) ÷ 4 members/household = 7.5M households. Segment by Income: Upper (20% = 1.5M), Middle (60% = 4.5M), Lower (20% = 1.5M). Apply AC Penetration (100%, 60%, 20% → 4.5M owning HH) and ACs per Household (4, 1.5, 1) → Total Installed Stock = 10.35 Million ACs! Divide by 8-year lifespan = 1.29 Million (~12.9 Lakh) ACs sold/year!',
     formula: 'Annual ACs = (Total Residential AC Stock ÷ 8-Yr Lifespan) + New Household Adoption',
@@ -1540,33 +1477,30 @@ window.GM_DATA.problems.push(
     id: 'vol2-ev-4w-india',
     title: 'Market Size of Electric 4-Wheelers (EV Cars) in India',
     prompt: 'Estimate the annual market size (units sold) of passenger Electric Vehicles (4-wheelers) in India.',
-    source: '180DC SRCC Vol 2',
-    pdfRef: 'Guesstimate-Book-Volume-2-3.pdf — p. 53 (Book p. 50)',
-    company: 'Trinity Life Sciences',
     difficulty: 3,
     archetype: 'Market Sizing',
     approachType: 'Replacement & Stock-Flow',
     templateId: 'tpl-durable',
-    tags: ['EV & Mobility', 'Automotive', 'India', 'Trinity'],
+    tags: ['EV & Mobility', 'Automotive', 'India'],
     clarifyingQuestions: [
       { q: '4-wheeler personal cars only, or commercial EV fleets (BluSmart/Uber EV) too?', a: 'Personal 4-wheelers first (clarify ~10–15% commercial fleet uplift).', why: 'Matches household ownership funnel.' },
       { q: 'Annual sales or total EV car stock currently on roads?', a: 'Annual unit sales (Stock ÷ Lifespan or Annual Car Sales × EV Share).', why: 'Always check whether installed stock or annual sales!' }
     ],
-    strategyOverview: 'Compare Trinity’s Stock Model vs Real-World EV Penetration Check! Trinity Book: Urban Pop (35% = 560M; wait 35% of 1.4B is 490M, book wrote 560M = 40%) ÷ 4 = 140M Urban HH → Exclude BPL (10%) → Lower Mid (70M × 20% × 1 = 14M cars), Upper Mid (42M × 60% × 2 = 50.4M cars), High (14M × 100% × 3 = 42M cars) = 106.4M cars?! Wait—let’s sanity check! 106M personal cars in Urban India alone is 2.5x higher than ALL cars in India (~40–45M)! AND assuming 10–30% of those 106M cars are ALREADY EVs gives 17.64M EVs on road (and 1.76M sold/yr) — whereas India actually sells ~4M total cars/yr with ~2.5–4% EV share = ~1.2–2 Lakh EV cars/year! Let’s show BOTH the book tree AND the realistic sanity-checked model!',
-    formula: 'Realistic: Annual Car Sales (~4M) × EV Penetration Share (~3–5%) | Book: Urban Cars × EV% ÷ 10-Yr Life',
+    strategyOverview: 'Compare an Unchecked Stock Model vs Real-World EV Penetration Check! Unchecked Stock Model: Urban Pop (35% = 560M; wait 35% of 1.4B is 490M, The baseline wrote 560M = 40%) ÷ 4 = 140M Urban HH → Exclude BPL (10%) → Lower Mid (70M × 20% × 1 = 14M cars), Upper Mid (42M × 60% × 2 = 50.4M cars), High (14M × 100% × 3 = 42M cars) = 106.4M cars?! Wait—let’s sanity check! 106M personal cars in Urban India alone is 2.5x higher than ALL cars in India (~40–45M)! AND assuming 10–30% of those 106M cars are ALREADY EVs gives 17.64M EVs on road (and 1.76M sold/yr) — whereas India actually sells ~4M total cars/yr with ~2.5–4% EV share = ~1.2–2 Lakh EV cars/year! Let’s show BOTH the unadjusted baseline tree AND the realistic sanity-checked model!',
+    formula: 'Realistic: Annual Car Sales (~4M) × EV Penetration Share (~3–5%) | Baseline: Urban Cars × EV% ÷ 10-Yr Life',
     assumptions: [
-      { label: 'Book Funnel: Urban HH (140M) → ~106.4M cars → EV adoption 10% Upper-Mid (5.04M) + 30% High (12.6M) = 17.64M EVs ÷ 10-yr life = 1.76M EVs/yr', rationale: 'Great tree structure, BUT let’s check the numbers!' },
+      { label: 'Baseline Funnel: Urban HH (140M) → ~106.4M cars → EV adoption 10% Upper-Mid (5.04M) + 30% High (12.6M) = 17.64M EVs ÷ 10-yr life = 1.76M EVs/yr', rationale: 'Great tree structure, BUT let’s check the numbers!' },
       { label: 'Sanity Check Adjustment: India has ~40–45M total personal cars (34/1000 pop!), selling ~4M new cars/year. Current EV 4W share is ~3–5% → ~1.2–2.0 Lakh EV cars/yr (rising to ~4–5 Lakh with 10% share)!', rationale: 'Explaining WHY 106M cars is 2.5x too high makes you sound like a seasoned partner!' }
     ],
     tree: {
       label: 'India Passenger 4W EV Market',
-      valueText: 'Book: 1.76M | Real: ~1.5–4L/yr',
+      valueText: 'Baseline: 1.76M | Real: ~1.5–4L/yr',
       children: [
-        { label: 'Book Model: Urban HH (140M) → 106M cars → 17.64M EVs ÷ 10 yrs', valueText: '17.64 Lakh (1.76M)/yr' },
+        { label: 'Baseline Model: Urban HH (140M) → 106M cars → 17.64M EVs ÷ 10 yrs', valueText: '17.64 Lakh (1.76M)/yr' },
         { label: 'Sanity Check: Total Cars ~42M ÷ 10 yrs = 4.2M annual cars × 4–8% EV share', valueText: '~1.7 – 3.4 Lakh EVs/Yr', highlight: true }
       ]
     },
-    finalAnswer: '~1.5 – 4 Lakh EV Cars/Year realistically (Book: 17.64 Lakh/year)',
+    finalAnswer: '~1.5 – 4 Lakh EV Cars/Year realistically (Baseline: 17.64 Lakh/year)',
     acceptableRange: { min: 100000, max: 1800000, unit: 'EV Cars/year', display: '1 Lakh – 18 Lakh EV cars/year' },
     sanityCheck: 'India’s entire passenger vehicle industry sells ~42 Lakh (4.2 Million) cars/year total (Maruti + Hyundai + Tata + Mahindra). EVs represent ~3–5% today (~1.5–2 Lakh/year) heading toward ~10% (~4 Lakh/year). Never accidentally report 17.6 Lakh EVs/yr without noticing that equals 42% of India’s car sales!',
     interviewerTrap: 'Assuming Upper-Middle Indian households own 2 cars each AND High Income own 3 cars each—creating 106M cars in urban India when India’s total 4-wheeler fleet is ~45M!',
@@ -1607,14 +1541,11 @@ window.GM_DATA.problems.push(
     id: 'vol2-metro-trains-delhi',
     title: 'Number of Operational Metro Trains in Delhi NCR',
     prompt: 'Estimate the number of operational metro trains running across the Delhi NCR network.',
-    source: '180DC SRCC Vol 2',
-    pdfRef: 'Guesstimate-Book-Volume-2-3.pdf — p. 57–58 (Book p. 54–55)',
-    company: 'Trinity Life Sciences',
     difficulty: 4,
     archetype: 'Supply & Capacity',
     approachType: 'Hybrid (Demand + Supply)',
     templateId: 'tpl-bottleneck',
-    tags: ['Public Transit', 'Delhi Metro', 'Demand vs Supply', 'Trinity'],
+    tags: ['Public Transit', 'Delhi Metro', 'Demand vs Supply'],
     clarifyingQuestions: [
       { q: 'Counting full trainsets (each having 6–8 coaches), not individual coaches?', a: 'Operational trainsets (each 6 coaches, ~1,500 passenger capacity).', why: 'Prevents 6x–8x coach vs train confusion!' },
       { q: 'Should we estimate based on passenger demand OR network line length + headway?', a: 'Solve via Demand (Unique Riders × Trips ÷ Train Daily Capacity), then cross-check via Line Headway!', why: 'Two independent checks make your estimate bulletproof!' }
@@ -1677,9 +1608,6 @@ window.GM_DATA.problems.push(
     id: 'vol2-theory-fast-food',
     title: 'Daily Revenue of a Fast Food Chain Outlet in New Delhi',
     prompt: 'Estimate the daily revenue of a fast-food chain outlet (e.g., McDonald’s / Burger King) in New Delhi.',
-    source: '180DC SRCC Vol 2',
-    pdfRef: 'Guesstimate-Book-Volume-2-3.pdf — p. 10 (Supply-Side Theory Example)',
-    company: '180DC SRCC',
     difficulty: 2,
     archetype: 'Revenue & Cost',
     approachType: 'Bottom-Up (Supply-Side)',
@@ -1689,7 +1617,7 @@ window.GM_DATA.problems.push(
       { q: 'Include Dine-in, Takeaway, and Delivery (Zomato/Swiggy), or Dine-in only?', a: 'Calculate Dine-in from seating capacity first, then add Takeaway + Delivery shares (~40–50% of total)!', why: 'In modern QSRs, Takeaway + Delivery can equal or exceed Dine-in!' },
       { q: 'High-street busy outlet or quiet residential mall?', a: 'Busy high-street outlet (~60 seats, open 12 hrs: 11 AM–11 PM).', why: 'Sets seating & operating hours cleanly.' }
     ],
-    strategyOverview: 'Textbook QSR Channel + Seating Capacity Model! Total Revenue = Avg Price × Items Sold across Dine-In, Takeaway, and Delivery. For Dine-In: Seats (60) × Operational Hours (12) × Avg Occupancy (50%) ÷ Avg Seat Duration (0.5 hr) = 720 dine-in customers × ₹250 avg bill = ₹1.80 Lakh/day (or in Book: items/person × ₹100/item). Add Takeaway + Delivery (~40–50% of total orders) → ~₹2.5–3.2 Lakh/day!',
+    strategyOverview: 'Textbook QSR Channel + Seating Capacity Model! Total Revenue = Avg Price × Items Sold across Dine-In, Takeaway, and Delivery. For Dine-In: Seats (60) × Operational Hours (12) × Avg Occupancy (50%) ÷ Avg Seat Duration (0.5 hr) = 720 dine-in customers × ₹250 avg bill = ₹1.80 Lakh/day (or in baseline: items/person × ₹100/item). Add Takeaway + Delivery (~40–50% of total orders) → ~₹2.5–3.2 Lakh/day!',
     formula: 'Daily Rev = [Seats × Hrs × Occupancy % ÷ Meal Duration × Avg Dine-In Bill] ÷ Dine-In Revenue Share %',
     assumptions: [
       { label: 'Seating = 60 seats; Open = 12 hrs/day (11 AM–11 PM); Blended Occupancy = 50% (80% peak, 30% off-peak)', rationale: 'Standard urban QSR footprint.' },

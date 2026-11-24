@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GuessMaster Pro — Zero-to-Offer Guesstimate Coach</title>
-  <meta name="description" content="Interactive guesstimate learning studio with 87 solved consulting & PM cases, visual issue trees, live sensitivity sliders, guided practice, flashcards, and timed mock interviews." />
+  <title>GuessMaster Pro — Guesstimate &amp; Market Sizing Studio</title>
+  <meta name="description" content="Standalone interactive guesstimate & market sizing coaching app with 87 solved cases, MECE issue trees, live sensitivity models, flashcards, and timed mock simulations." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
@@ -91,7 +91,7 @@
               type="text"
               class="quick-search"
               id="global-search"
-              placeholder="Search cases, firms..."
+              placeholder="Search cases, categories..."
             />
             <span class="kbd-hint">/</span>
           </div>
@@ -108,30 +108,30 @@
   <!-- Settings & Backup Modal -->
   <div class="modal-backdrop" id="settings-modal">
     <div class="modal-card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-        <h3 style="margin:0;font-size:15.5px;">⚙️ Settings &amp; Progress Backup</h3>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <h3 style="margin:0;font-size:1.12rem;">⚙️ Settings &amp; Progress Backup</h3>
         <button class="btn btn-sm" id="close-settings-btn">✕</button>
       </div>
 
-      <div class="section-block" style="margin-bottom:10px;">
-        <strong style="font-size:12.5px;">🎨 Appearance Mode</strong>
+      <div class="section-block" style="margin-bottom:8px;">
+        <strong style="font-size:0.96rem;">🎨 Appearance Mode</strong>
         <div class="theme-switcher" style="margin-top:6px;">
           <button class="theme-chip" data-set-theme="dark">True Dark Mode</button>
           <button class="theme-chip" data-set-theme="light">Normal (Light)</button>
         </div>
       </div>
 
-      <div class="section-block" style="margin-bottom:10px;">
-        <strong style="font-size:12.5px;">🔤 UI Text Scale</strong>
+      <div class="section-block" style="margin-bottom:8px;">
+        <strong style="font-size:0.96rem;">🔤 UI Text Scale</strong>
         <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;">
-          <button class="btn btn-sm" data-set-font="compact" style="flex:1 1 110px;">Compact (12px)</button>
-          <button class="btn btn-sm" data-set-font="normal" style="flex:1 1 110px;">Normal (13px)</button>
-          <button class="btn btn-sm" data-set-font="comfortable" style="flex:1 1 110px;">Large (14px)</button>
+          <button class="btn btn-sm" data-set-font="compact" style="flex:1 1 95px;">Compact</button>
+          <button class="btn btn-sm" data-set-font="normal" style="flex:1 1 95px;">Default</button>
+          <button class="btn btn-sm" data-set-font="comfortable" style="flex:1 1 95px;">Comfortable</button>
         </div>
       </div>
 
-      <div class="section-block" style="margin-bottom:10px;">
-        <strong style="font-size:12.5px;">⏱️ Default Mock Timer</strong>
+      <div class="section-block" style="margin-bottom:8px;">
+        <strong style="font-size:0.96rem;">⏱️ Default Mock Timer</strong>
         <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;">
           <button class="btn btn-sm" data-set-mockmins="10" style="flex:1 1 90px;">10 Mins</button>
           <button class="btn btn-sm" data-set-mockmins="15" style="flex:1 1 90px;">15 Mins</button>
@@ -139,9 +139,9 @@
         </div>
       </div>
 
-      <div class="section-block" style="margin-bottom:12px;">
-        <strong style="font-size:12.5px;">💾 Backup / Sync Progress</strong>
-        <p style="font-size:11.5px;color:var(--text-muted);margin:4px 0 8px;">Export or import your mastered cases, flashcards, and roadmap checkmarks as a JSON file.</p>
+      <div class="section-block" style="margin-bottom:10px;">
+        <strong style="font-size:0.96rem;">💾 Backup / Sync Progress</strong>
+        <p style="font-size:0.9rem;color:var(--text-muted);margin:4px 0 8px;">Export or import your mastered cases, flashcards, and roadmap checkmarks as a JSON file.</p>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <button class="btn btn-sm btn-secondary" id="export-progress-btn">⬇ Export JSON</button>
           <label class="btn btn-sm" style="cursor:pointer;">
