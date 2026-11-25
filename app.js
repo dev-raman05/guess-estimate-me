@@ -9,6 +9,7 @@
   const defaultState = {
     theme: 'dark',
     fontScale: 'normal',
+    sidebarCollapsed: false,
     mockDurationMins: 10,
     view: 'dashboard',
     academyTab: 'algorithm',
@@ -235,6 +236,36 @@
     });
     const themeColorMeta = document.getElementById('meta-theme-color');
     if (themeColorMeta) themeColorMeta.setAttribute('content', state.theme === 'light' ? '#f8fafc' : '#09090b');
+    applySidebarState();
+  }
+
+  function applySidebarState() {
+    const collapsed = !!state.sidebarCollapsed;
+    const shell = document.getElementById('app-shell');
+    if (shell) shell.classList.toggle('sidebar-collapsed', collapsed);
+    const btn = document.getElementById('sidebar-toggle-btn');
+    if (btn) {
+      btn.setAttribute('aria-expanded', String(!collapsed));
+      btn.setAttribute('aria-label', collapsed ? 'Expand sidebar' : 'Collapse sidebar');
+      btn.title = collapsed ? 'Expand sidebar ([ or Ctrl+B)' : 'Collapse sidebar ([ or Ctrl+B)';
+    }
+  }
+
+  function toggleSidebarCollapsed() {
+    if (window.innerWidth <= 820) {
+      const sb = document.getElementById('sidebar');
+      if (sb) sb.classList.toggle('open');
+      return;
+    }
+    state.sidebarCollapsed = !state.sidebarCollapsed;
+    saveState();
+    applySidebarState();
+    if (state.view === 'library' && typeof window.__gmSyncLibraryListHeight === 'function') {
+      requestAnimationFrame(() => window.__gmSyncLibraryListHeight());
+      setTimeout(() => {
+        if (typeof window.__gmSyncLibraryListHeight === 'function') window.__gmSyncLibraryListHeight();
+      }, 210);
+    }
   }
 
   function syncNavUI() {
@@ -2876,6 +2907,15 @@
     document.getElementById('sidebar').classList.toggle('open');
   });
 
+  const sidebarToggleBtn = document.getElementById('sidebar-toggle-btn');
+  if (sidebarToggleBtn) {
+    sidebarToggleBtn.addEventListener('click', toggleSidebarCollapsed);
+  }
+  const sidebarRailHint = document.getElementById('sidebar-rail-hint');
+  if (sidebarRailHint) {
+    sidebarRailHint.addEventListener('click', toggleSidebarCollapsed);
+  }
+
   document.querySelectorAll('[data-set-theme]').forEach(btn => {
     btn.addEventListener('click', () => {
       state.theme = btn.dataset.setTheme;
@@ -3013,8 +3053,18 @@
   if (typeof document.addEventListener === 'function') {
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') toggleSettings(false);
+      if ((e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey && e.key.toLowerCase() === 'b') {
+        e.preventDefault();
+        toggleSidebarCollapsed();
+        return;
+      }
       const activeTag = (document.activeElement && document.activeElement.tagName) || '';
       const inField = ['INPUT', 'TEXTAREA', 'SELECT'].includes(activeTag);
+      if (e.key === '[' && !inField && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        e.preventDefault();
+        toggleSidebarCollapsed();
+        return;
+      }
       if (e.key === '/' && !inField) {
         e.preventDefault();
         if (globalSearchEl) globalSearchEl.focus();

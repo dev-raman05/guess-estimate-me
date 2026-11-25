@@ -22,19 +22,21 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="app-shell">
+  <div class="app-shell" id="app-shell">
     <!-- Sidebar Navigation -->
     <aside class="sidebar" id="sidebar">
-      <div class="brand">
+      <button type="button" class="brand brand-toggle" id="sidebar-toggle-btn" aria-expanded="true" aria-controls="sidebar-body" title="Collapse sidebar ([ or Ctrl+B)">
         <div class="brand-icon">
           <img src="icons/logo.svg" alt="GuessMaster Pro logo" class="brand-logo-img" width="28" height="28" />
         </div>
-        <div>
+        <div class="brand-text">
           <div class="brand-title">GuessMaster Pro</div>
           <div class="brand-sub">Guesstimate Prep Studio</div>
         </div>
-      </div>
+        <span class="brand-kbd-hint" aria-hidden="true">[</span>
+      </button>
 
+      <div class="sidebar-body" id="sidebar-body">
       <div class="nav-group-label">Learn</div>
       <nav class="nav-list">
         <button class="nav-btn active" data-view="dashboard">
@@ -90,6 +92,9 @@
         <button class="btn btn-sm btn-primary install-app-btn" id="install-app-btn" style="display:none;width:100%;">⬇ Install Desktop App</button>
         <button class="btn btn-sm" id="open-settings-btn" style="width:100%;">⚙️ Settings &amp; Backup</button>
       </div>
+      </div>
+
+      <button type="button" class="sidebar-rail-hint" id="sidebar-rail-hint" aria-label="Expand sidebar" title="Expand sidebar ([ or Ctrl+B)">[</button>
     </aside>
 
     <!-- Main Workspace -->
@@ -169,6 +174,11 @@
             <input type="file" id="import-progress-input" accept="application/json" style="display:none;" />
           </label>
         </div>
+      </div>
+
+      <div class="section-block" style="margin-bottom:10px;">
+        <strong style="font-size:0.96rem;">⌨️ Keyboard Shortcuts</strong>
+        <p style="font-size:0.9rem;color:var(--text-muted);margin:4px 0 0;"><code>[</code> or <code>Ctrl+B</code> toggles left sidebar · <code>/</code> focuses search · <code>1–4</code> answers 60s drill</p>
       </div>
 
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
