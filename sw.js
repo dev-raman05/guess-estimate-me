@@ -1,4 +1,4 @@
-const CACHE_NAME = 'guessmaster-pro-v1';
+const CACHE_NAME = 'guessmaster-pro-v2';
 
 const CORE_ASSETS = [
   './',
@@ -12,6 +12,7 @@ const CORE_ASSETS = [
   './data/problems_vol1.js',
   './data/problems_vol2.js',
   './data/problems_iitg_web.js',
+  './data/problems_casebooks.js',
   './icons/logo.svg',
   './icons/favicon-16x16.png',
   './icons/favicon-32x32.png',

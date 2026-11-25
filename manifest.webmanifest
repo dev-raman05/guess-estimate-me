@@ -2,7 +2,7 @@
   "id": "./",
   "name": "GuessMaster Pro — Guesstimate Prep Studio",
   "short_name": "GuessMaster Pro",
-  "description": "Distraction-free consulting & PM guesstimate prep studio with 87 solved cases, MECE issue trees, flashcards, 60s rapid drill, and timed mock workbench.",
+  "description": "Distraction-free consulting & PM guesstimate prep studio with 130 solved cases, MECE issue trees, flashcards, 60s rapid drill, and timed mock workbench.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
