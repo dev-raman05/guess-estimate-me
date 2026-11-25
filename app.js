@@ -120,6 +120,7 @@
     durationSec: 600,
     timeLeft: 600,
     running: false,
+    completed: false,
     timerId: null,
     clarifiedIdx: {},
     showVariation: false,
@@ -236,6 +237,26 @@
     if (themeColorMeta) themeColorMeta.setAttribute('content', state.theme === 'light' ? '#f8fafc' : '#09090b');
   }
 
+  function syncNavUI() {
+    document.querySelectorAll('.nav-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.view === state.view);
+    });
+    const titles = {
+      dashboard: 'Crash Course Roadmap',
+      academy: 'Approach Guide',
+      memorize: 'Memorize & Drill',
+      library: `Problem Library (${PROBLEMS.length})`,
+      practice: 'Guided Practice Coach',
+      mock: 'Mock Interview Workbench'
+    };
+    const titleEl = document.getElementById('topbar-title');
+    if (titleEl) titleEl.textContent = titles[state.view] || 'GuessMaster Pro';
+    const gs = document.getElementById('global-search');
+    if (gs && gs.value !== (state.filters.search || '')) {
+      gs.value = state.filters.search || '';
+    }
+  }
+
   function setView(view, opts = {}) {
     if (hasDrillSessionData() && (view !== 'memorize' || (opts.memorizeTab && opts.memorizeTab !== 'drill'))) {
       abortRapidDrill();
@@ -247,27 +268,16 @@
     state.view = view;
     if (opts.academyTab) state.academyTab = opts.academyTab;
     if (opts.memorizeTab) state.memorizeTab = opts.memorizeTab;
-    if (opts.problemId) state.selectedProblemId = opts.problemId;
+    if (opts.problemId) {
+      state.selectedProblemId = opts.problemId;
+      if (view === 'library' && !getFilteredProblems().some(p => p.id === opts.problemId)) {
+        state.filters = { ...defaultState.filters };
+      }
+    }
     saveState();
 
-    document.querySelectorAll('.nav-btn').forEach(b => {
-      b.classList.toggle('active', b.dataset.view === view);
-    });
-
-    const titles = {
-      dashboard: 'Crash Course Roadmap',
-      academy: 'Approach Guide',
-      memorize: 'Memorize & Drill',
-      library: `Problem Library (${PROBLEMS.length})`,
-      practice: 'Guided Practice Coach',
-      mock: 'Mock Interview Workbench'
-    };
-    document.getElementById('topbar-title').textContent = titles[view] || 'GuessMaster Pro';
+    syncNavUI();
     document.getElementById('sidebar').classList.remove('open');
-    const gs = document.getElementById('global-search');
-    if (gs && gs.value !== (state.filters.search || '')) {
-      gs.value = state.filters.search || '';
-    }
     if (!opts.preserveFocus && typeof window.scrollTo === 'function') {
       window.scrollTo(0, 0);
     }
@@ -911,10 +921,10 @@
             <h2 style="margin:0 0 2px;font-size:1.35rem;letter-spacing:-0.015em;">${esc(prob.title)}</h2>
           </div>
           <div style="display:flex;flex-wrap:wrap;gap:6px;">
-            <button class="btn btn-sm ${isMastered ? 'btn-primary' : ''}" data-toggle-master="${esc(prob.id)}">
+            <button class="btn btn-sm ${isMastered ? 'btn-primary' : ''}" data-toggle-master="${esc(prob.id)}" aria-pressed="${isMastered}">
               ${isMastered ? '✓ Mastered' : '○ Mark Mastered'}
             </button>
-            <button class="btn btn-sm ${isBookmarked ? 'btn-warn' : ''}" data-toggle-bookmark="${esc(prob.id)}">
+            <button class="btn btn-sm ${isBookmarked ? 'btn-warn' : ''}" data-toggle-bookmark="${esc(prob.id)}" aria-pressed="${isBookmarked}">
               ${isBookmarked ? '★ Bookmarked' : '☆ Bookmark'}
             </button>
             <button class="btn btn-sm btn-secondary" data-practice-id="${esc(prob.id)}">🎯 Guided Solve</button>
@@ -1298,7 +1308,7 @@
           <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
             <button class="btn" data-guided-step="4">← Back</button>
             <div style="display:flex;gap:6px;flex-wrap:wrap;">
-              <button class="btn ${isMastered ? 'btn-primary' : 'btn-secondary'}" data-toggle-master="${esc(prob.id)}">
+              <button class="btn ${isMastered ? 'btn-primary' : 'btn-secondary'}" data-toggle-master="${esc(prob.id)}" aria-pressed="${isMastered}">
                 ${isMastered ? '✓ Mastered!' : '✓ Mark Problem Mastered'}
               </button>
               <button class="btn btn-primary" id="guided-next-unmastered">Next Unsolved Problem →</button>
@@ -1444,7 +1454,7 @@
               <div style="font-size:0.84rem;text-transform:uppercase;font-weight:700;color:var(--accent-bright);">Your Workbench Estimate</div>
               <div style="font-size:1.38rem;font-weight:800;" id="wb-final-val">${formatIndian(finalComputed)}</div>
             </div>
-            <button class="btn btn-sm btn-primary" id="mock-complete-btn">✓ Complete Mock</button>
+            <button class="btn btn-sm ${mockState.completed ? 'btn-secondary' : 'btn-primary'}" id="mock-complete-btn" aria-pressed="${mockState.completed ? 'true' : 'false'}">${mockState.completed ? '✓ Mock Completed' : '✓ Complete Mock'}</button>
           </div>
 
           <div class="section-block" style="margin-top:10px;">
@@ -1462,14 +1472,17 @@
           <div class="section-block" style="margin-bottom:9px;">
             <strong style="font-size:0.96rem;">1. Ask Clarifying Questions</strong>
             <div style="margin-top:6px;display:flex;flex-direction:column;gap:5px;">
-              ${(prob.clarifyingQuestions || []).map((cq, idx) => `
+              ${(prob.clarifyingQuestions || []).map((cq, idx) => {
+                const asked = !!mockState.clarifiedIdx[idx];
+                return `
                 <div>
-                  <button class="btn btn-sm btn-block-left" data-mock-clarify="${idx}">
-                    ❓ ${esc(cq.q)}
+                  <button class="btn btn-sm btn-block-left ${asked ? 'btn-secondary' : ''}" data-mock-clarify="${idx}" aria-pressed="${asked}">
+                    ${asked ? '✓' : '❓'} ${esc(cq.q)}
                   </button>
-                  ${mockState.clarifiedIdx[idx] ? `<div style="font-size:0.93rem;color:var(--accent-bright);padding:3px 7px;">💬 "${esc(cq.a)}"</div>` : ''}
+                  ${asked ? `<div style="font-size:0.93rem;color:var(--accent-bright);padding:3px 7px;">💬 "${esc(cq.a)}"</div>` : ''}
                 </div>
-              `).join('')}
+              `;
+              }).join('')}
             </div>
           </div>
 
@@ -1610,6 +1623,7 @@
       });
       if (flashState.index >= filtered.length) flashState.index = 0;
       const card = filtered[flashState.index];
+      const cardStatus = card ? state.flashcardStatus[card.id] : null;
       const masteredTotal = cards.filter(c => state.flashcardStatus[c.id] === 'mastered').length;
 
       body = `
@@ -1630,7 +1644,10 @@
             <div class="flashcard" id="fc-card-box">
               <div class="flashcard-header">
                 <span class="flashcard-face-label">${flashState.flipped ? 'ANSWER · CLICK TO FLIP BACK' : 'QUESTION · CLICK TO REVEAL'} (${flashState.index + 1}/${filtered.length})</span>
-                <span class="pill pill-blue">${esc(card.category)}</span>
+                <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap;">
+                  ${cardStatus === 'mastered' ? '<span class="pill pill-green" id="fc-status-pill">✓ Mastered</span>' : cardStatus === 'review' ? '<span class="pill pill-warn" id="fc-status-pill">🔁 Needs Review</span>' : ''}
+                  <span class="pill pill-blue">${esc(card.category)}</span>
+                </div>
               </div>
               <div class="flashcard-body">
                 ${!flashState.flipped ? `
@@ -1727,6 +1744,7 @@
   function render() {
     applyTheme();
     updateSidebarStats();
+    syncNavUI();
     const container = document.getElementById('main-content');
     if (!container) return;
 
@@ -1926,13 +1944,14 @@
       });
     }
 
-    window.__gmUpdateLibraryResults = function updateLibraryResults(forceDetail = false) {
+    function updateLibraryResults(forceDetail = false) {
       const listPanel = document.getElementById('lib-list-panel');
       const countEl = document.getElementById('lib-count-text');
       const detailWrap = document.getElementById('lib-detail-wrap');
       if (!listPanel || !detailWrap) return;
 
       const prevSelectedId = state.selectedProblemId;
+      const prevScrollTop = listPanel.scrollTop;
       const filtered = getFilteredProblems();
       if (!filtered.some(p => p.id === state.selectedProblemId)) {
         state.selectedProblemId = filtered[0] ? filtered[0].id : null;
@@ -1942,13 +1961,17 @@
       if (countEl) countEl.innerHTML = `Showing <strong>${filtered.length}</strong> of ${PROBLEMS.length} solved guesstimates`;
       listPanel.innerHTML = renderLibraryListHtml(filtered, activeProb);
       bindLibraryListClicks();
+      if (activeProb && prevSelectedId === activeProb.id) {
+        listPanel.scrollTop = prevScrollTop;
+      }
 
       if (forceDetail || prevSelectedId !== (activeProb && activeProb.id)) {
         detailWrap.innerHTML = renderProblemDetail(activeProb);
         attachLibraryDetailListeners(detailWrap);
       }
       syncLibraryListHeight();
-    };
+    }
+    window.__gmUpdateLibraryResults = updateLibraryResults;
 
     window.__gmSyncLibraryListHeight = syncLibraryListHeight;
 
@@ -2034,7 +2057,8 @@
 
     const pickByDiff = (minD, maxD) => {
       const pool = PROBLEMS.filter(p => p.difficulty >= minD && p.difficulty <= maxD);
-      const pick = pool[Math.floor(Math.random() * pool.length)] || PROBLEMS[0];
+      const altPool = pool.length > 1 ? pool.filter(p => p.id !== state.guided.problemId) : pool;
+      const pick = altPool[Math.floor(Math.random() * altPool.length)] || PROBLEMS[0];
       startGuidedProblem(pick.id);
       render();
     };
@@ -2089,7 +2113,9 @@
       const evalCalc = () => {
         const expr = calcInput.value.trim();
         state.guided.calcInput = expr;
-        if (/^[0-9+\-*/().\s]+$/.test(expr)) {
+        if (!expr) {
+          state.guided.calcResult = 'Enter a math expression first';
+        } else if (/^[0-9+\-*/().\s]+$/.test(expr)) {
           try {
             const val = Function(`"use strict"; return (${expr});`)();
             state.guided.calcResult = isFinite(val) ? `${val.toLocaleString('en-IN')} (${formatIndian(val)})` : 'Invalid';
@@ -2139,7 +2165,7 @@
         const gradeOut = document.getElementById('guided-grade-out');
         if (gradeOut) {
           const gr = state.guided.gradeResult;
-          gradeOut.innerHTML = gr ? `<div class="${gr.ok ? 'good-box' : 'bad-box'}" style="margin-top:8px;font-size:1.05rem;">${esc(gr.msg)}</div>` : '';
+          gradeOut.innerHTML = gr ? `<div class="${gr.ok ? 'good-box' : 'bad-box'}" style="margin-top:6px;font-size:0.94rem;">${esc(gr.msg)}</div>` : '';
         }
       };
       checkEstBtn.addEventListener('click', checkEstimate);
@@ -2178,6 +2204,7 @@
           updateMockTimerUI();
         } else {
           clearInterval(mockState.timerId);
+          if (mockState.timeLeft <= 0) mockState.timeLeft = mockState.durationSec;
           mockState.running = true;
           updateMockTimerUI();
           mockState.timerId = setInterval(() => {
@@ -2213,7 +2240,8 @@
     const mockRandBtn = document.getElementById('mock-random-btn');
     if (mockRandBtn) {
       mockRandBtn.addEventListener('click', () => {
-        const pick = PROBLEMS[Math.floor(Math.random() * PROBLEMS.length)];
+        const pool = PROBLEMS.length > 1 ? PROBLEMS.filter(p => p.id !== mockState.problemId) : PROBLEMS;
+        const pick = pool[Math.floor(Math.random() * pool.length)];
         initMockProblem(pick.id);
         render();
       });
@@ -2224,7 +2252,10 @@
       mockCompBtn.addEventListener('click', () => {
         clearInterval(mockState.timerId);
         mockState.running = false;
-        state.mocksCompleted++;
+        if (!mockState.completed) {
+          mockState.completed = true;
+          state.mocksCompleted++;
+        }
         state.masteredIds[mockState.problemId] = true;
         saveState();
         mockState.showSolutionRef = true;
@@ -2234,7 +2265,7 @@
 
     document.querySelectorAll('[data-mock-clarify]').forEach(btn => {
       btn.addEventListener('click', () => {
-        mockState.clarifiedIdx[btn.dataset.mockClarify] = true;
+        mockState.clarifiedIdx[btn.dataset.mockClarify] = !mockState.clarifiedIdx[btn.dataset.mockClarify];
         render();
       });
     });
@@ -2339,7 +2370,9 @@
         state.flashcardStatus[current.id] = status;
         saveState();
       }
-      flashState.index++;
+      if (!(flashState.onlyReview && status === 'mastered')) {
+        flashState.index++;
+      }
       flashState.flipped = false;
       render();
     };
@@ -2805,6 +2838,7 @@
     mockState.durationSec = (state.mockDurationMins || 10) * 60;
     mockState.timeLeft = mockState.durationSec;
     mockState.running = false;
+    mockState.completed = false;
     mockState.clarifiedIdx = {};
     mockState.showVariation = false;
     mockState.showSolutionRef = false;
@@ -2924,6 +2958,7 @@
         }
       };
       reader.readAsText(file);
+      e.target.value = '';
     });
   }
 
@@ -2932,6 +2967,15 @@
     resetBtn.addEventListener('click', () => {
       if (confirm('Reset all roadmap checkmarks, mastered problems, and flashcard progress?')) {
         abortRapidDrill();
+        clearInterval(mockState.timerId);
+        mockState.running = false;
+        mockState.completed = false;
+        mockState.clarifiedIdx = {};
+        mockState.showVariation = false;
+        mockState.showSolutionRef = false;
+        mockState.sanityNote = '';
+        wizardAnswers = { q1: null, q2: null, q3: null };
+        cheatSearch = '';
         localStorage.removeItem(STORAGE_KEY);
         state = loadState();
         toggleSettings(false);
@@ -3011,7 +3055,10 @@
   }
 
   document.getElementById('random-practice-btn').addEventListener('click', () => {
-    const pick = PROBLEMS[Math.floor(Math.random() * PROBLEMS.length)];
+    const pool = (state.view === 'practice' && PROBLEMS.length > 1)
+      ? PROBLEMS.filter(p => p.id !== state.guided.problemId)
+      : PROBLEMS;
+    const pick = pool[Math.floor(Math.random() * pool.length)];
     startGuidedProblem(pick.id);
     setView('practice');
   });

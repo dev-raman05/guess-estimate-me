@@ -1,4 +1,4 @@
-const CACHE_NAME = 'guessmaster-pro-v2';
+const CACHE_NAME = 'guessmaster-pro-v3';
 
 const CORE_ASSETS = [
   './',
